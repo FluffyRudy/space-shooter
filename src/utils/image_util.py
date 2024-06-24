@@ -1,7 +1,4 @@
 import pygame, sys
-
-sys.path.append("../..")
-
 from pathlib import Path
 from config import path_dict
 
