@@ -1,10 +1,23 @@
 import pygame
-from .utils import image_util
+from src.UI.background import Background
+from .sprites.player import Player
+from .settings import WIDTH, HEIGHT, G_SPRITE_SIZE
 
 
 class Level:
     def __init__(self):
         self.display_surface = pygame.display.get_surface()
 
+        self.background = Background()
+
+        self.player_group = pygame.sprite.Group()
+        self.player = Player(
+            (WIDTH // 2 - G_SPRITE_SIZE // 2, HEIGHT - G_SPRITE_SIZE),
+            self.player_group,
+        )
+
     def run(self):
-        pass
+        self.background.update()
+        self.player_group.update()
+        self.background.draw_background(self.display_surface)
+        self.player_group.draw(self.display_surface)

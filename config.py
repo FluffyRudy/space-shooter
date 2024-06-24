@@ -8,13 +8,6 @@ EXPLOSION_DIR = GRAPHICS_DIR / "explosion"
 PLAYER_SHIP_DIR = GRAPHICS_DIR / "player_ship"
 SPACE_BG_DIR = GRAPHICS_DIR / "space_bg"
 
-path_dict = {
-    "player": PLAYER_SHIP_DIR,
-    "enemy": ENEMY_SHIP_DIR,
-    "spacebg": SPACE_BG_DIR,
-    "explosion": EXPLOSION_DIR,
-}
-
 
 if __name__ == "__main__":
     all_dirs = [
