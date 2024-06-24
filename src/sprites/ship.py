@@ -1,6 +1,8 @@
 import pygame
 from src.utils.image_util import load_frames
+from src.timer.cooldown import Cooldown
 from .state import Direction, State, Status
+from .bullet import Bullet
 from config import PLAYER_SHIP_DIR
 
 
@@ -19,6 +21,11 @@ class Ship(pygame.sprite.Sprite):
 
         self.speed = 4
 
+        self.addition_groups = groups
+
+        cooldown = 100
+        self.cooldown_timer = Cooldown(cooldown)
+
     def animate(self):
         animation = self.animations_list[self.get_status()]
         self.frame_index += self.animation_speed
@@ -31,6 +38,7 @@ class Ship(pygame.sprite.Sprite):
     def update(self, *args, **kwargs):
         self.manage_status()
         self.animate()
+
         self.rect.x += self.direction.x * self.speed
         self.rect.y += self.direction.y * self.speed
 
@@ -49,3 +57,19 @@ class Ship(pygame.sprite.Sprite):
             else:
                 new_state = "right"
         return new_state
+
+    def create_bullet(self, num_bullets: int = 1):
+        total_positions = num_bullets + ((num_bullets + 1) % 2)
+        position_count = 0
+        start_position = -(num_bullets // 2)
+
+        while position_count < total_positions:
+            bullet_position = self.rect.centerx, self.rect.top
+            bullet = Bullet(
+                bullet_position,
+                (start_position, 0),
+                start_position,
+                [self.addition_groups],
+            )
+            start_position += 1
+            position_count += 1

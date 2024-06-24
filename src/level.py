@@ -10,14 +10,14 @@ class Level:
 
         self.background = Background()
 
-        self.player_group = pygame.sprite.Group()
+        self.visible_group = pygame.sprite.Group()
         self.player = Player(
             (WIDTH // 2 - G_SPRITE_SIZE // 2, HEIGHT - G_SPRITE_SIZE),
-            self.player_group,
+            self.visible_group,
         )
 
     def run(self):
         self.background.update()
-        self.player_group.update()
+        self.visible_group.update()
         self.background.draw_background(self.display_surface)
-        self.player_group.draw(self.display_surface)
+        self.visible_group.draw(self.display_surface)
