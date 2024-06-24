@@ -29,4 +29,5 @@ class Player(Ship):
             self.direction.y = 0
 
         if keys[pygame.K_SPACE] and self.cooldown_timer.has_cooldown():
-            self.create_bullet(num_bullets=11)
+            self.create_bullet(num_bullets=3)
+            self.cooldown_timer.reset_time()

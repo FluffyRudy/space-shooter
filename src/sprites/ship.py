@@ -23,7 +23,7 @@ class Ship(pygame.sprite.Sprite):
 
         self.addition_groups = groups
 
-        cooldown = 100
+        cooldown = 200
         self.cooldown_timer = Cooldown(cooldown)
 
     def animate(self):
