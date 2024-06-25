@@ -17,5 +17,8 @@ class Cooldown:
     def has_cooldown(self):
         return self.finish_cooldown
 
+    def update_cooldown(self, new_cooldown):
+        self.cooldown_timer = new_cooldown
+
     def reset_time(self):
         self.start_timer = pygame.time.get_ticks()
