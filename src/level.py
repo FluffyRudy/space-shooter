@@ -16,7 +16,7 @@ class Level:
         self.enemy_bullet_group = pygame.sprite.Group()
         self.player_bullet_group = pygame.sprite.Group()
 
-        self.max_enemy_count = 10
+        self.max_enemy_count = 15
 
         self.player = Player(
             (WIDTH // 2 - G_SPRITE_SIZE // 2, HEIGHT - G_SPRITE_SIZE),
