@@ -29,19 +29,19 @@ class ShooterEnemy(Ship):
 
     def update(self, *args, **kwargs):
         relative_rect = kwargs.get("relative_rect")
-        behave(relative_rect)
+        self.behave(relative_rect)
 
         self.movement()
         self.cooldown_timer.handle_cooldown()
         if self.cooldown_timer.has_cooldown():
             self.cooldown_timer.reset_time()
-        super().animate()
+        super().update()
 
     def movement(self):
         velocity_x = self.direction.x * self.props.get("speed")
         velocity_y = self.direction.y * self.props.get("speed")
         self.rect.x += velocity_x
-        self.rect.y += velocity_y + random.choice([-2, 2])
+        self.rect.y += velocity_y + random.choice([-1, 1])
 
     def shoot(self):
         create_bullet(
@@ -95,7 +95,7 @@ class SelfKillerEnemy(Ship):
             self.direction *= 0
             self.animation_speed = 0.1
         if (
-            self.status.get_status() == State.DEAD
+            self.status.get_state() == State.DEAD
             and self.frame_index >= len(self.get_current_animation()) - 1
         ):
             self.kill()

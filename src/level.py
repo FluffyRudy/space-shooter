@@ -67,7 +67,6 @@ class Level:
                 bullet, collided_enemy
             ):
                 collided_enemy.damage(bullet.get_damage())
-                print("c")
                 bullet.kill()
                 break
 

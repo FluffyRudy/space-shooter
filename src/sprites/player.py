@@ -23,6 +23,7 @@ class Player(Ship):
 
     def update(self, *args, **kwargs):
         self.handle_movement()
+        self.movement()
         self.cooldown_timer.handle_cooldown()
         super().update()
 
@@ -52,3 +53,7 @@ class Player(Ship):
                 damage=self.props.get("damage"),
             )
             self.cooldown_timer.reset_time()
+
+    def movement(self):
+        self.rect.x += self.direction.x * self.props.get("speed")
+        self.rect.y += self.direction.y * self.props.get("speed")

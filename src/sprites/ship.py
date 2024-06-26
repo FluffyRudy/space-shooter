@@ -61,13 +61,18 @@ class Ship(pygame.sprite.Sprite):
 
     def update(self, *args, **kwargs):
         self.manage_status()
+        if self.can_kill():
+            self.kill()
         self.animate()
 
-        self.rect.x += self.direction.x * self.props.get("speed")
-        self.rect.y += self.direction.y * self.props.get("speed")
+    def can_kill(self):
+        return (
+            self.status.get_state() == State.DEAD
+            and self.frame_index >= len(self.get_current_animation()) - 1
+        )
 
     def manage_status(self):
-        if self.status == State.DEAD:
+        if self.status.get_state() == State.DEAD:
             return
         if self.direction.x != 0:
             self.status.set_state(State.MOVEMENT)
@@ -75,27 +80,20 @@ class Ship(pygame.sprite.Sprite):
             self.status.set_state(State.IDLE)
 
     def get_status(self):
-        if not self.status.is_dead():
-            status = self.status.get_status()
-            new_state = "idle"
-            if status == State.MOVEMENT:
-                if self.direction.x < 0:
-                    new_state = "left"
-                else:
-                    new_state = "right"
-            return new_state
-        return "dead"
+        if self.status.is_dead():
+            return "dead"
+
+        status = self.status.get_state()
+        new_state = "idle"
+        if status == State.MOVEMENT:
+            if self.direction.x < 0:
+                new_state = "left"
+            else:
+                new_state = "right"
+        return new_state
 
     def damage(self, damage: int):
         self.props["kill_damage_count"] -= 1
-        print(self.props.get("kill_damage_count"))
-        if self.props.get("kill_damage_count") <= 0:
+        if self.props["kill_damage_count"] <= 0:
             self.status.set_state(State.DEAD)
             self.direction *= 0
-            self.animation_speed = 0.1
-            if (
-                self.status.get_status() == State.DEAD
-                and self.frame_index >= len(self.get_current_animation()) - 1
-            ):
-                self.kill()
-            print(self.frame_index, len(self.get_current_animation()) - 1)

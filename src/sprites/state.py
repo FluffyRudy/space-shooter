@@ -19,7 +19,7 @@ class Status:
     def __init__(self):
         self.status = State.IDLE
 
-    def get_status(self):
+    def get_state(self):
         return self.status
 
     def is_idle(self):
