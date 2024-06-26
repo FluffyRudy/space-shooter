@@ -1,6 +1,8 @@
 import pygame, sys
+from src.storage.storage import Storage
 from src.level import Level
 from src.settings import FPS, WIDTH, HEIGHT, BLACK
+from src.storage.storage import StorageHandler
 
 
 class Game:
