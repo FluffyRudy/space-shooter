@@ -13,10 +13,12 @@ class Bullet(pygame.sprite.Sprite):
         offset_coor: tuple[int, int],
         speed: float,
         direction: tuple[int, int],
+        damage: int,
         sibling_offset_X: int = 0,
     ):
         super().__init__(groups)
         self.speed = speed
+        self.damage = damage
         self.direction = pygame.math.Vector2(direction)  # default
         self.frames = load_frame(BULLET_DIR)
         self.frame_index = 0
@@ -36,6 +38,9 @@ class Bullet(pygame.sprite.Sprite):
         self.direction.x = direction[0]
         self.direction.y = direction[1]
 
+    def get_damage(self):
+        return self.damage
+
     def animate(self):
         self.frame_index += self.animation_speed
         frame_index = int(self.frame_index) % len(self.frames)
@@ -53,6 +58,7 @@ def create_bullet(
     relative_rect: pygame.Rect,
     num_bullets,
     speed: float,
+    damage: int,
     direction: tuple[int, int],
 ):
     total_positions = num_bullets + ((num_bullets + 1) % 2)
@@ -69,6 +75,7 @@ def create_bullet(
             speed=speed,
             sibling_offset_X=start_position,
             direction=direction,
+            damage=damage,
         )
         start_position += 1
         position_count += 1

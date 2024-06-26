@@ -66,8 +66,18 @@ class Level:
             if collided_enemy is not None and pygame.sprite.collide_mask(
                 bullet, collided_enemy
             ):
+                collided_enemy.damage(bullet.get_damage())
+                print("c")
                 bullet.kill()
-                collided_enemy.kill()
+                break
+
+    def handle_enemy_attack(self):
+        for bullet in self.enemy_bullet_group.sprites():
+            player_bullet_collision = pygame.sprite.collide_rect(bullet, self.player)
+            if player_bullet_collision and pygame.sprite.collide_mask(
+                bullet, self.player
+            ):
+                bullet.kill()
                 break
 
     def run(self):
@@ -80,3 +90,4 @@ class Level:
 
         self.spawn_enemy()
         self.handle_player_attack()
+        self.handle_enemy_attack()

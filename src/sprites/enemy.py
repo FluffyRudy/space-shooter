@@ -29,7 +29,7 @@ class ShooterEnemy(Ship):
 
     def update(self, *args, **kwargs):
         relative_rect = kwargs.get("relative_rect")
-        self.update_direction_x(relative_rect)
+        behave(relative_rect)
 
         self.movement()
         self.cooldown_timer.handle_cooldown()
@@ -41,7 +41,7 @@ class ShooterEnemy(Ship):
         velocity_x = self.direction.x * self.props.get("speed")
         velocity_y = self.direction.y * self.props.get("speed")
         self.rect.x += velocity_x
-        self.rect.y += velocity_y + random.choice([-1, 1])
+        self.rect.y += velocity_y + random.choice([-2, 2])
 
     def shoot(self):
         create_bullet(
@@ -50,9 +50,10 @@ class ShooterEnemy(Ship):
             num_bullets=1,
             speed=DEFAULT_BULLET_SPEED,
             direction=(0, 1),
+            damage=self.props.get("damage"),
         )
 
-    def update_direction_x(self, relative_rect: pygame.Rect):
+    def behave(self, relative_rect: pygame.Rect):
         if self.rect.left < 0:
             self.direction.x = 1
         elif self.rect.right > WIDTH:

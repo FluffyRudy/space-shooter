@@ -17,7 +17,7 @@ class Ship(pygame.sprite.Sprite):
         base_group: pygame.sprite.Group,
         bullet_group: pygame.sprite.Group,
     ):
-        super().__init__((base_group, visible_group, bullet_group))
+        super().__init__((base_group, visible_group))
 
         self.frame_index = 0
         self.animation_speed = 0.25
@@ -29,7 +29,7 @@ class Ship(pygame.sprite.Sprite):
         self.image = self.animations_list[self.get_status()][0]
         self.rect = self.image.get_rect(topleft=pos)
 
-        self.props = ship_props
+        self.props = ship_props.copy()
 
         self.bullet_group = bullet_group
         self.visible_group = visible_group
@@ -85,3 +85,17 @@ class Ship(pygame.sprite.Sprite):
                     new_state = "right"
             return new_state
         return "dead"
+
+    def damage(self, damage: int):
+        self.props["kill_damage_count"] -= 1
+        print(self.props.get("kill_damage_count"))
+        if self.props.get("kill_damage_count") <= 0:
+            self.status.set_state(State.DEAD)
+            self.direction *= 0
+            self.animation_speed = 0.1
+            if (
+                self.status.get_status() == State.DEAD
+                and self.frame_index >= len(self.get_current_animation()) - 1
+            ):
+                self.kill()
+            print(self.frame_index, len(self.get_current_animation()) - 1)

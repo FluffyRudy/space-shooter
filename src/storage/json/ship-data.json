@@ -1,9 +1,10 @@
 {
     "player": {
         "health_count": 5,
-        "speed": 4,
+        "speed": 5,
         "bullet_speed": 5,
         "bullet_damage": 1,
+        "kill_damage_count": 5,
         "score": 0
     },
     "enemies": {
@@ -11,10 +12,12 @@
             "health_count": 5,
             "speed": 2,
             "bullet_speed": 5,
-            "bullet_damage": 1
+            "bullet_damage": 1,
+            "kill_damage_count": 5
         },
         "self_killer": {
-            "speed": 5
+            "speed": 8,
+            "kill_damage_count": "null"
         }
     }
 }
