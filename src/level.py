@@ -1,4 +1,5 @@
 import pygame, random
+from src.storage.storage import Storage
 from src.UI.background import Background
 from src.UI.healthbar import Healthbar
 from .sprites.player import Player

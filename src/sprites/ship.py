@@ -12,6 +12,7 @@ class Ship(pygame.sprite.Sprite):
         self,
         pos: tuple[int, int],
         ship_type: ShipTypes,
+        ship_props: dict,
         visible_group: pygame.sprite.Group,
         base_group: pygame.sprite.Group,
         bullet_group: pygame.sprite.Group,
@@ -28,7 +29,7 @@ class Ship(pygame.sprite.Sprite):
         self.image = self.animations_list[self.get_status()][0]
         self.rect = self.image.get_rect(topleft=pos)
 
-        self.speed = 4
+        self.props = ship_props
 
         self.bullet_group = bullet_group
         self.visible_group = visible_group
@@ -62,8 +63,8 @@ class Ship(pygame.sprite.Sprite):
         self.manage_status()
         self.animate()
 
-        self.rect.x += self.direction.x * self.speed
-        self.rect.y += self.direction.y * self.speed
+        self.rect.x += self.direction.x * self.props.get("speed")
+        self.rect.y += self.direction.y * self.props.get("speed")
 
     def manage_status(self):
         if self.status == State.DEAD:

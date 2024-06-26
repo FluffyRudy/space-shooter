@@ -1,6 +1,7 @@
 import pygame
 from .ship import Ship
 from .bullet import Bullet, create_bullet
+from src.storage.storage import get_player_data
 from src.settings import DEFAULT_BULLET_SPEED, ShipTypes
 
 
@@ -11,7 +12,9 @@ class Player(Ship):
         visible_group: pygame.sprite.Group,
         bullet_group: pygame.sprite.Group,
     ):
-        super().__init__(pos, ShipTypes.PLAYER, visible_group, [], bullet_group)
+        super().__init__(
+            pos, ShipTypes.PLAYER, get_player_data(), visible_group, [], bullet_group
+        )
 
     def update(self, *args, **kwargs):
         self.handle_movement()

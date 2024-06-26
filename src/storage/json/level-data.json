@@ -1,0 +1,21 @@
+{
+    "enemy": {
+        "level": {
+            "1": {
+                "max_enemy_spawn": 10,
+                "max_enemy_count": 10,
+                "powerops": []
+            },
+            "2": {
+                "max_enemy_spawn": 10,
+                "max_enemy_count": 15,
+                "powerops": []
+            },
+            "3": {
+                "max_enemy_spawn": 10,
+                "max_enemy_count": 20,
+                "powerops": []
+            }
+        }
+    }
+}

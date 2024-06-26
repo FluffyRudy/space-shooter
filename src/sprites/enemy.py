@@ -2,6 +2,7 @@ import pygame, math, random
 from .state import State
 from .ship import Ship
 from .bullet import create_bullet
+from src.storage.storage import get_enemy_data
 from src.settings import DEFAULT_BULLET_SPEED, ShipTypes, HEIGHT, WIDTH, G_SPRITE_SIZE
 
 
@@ -15,12 +16,16 @@ class ShooterEnemy(Ship):
         offset_y: int = 0,
     ):
         super().__init__(
-            pos, ShipTypes.SHOOTING_ENEMY, visible_group, base_group, bullet_group
+            pos,
+            ShipTypes.SHOOTING_ENEMY,
+            get_enemy_data().get("shooter"),
+            visible_group,
+            base_group,
+            bullet_group,
         )
         self.offset_y = offset_y
         self.cooldown_timer.update_cooldown(500)
         self.direction.x = random.choice([1, -1])
-        self.speed = 2
 
     def update(self, *args, **kwargs):
         relative_rect = kwargs.get("relative_rect")
@@ -33,8 +38,8 @@ class ShooterEnemy(Ship):
         super().animate()
 
     def movement(self):
-        velocity_x = self.direction.x * self.speed
-        velocity_y = self.direction.y * self.speed
+        velocity_x = self.direction.x * self.props.get("speed")
+        velocity_y = self.direction.y * self.props.get("speed")
         self.rect.x += velocity_x
         self.rect.y += velocity_y + random.choice([-1, 1])
 
@@ -70,13 +75,20 @@ class SelfKillerEnemy(Ship):
         visible_group: pygame.sprite.Group,
         base_group: pygame.sprite.Group,
     ):
-        super().__init__(pos, ShipTypes.SELF_KILL_ENEMY, visible_group, [], [])
+        super().__init__(
+            pos,
+            ShipTypes.SELF_KILL_ENEMY,
+            get_enemy_data().get("self_killer"),
+            visible_group,
+            [],
+            [],
+        )
         self.animation_speed = 1
         self.direction.y = 1
 
     def update(self, *args, **kwargs):
         self.animate()
-        self.rect.y += self.direction.y * self.speed * 2
+        self.rect.y += self.direction.y * self.props.get("speed") * 2
         if self.rect.bottom >= HEIGHT:
             self.status.set_state(State.DEAD)
             self.direction *= 0
