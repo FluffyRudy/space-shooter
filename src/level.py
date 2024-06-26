@@ -27,6 +27,10 @@ class Level:
             bullet_group=self.player_bullet_group,
         )
 
+        """this is temporary solution, I have zero idea how
+           a single bullet is always present in player bullet"""
+        self.player_bullet_group.empty()
+
     def spawn_enemy(self):
         if random.uniform(0, 1) < 0.01:
             random_x = random.randint(-WIDTH, WIDTH * 2)

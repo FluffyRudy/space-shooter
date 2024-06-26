@@ -1,7 +1,7 @@
 {
     "player": {
         "health_count": 5,
-        "speed": 5,
+        "speed": 4,
         "bullet_speed": 5,
         "bullet_damage": 1,
         "score": 0

@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Literal
 import json
 from json.decoder import JSONDecodeError
 from pathlib import Path
@@ -13,9 +13,7 @@ class StorageHandler:
             return
         self.__storage_path = ROOT_DIR / "src" / "storage" / "json"
         self.__ship_data = {}
-        self.__level_data = {}
         self.__init_ship_data()
-        self.__init__level_data()
 
         self.__instance = self
 
@@ -42,21 +40,8 @@ class StorageHandler:
                 self.__ship_data = default_data
             f_ship_data.close()
 
-    def __init__level_data(self):
-        level_data_file = self.__storage_path / "level-data.json"
-
-        if not level_data_file.exists():
-            Path(level_data_file).touch()
-
-        with open(file=level_data_file, mode="r") as f_level_data:
-            try:
-                level_data = json.load(f_level_data)
-                self.__level_data = level_data
-            except JSONDecodeError:
-                pass
-
-    def write_ship_data(self, data: dict):
-        self.__ship_data["player"].update(data)
+    def write_player_data(self, data: dict):
+        self.__ship_data.get("player").update(data)
         ship_data_path = self.__storage_path / "ship-data.json"
 
         with open(ship_data_path, "w") as f_ship_data:
@@ -74,19 +59,17 @@ class StorageHandler:
         with open(ship_data_path, "w") as f_ship_data:
             json.dump(default_data, f_ship_data, indent=4)
 
-    def get_ship_data(self):
+    def get_ship_data(self) -> dict:
         return self.__ship_data
 
     def get_level_data(self):
         return self.__level_data
 
+    def get_player_data(self):
+        return Storage.get_ship_data().get("player")
+
+    def get_enemy_data(self, type_: Literal["shooter", "self_killer"]):
+        return Storage.get_ship_data().get("enemies").get(type_)
+
 
 Storage = StorageHandler()
-
-
-def get_player_data():
-    return Storage.get_ship_data().get("player")
-
-
-def get_enemy_data():
-    return Storage.get_ship_data().get("enemies")

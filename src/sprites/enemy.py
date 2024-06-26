@@ -2,7 +2,7 @@ import pygame, math, random
 from .state import State
 from .ship import Ship
 from .bullet import create_bullet
-from src.storage.storage import get_enemy_data
+from src.storage.storage import Storage
 from src.settings import DEFAULT_BULLET_SPEED, ShipTypes, HEIGHT, WIDTH, G_SPRITE_SIZE
 
 
@@ -18,7 +18,7 @@ class ShooterEnemy(Ship):
         super().__init__(
             pos,
             ShipTypes.SHOOTING_ENEMY,
-            get_enemy_data().get("shooter"),
+            Storage.get_enemy_data("shooter"),
             visible_group,
             base_group,
             bullet_group,
@@ -78,7 +78,7 @@ class SelfKillerEnemy(Ship):
         super().__init__(
             pos,
             ShipTypes.SELF_KILL_ENEMY,
-            get_enemy_data().get("self_killer"),
+            Storage.get_enemy_data("self_killer"),
             visible_group,
             [],
             [],
