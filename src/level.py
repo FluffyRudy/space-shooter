@@ -1,5 +1,6 @@
 import pygame, random
 from src.UI.background import Background
+from src.UI.healthbar import Healthbar
 from .sprites.player import Player
 from .sprites.enemy import ShooterEnemy, SelfKillerEnemy
 from .settings import WIDTH, HEIGHT, G_SPRITE_SIZE, ShipTypes
@@ -10,6 +11,7 @@ class Level:
         self.display_surface = pygame.display.get_surface()
 
         self.background = Background()
+        self.health_bar = Healthbar(5)
 
         self.visible_group = pygame.sprite.Group()
         self.enemy_group = pygame.sprite.Group()
@@ -66,8 +68,10 @@ class Level:
     def run(self):
         self.background.update()
         self.visible_group.update(relative_rect=self.player.rect)
+
         self.background.draw_background(self.display_surface)
         self.visible_group.draw(self.display_surface)
+        self.health_bar.display(self.display_surface)
 
         self.spawn_enemy()
         self.handle_player_attack()
