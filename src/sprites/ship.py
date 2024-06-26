@@ -34,8 +34,8 @@ class Ship(pygame.sprite.Sprite):
         self.bullet_group = bullet_group
         self.visible_group = visible_group
 
-        self.cooldown = 200
-        self.cooldown_timer = Cooldown(self.cooldown)
+        self.bullet_cooldown = 200
+        self.bullet_cooldown_timer = Cooldown(self.bullet_cooldown)
 
     @classmethod
     def select_ship(cls, ship_type: ShipTypes):
@@ -97,3 +97,6 @@ class Ship(pygame.sprite.Sprite):
         if self.props["kill_damage_count"] <= 0:
             self.status.set_state(State.DEAD)
             self.direction *= 0
+
+    def make_invincible(self):
+        pass

@@ -78,6 +78,9 @@ class Level:
             ):
                 bullet.kill()
                 break
+        for enemy in self.enemy_group.sprites():
+            if enemy.rect.colliderect(self.player.rect):
+                pass
 
     def run(self):
         self.background.update()

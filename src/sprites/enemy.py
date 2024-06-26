@@ -24,17 +24,18 @@ class ShooterEnemy(Ship):
             bullet_group,
         )
         self.offset_y = offset_y
-        self.cooldown_timer.update_cooldown(500)
+        self.bullet_cooldown_timer.update_cooldown(500)
         self.direction.x = random.choice([1, -1])
+        self.prev_direction = self.direction.copy()
 
     def update(self, *args, **kwargs):
         relative_rect = kwargs.get("relative_rect")
         self.behave(relative_rect)
 
         self.movement()
-        self.cooldown_timer.handle_cooldown()
-        if self.cooldown_timer.has_cooldown():
-            self.cooldown_timer.reset_time()
+        self.bullet_cooldown_timer.handle_cooldown()
+        if self.bullet_cooldown_timer.has_cooldown():
+            self.bullet_cooldown_timer.reset_time()
         super().update()
 
     def movement(self):
@@ -56,17 +57,24 @@ class ShooterEnemy(Ship):
     def behave(self, relative_rect: pygame.Rect):
         if self.rect.left < 0:
             self.direction.x = 1
+            self.prev_direction.x = 1
         elif self.rect.right > WIDTH:
             self.direction.x = -1
+            self.prev_direction.x = -1
         if self.rect.top < self.offset_y:
             self.direction.y = 1
         else:
             self.direction.y = 0
 
-        if self.cooldown_timer.has_cooldown():
+        if self.bullet_cooldown_timer.has_cooldown():
             x_dist = relative_rect.centerx - self.rect.centerx
             if abs(x_dist) <= G_SPRITE_SIZE:
+                if self.direction.x != 0:
+                    self.prev_direction.x = self.direction.x
+                self.direction.x = 0
                 self.shoot()
+            else:
+                self.direction.x = self.prev_direction.x
 
 
 class SelfKillerEnemy(Ship):

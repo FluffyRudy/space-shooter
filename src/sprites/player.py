@@ -24,7 +24,7 @@ class Player(Ship):
     def update(self, *args, **kwargs):
         self.handle_movement()
         self.movement()
-        self.cooldown_timer.handle_cooldown()
+        self.bullet_cooldown_timer.handle_cooldown()
         super().update()
 
     def handle_movement(self):
@@ -43,7 +43,7 @@ class Player(Ship):
         else:
             self.direction.y = 0
 
-        if keys[pygame.K_SPACE] and self.cooldown_timer.has_cooldown():
+        if keys[pygame.K_SPACE] and self.bullet_cooldown_timer.has_cooldown():
             create_bullet(
                 groups=[self.visible_group, self.bullet_group],
                 relative_rect=self.rect,
@@ -52,7 +52,7 @@ class Player(Ship):
                 direction=(0, -1),
                 damage=self.props.get("damage"),
             )
-            self.cooldown_timer.reset_time()
+            self.bullet_cooldown_timer.reset_time()
 
     def movement(self):
         self.rect.x += self.direction.x * self.props.get("speed")
