@@ -14,6 +14,7 @@ class Healthbar:
         self.health_count = health_count
 
     def display(self, display_surface: pygame.Surface):
+        i = 0
         display_surface.blit(self.empty_health_chunks[0], (0, 0))
         for i in range(self.health_count):
             display_surface.blit(
