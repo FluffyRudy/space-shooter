@@ -19,6 +19,8 @@ if __name__ == "__main__":
         EXPLOSION_DIR,
         PLAYER_SHIP_DIR,
         SPACE_BG_DIR,
+        HEALTH_UI_DIR,
+        OBSTACLES_DIR,
     ]
 
     for dir_path in all_dirs:
