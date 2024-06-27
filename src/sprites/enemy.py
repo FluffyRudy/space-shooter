@@ -96,9 +96,10 @@ class SelfKillerEnemy(Ship):
         self.direction.y = 1
 
     def update(self, *args, **kwargs):
+        relative_rect = kwargs.get("relative_rect")
         self.animate()
         self.rect.y += self.direction.y * self.props.get("speed") * 2
-        if self.rect.bottom >= HEIGHT:
+        if self.rect.bottom >= HEIGHT or self.rect.colliderect(relative_rect):
             self.status.set_state(State.DEAD)
             self.direction *= 0
             self.animation_speed = 0.1

@@ -15,22 +15,12 @@ class Healthbar:
 
     def display(self, display_surface: pygame.Surface):
         i = 0
-        display_surface.blit(self.empty_health_chunks[0], (0, 0))
         for i in range(self.health_count):
             display_surface.blit(
                 self.empty_health_chunks[1], ((i + 1) * self.chunk_width, 0)
             )
-        display_surface.blit(
-            pygame.transform.flip(self.empty_health_chunks[0], True, False),
-            ((i + 1) * self.chunk_width, 0),
-        )
 
-        display_surface.blit(self.filled_health_chunks[0], (0, 0))
         for i in range(self.health_count):
             display_surface.blit(
                 self.filled_health_chunks[1], ((i + 1) * self.chunk_width, 0)
             )
-        display_surface.blit(
-            pygame.transform.flip(self.filled_health_chunks[0], True, False),
-            ((i + 1) * self.chunk_width, 0),
-        )

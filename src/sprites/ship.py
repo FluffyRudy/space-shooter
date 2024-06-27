@@ -34,7 +34,7 @@ class Ship(pygame.sprite.Sprite):
         self.bullet_group = bullet_group
         self.visible_group = visible_group
 
-        self.bullet_cooldown = 200
+        self.bullet_cooldown = self.props.get("bullet_cooldown_time")
         self.bullet_cooldown_timer = Cooldown(self.bullet_cooldown)
 
         self.auto_kill = True

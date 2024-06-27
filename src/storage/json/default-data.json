@@ -5,6 +5,8 @@
         "bullet_speed": 5,
         "bullet_damage": 1,
         "kill_damage_count": 5,
+        "invinciblity_cooldown_time": 500,
+        "bullet_cooldown_time": 200,
         "score": 0
     },
     "enemies": {
@@ -13,7 +15,8 @@
             "speed": 2,
             "bullet_speed": 5,
             "bullet_damage": 1,
-            "kill_damage_count": 5
+            "kill_damage_count": 5,
+            "bullet_cooldown_time": 200
         },
         "self_killer": {
             "speed": 8,

@@ -28,14 +28,14 @@ class Level:
         )
 
         """this is temporary solution, I have zero idea how
-           a single bullet is always present in player bullet"""
+           a single bullet is always present in player bullet group"""
         self.player_bullet_group.empty()
 
     def spawn_enemy(self):
         if random.uniform(0, 1) < 0.01:
             random_x = random.randint(-WIDTH, WIDTH * 2)
             random_y = random.randint(-HEIGHT, 0)
-            SelfKillerEnemy((random_x, random_y), self.visible_group, [])
+            SelfKillerEnemy((random_x, random_y), self.visible_group, self.enemy_group)
 
         if len(self.enemy_group) >= self.max_enemy_count:
             return
@@ -79,11 +79,10 @@ class Level:
                 bullet.kill()
                 self.player.damage(bullet.get_damage())
                 self.health_bar.update_health_count(self.player.get_damage_count())
-                break
 
         for enemy in self.enemy_group.sprites():
             if enemy.rect.colliderect(self.player.rect):
-                pass
+                break
 
     def run(self):
         self.background.update()
