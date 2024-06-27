@@ -73,12 +73,17 @@ class Level:
     def handle_enemy_attack(self):
         for bullet in self.enemy_bullet_group.sprites():
             player_bullet_collision = pygame.sprite.collide_rect(bullet, self.player)
-            if player_bullet_collision and pygame.sprite.collide_mask(
-                bullet, self.player
+            if (
+                not self.player.is_invincible
+                and player_bullet_collision
+                and pygame.sprite.collide_mask(bullet, self.player)
             ):
+                self.player.is_invincible = True
+                self.player.invincility_cooldown_timer.reset_time()
                 bullet.kill()
                 self.player.damage(bullet.get_damage())
                 self.health_bar.update_health_count(self.player.get_damage_count())
+                break
 
         for enemy in self.enemy_group.sprites():
             if (
