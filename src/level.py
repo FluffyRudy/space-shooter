@@ -19,7 +19,7 @@ class Level:
         self.enemy_bullet_group = pygame.sprite.Group()
         self.player_bullet_group = pygame.sprite.Group()
 
-        self.max_enemy_count = 15
+        self.max_enemy_count = 5
 
         self.player = Player(
             (WIDTH // 2 - G_SPRITE_SIZE // 2, HEIGHT - G_SPRITE_SIZE),
@@ -98,7 +98,10 @@ class Level:
 
     def run(self):
         self.background.update()
-        self.visible_group.update(relative_rect=self.player.rect)
+        if not self.player.status.is_dead():
+            self.visible_group.update(relative_rect=self.player.rect)
+        else:
+            self.player.update()
 
         self.background.draw_background(self.display_surface)
         self.visible_group.draw(self.display_surface)
