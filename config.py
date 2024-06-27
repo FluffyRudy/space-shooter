@@ -9,6 +9,7 @@ PLAYER_SHIP_DIR = GRAPHICS_DIR / "player_ship"
 BULLET_DIR = GRAPHICS_DIR / "bullet"
 SPACE_BG_DIR = GRAPHICS_DIR / "space_bg"
 HEALTH_UI_DIR = GRAPHICS_DIR / "health"
+OBSTACLES_DIR = GRAPHICS_DIR / "obstacles" / "asteroid"
 
 if __name__ == "__main__":
     all_dirs = [
