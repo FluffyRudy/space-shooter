@@ -81,7 +81,14 @@ class Level:
                 self.health_bar.update_health_count(self.player.get_damage_count())
 
         for enemy in self.enemy_group.sprites():
-            if enemy.rect.colliderect(self.player.rect):
+            if (
+                enemy.rect.colliderect(self.player.rect)
+                and not self.player.is_invincible
+            ):
+                self.player.damage(1)
+                self.health_bar.update_health_count(self.player.get_damage_count())
+                self.player.is_invincible = True
+                self.player.invincility_cooldown_timer.reset_time()
                 break
 
     def run(self):

@@ -30,7 +30,6 @@ class ShooterEnemy(Ship):
     def update(self, *args, **kwargs):
         relative_rect = kwargs.get("relative_rect")
         self.behave(relative_rect)
-
         self.movement()
         self.bullet_cooldown_timer.handle_cooldown()
         if self.bullet_cooldown_timer.has_cooldown():

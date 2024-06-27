@@ -1,4 +1,4 @@
-import pygame
+import pygame, math, random
 from .ship import Ship
 from .bullet import Bullet, create_bullet
 from src.timer.cooldown import Cooldown
@@ -23,19 +23,23 @@ class Player(Ship):
         )
         self.auto_kill = False
 
+        self.is_invincible = False
         self.invincility_cooldown_timer = Cooldown(
             self.props.get("invinciblity_cooldown_time")
         )
 
     def update(self, *args, **kwargs):
-        if not self.status.is_dead():
-            self.handle_event()
-            self.movement()
+        self.handle_event()
+        self.movement()
         self.bullet_cooldown_timer.handle_cooldown()
         self.invincility_cooldown_timer.handle_cooldown()
+        self.handle_invincibility()
         super().update()
 
     def handle_event(self):
+        if self.status.is_dead():
+            return
+
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_RIGHT]:
@@ -61,6 +65,20 @@ class Player(Ship):
                 damage=self.props.get("damage"),
             )
             self.bullet_cooldown_timer.reset_time()
+
+    def handle_invincibility(self):
+        if (
+            self.invincility_cooldown_timer.has_cooldown()
+            and self.image.get_alpha() != 255
+        ):
+            self.image.set_alpha(255)
+            self.is_invincible = False
+
+        elif self.is_invincible and not self.status.is_dead():
+            self.flicker_display()
+
+    def flicker_display(self):
+        self.image.set_alpha(math.sin(random.random()) * 255)
 
     def movement(self):
         self.rect.x += self.direction.x * self.props.get("speed")
