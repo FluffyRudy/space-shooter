@@ -24,7 +24,6 @@ class ShooterEnemy(Ship):
             bullet_group,
         )
         self.offset_y = offset_y
-        self.bullet_cooldown_timer.update_cooldown(500)
         self.direction.x = random.choice([1, -1])
         self.prev_direction = self.direction.copy()
 
