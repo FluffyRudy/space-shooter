@@ -4,6 +4,7 @@ from src.UI.background import Background
 from src.UI.healthbar import Healthbar
 from .sprites.ships.player import Player
 from .sprites.ships.enemy import ShooterEnemy, SelfKillerEnemy
+from .sprites.obstacles.asteroid import Asteroid
 from .settings import WIDTH, HEIGHT, G_SPRITE_SIZE, ShipTypes
 
 
@@ -18,6 +19,7 @@ class Level:
         self.enemy_group = pygame.sprite.Group()
         self.enemy_bullet_group = pygame.sprite.Group()
         self.player_bullet_group = pygame.sprite.Group()
+        self.obstacle_group = pygame.sprite.Group()
 
         self.max_enemy_count = 5
 
@@ -59,6 +61,12 @@ class Level:
                 bullet_group=self.enemy_bullet_group,
                 offset_y=random.randrange(0, G_SPRITE_SIZE * 4),
             )
+
+    def spawn_obstacle(self):
+        if random.uniform(0, 1) < 0.01:
+            random_x = random.randint(0, WIDTH)
+            random_y = random.randrange(-HEIGHT * 2, HEIGHT * 2, HEIGHT)
+            Asteroid((random_x, random_y), self.visible_group, self.obstacle_group)
 
     def handle_player_attack(self):
         for bullet in self.player_bullet_group.sprites():
@@ -108,5 +116,6 @@ class Level:
         self.health_bar.display(self.display_surface)
 
         self.spawn_enemy()
+        self.spawn_obstacle()
         self.handle_player_attack()
         self.handle_enemy_attack()

@@ -31,7 +31,7 @@ def load_frames(
     """
     frames = {}
 
-    for subdir in Path(path).iterdir():
+    for subdir in sorted(Path(path).iterdir()):
         frame_name = subdir.name
         frames[frame_name] = []
         for file in subdir.iterdir():
@@ -56,7 +56,7 @@ def load_frame(
     """
     frames = []
 
-    for file in Path(path).iterdir():
+    for file in sorted(Path(path).iterdir()):
         if file.suffix == ".png":
             surface = load_image(Path(path) / file, scale_ratio)
             frames.append(surface)

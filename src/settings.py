@@ -18,3 +18,7 @@ class ShipTypes(Enum):
     PLAYER = 0
     SHOOTING_ENEMY = 1
     SELF_KILL_ENEMY = 2
+
+
+class ObstacleTypes(Enum):
+    ASTEROID = 0
