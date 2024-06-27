@@ -37,6 +37,8 @@ class Ship(pygame.sprite.Sprite):
         self.bullet_cooldown = 200
         self.bullet_cooldown_timer = Cooldown(self.bullet_cooldown)
 
+        self.auto_kill = True
+
     @classmethod
     def select_ship(cls, ship_type: ShipTypes):
         ship = PLAYER_SHIP_DIR
@@ -61,7 +63,7 @@ class Ship(pygame.sprite.Sprite):
 
     def update(self, *args, **kwargs):
         self.manage_status()
-        if self.can_kill():
+        if self.can_kill() and self.auto_kill:
             self.kill()
         self.animate()
 

@@ -20,14 +20,16 @@ class Player(Ship):
             [],
             bullet_group,
         )
+        self.auto_kill = False
 
     def update(self, *args, **kwargs):
-        self.handle_movement()
-        self.movement()
+        if not self.status.is_dead():
+            self.handle_event()
+            self.movement()
         self.bullet_cooldown_timer.handle_cooldown()
         super().update()
 
-    def handle_movement(self):
+    def handle_event(self):
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_RIGHT]:
@@ -57,3 +59,6 @@ class Player(Ship):
     def movement(self):
         self.rect.x += self.direction.x * self.props.get("speed")
         self.rect.y += self.direction.y * self.props.get("speed")
+
+    def get_damage_count(self):
+        return max(0, self.props.get("kill_damage_count"))

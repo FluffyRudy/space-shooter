@@ -77,7 +77,10 @@ class Level:
                 bullet, self.player
             ):
                 bullet.kill()
+                self.player.damage(bullet.get_damage())
+                self.health_bar.update_health_count(self.player.get_damage_count())
                 break
+
         for enemy in self.enemy_group.sprites():
             if enemy.rect.colliderect(self.player.rect):
                 pass
