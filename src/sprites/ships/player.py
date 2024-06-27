@@ -1,6 +1,6 @@
 import pygame, math, random
 from .ship import Ship
-from .bullet import Bullet, create_bullet
+from ..weapons.bullet import Bullet, create_bullet
 from src.timer.cooldown import Cooldown
 from src.storage.storage import Storage
 from src.settings import DEFAULT_BULLET_SPEED, ShipTypes

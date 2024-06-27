@@ -2,8 +2,8 @@ import pygame, random
 from src.storage.storage import Storage
 from src.UI.background import Background
 from src.UI.healthbar import Healthbar
-from .sprites.player import Player
-from .sprites.enemy import ShooterEnemy, SelfKillerEnemy
+from .sprites.ships.player import Player
+from .sprites.ships.enemy import ShooterEnemy, SelfKillerEnemy
 from .settings import WIDTH, HEIGHT, G_SPRITE_SIZE, ShipTypes
 
 

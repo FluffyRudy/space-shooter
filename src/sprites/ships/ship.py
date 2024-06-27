@@ -2,7 +2,7 @@ import pygame, random, math
 from src.utils.image_util import load_frames, load_frame
 from src.timer.cooldown import Cooldown
 from .state import Direction, State, Status
-from .bullet import Bullet
+from ..weapons.bullet import Bullet
 from src.settings import DEFAULT_BULLET_SPEED, ShipTypes
 from config import PLAYER_SHIP_DIR, ENEMY_SHIP_DIR, EXPLOSION_DIR
 
