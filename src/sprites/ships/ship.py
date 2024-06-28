@@ -25,7 +25,6 @@ class Ship(pygame.sprite.Sprite):
         self.animations_list["dead"] = load_frame(EXPLOSION_DIR)
         self.direction = pygame.math.Vector2(0, 0)
         self.status = Status()
-        print(self.animations_list.keys())
 
         self.image = self.animations_list[self.get_status()][0]
         self.rect = self.image.get_rect(topleft=pos)
@@ -66,6 +65,7 @@ class Ship(pygame.sprite.Sprite):
         self.manage_status()
         if self.can_kill() and self.auto_kill:
             self.kill()
+
         self.animate()
 
     def can_kill(self):
@@ -98,7 +98,7 @@ class Ship(pygame.sprite.Sprite):
     def damage(self, damage: int):
         self.props["kill_damage_count"] -= 1
         if self.props["kill_damage_count"] <= 0:
-            self.animation_speed /= 2
+            self.animation_speed = 0.1
             self.status.set_state(State.DEAD)
             self.direction *= 0
 

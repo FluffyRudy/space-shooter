@@ -1,4 +1,5 @@
 {
+    "current_level": 1,
     "player": {
         "health_count": 5,
         "speed": 5,

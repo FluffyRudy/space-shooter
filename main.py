@@ -12,11 +12,12 @@ class Game:
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         self.clock = pygame.time.Clock()
 
-        self.level = Level(level=1)
+        self.level = Level(level=Storage.get_current_level())
 
     def handle_event(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                Storage.write_current_level(self.level.current_level)
                 sys.exit()
 
     def update(self):
@@ -25,7 +26,8 @@ class Game:
 
         self.level.run()
         if self.level.completed():
-            self.level = Level(2)
+            self.level = Level(self.level.current_level + 1)
+            print(self.level.current_level)
 
         pygame.display.update()
         self.clock.tick(FPS)

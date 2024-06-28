@@ -22,6 +22,7 @@ class Level:
         self.obstacle_group = pygame.sprite.Group()
 
         self.level_attributes = Storage.get_level_data(level)
+        self.current_level = level
         self.enemy_count = 0
 
         self.player = Player(

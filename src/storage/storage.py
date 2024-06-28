@@ -42,6 +42,13 @@ class StorageHandler:
 
     def write_player_data(self, data: dict):
         self.__ship_data.get("player").update(data)
+        self.__write_to_file()
+
+    def write_current_level(self, level: int):
+        self.__ship_data["current_level"] = level
+        self.__write_to_file()
+
+    def __write_to_file(self):
         ship_data_path = self.__storage_path / "ship-data.json"
 
         with open(ship_data_path, "w") as f_ship_data:
@@ -67,6 +74,9 @@ class StorageHandler:
 
     def get_level_data(self, level: int):
         return Storage.get_ship_data().get("levels").get(f"{level}")
+
+    def get_current_level(self):
+        return Storage.get_ship_data().get("current_level")
 
     def get_enemy_data(self, type_: Literal["shooter", "self_killer"]):
         return Storage.get_ship_data().get("enemies").get(type_)
