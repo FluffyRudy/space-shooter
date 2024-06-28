@@ -1,3 +1,4 @@
+from typing import Union
 import pygame, random, math
 from src.utils.image_util import load_frames, load_frame
 from src.timer.cooldown import Cooldown
@@ -95,12 +96,11 @@ class Ship(pygame.sprite.Sprite):
                 new_state = "right"
         return new_state
 
-    def damage(self, damage: int):
+    def damage(self, damage: Union[int, None]):
+        if damage is None or self.props["kill_damage_count"] is None:
+            return damage
         self.props["kill_damage_count"] -= 1
         if self.props["kill_damage_count"] <= 0:
             self.animation_speed = 0.1
             self.status.set_state(State.DEAD)
             self.direction *= 0
-
-    def make_invincible(self):
-        pass
