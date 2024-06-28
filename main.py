@@ -12,7 +12,7 @@ class Game:
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         self.clock = pygame.time.Clock()
 
-        self.level = Level()
+        self.level = Level(level=1)
 
     def handle_event(self):
         for event in pygame.event.get():
@@ -24,6 +24,8 @@ class Game:
         self.handle_event()
 
         self.level.run()
+        if self.level.completed():
+            self.level = Level(2)
 
         pygame.display.update()
         self.clock.tick(FPS)

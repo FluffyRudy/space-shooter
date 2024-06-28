@@ -9,7 +9,7 @@ from .settings import WIDTH, HEIGHT, G_SPRITE_SIZE, ShipTypes
 
 
 class Level:
-    def __init__(self):
+    def __init__(self, level: int):
         self.display_surface = pygame.display.get_surface()
 
         self.background = Background()
@@ -21,7 +21,8 @@ class Level:
         self.player_bullet_group = pygame.sprite.Group()
         self.obstacle_group = pygame.sprite.Group()
 
-        self.max_enemy_count = 5
+        self.level_attributes = Storage.get_level_data(level)
+        self.enemy_count = 0
 
         self.player = Player(
             (WIDTH // 2 - G_SPRITE_SIZE // 2, HEIGHT - G_SPRITE_SIZE),
@@ -33,13 +34,21 @@ class Level:
            a single bullet is always present in player bullet group"""
         self.player_bullet_group.empty()
 
+    def completed(self):
+        return (
+            self.enemy_count >= self.level_attributes.get("max_spawn_count")
+            and len(self.enemy_group.sprites()) == 0
+        )
+
     def spawn_enemy(self):
         if random.uniform(0, 1) < 0.01:
             random_x = random.randint(-WIDTH, WIDTH * 2)
             random_y = random.randint(-HEIGHT, 0)
             SelfKillerEnemy((random_x, random_y), self.visible_group, self.enemy_group)
 
-        if len(self.enemy_group) >= self.max_enemy_count:
+        if len(self.enemy_group.sprites()) >= self.level_attributes.get(
+            "spawn_count"
+        ) or self.enemy_count >= self.level_attributes.get("max_spawn_count"):
             return
 
         do_collide = False
@@ -61,6 +70,7 @@ class Level:
                 bullet_group=self.enemy_bullet_group,
                 offset_y=random.randrange(0, G_SPRITE_SIZE * 4),
             )
+            self.enemy_count += 1
 
     def spawn_obstacle(self):
         if random.uniform(0, 1) < 0.01:
