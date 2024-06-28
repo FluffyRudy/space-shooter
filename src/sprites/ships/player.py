@@ -1,9 +1,11 @@
 import pygame, math, random
 from .ship import Ship
 from ..weapons.bullet import Bullet, create_bullet
+from src.utils.image_util import load_frame
 from src.timer.cooldown import Cooldown
 from src.storage.storage import Storage
 from src.settings import DEFAULT_BULLET_SPEED, ShipTypes
+from config import DEAD_EFFECT
 
 
 class Player(Ship):
@@ -21,11 +23,13 @@ class Player(Ship):
             [],
             bullet_group,
         )
+        self.animations_list["dead"] = load_frame(DEAD_EFFECT)
+
         self.auto_kill = False
 
         self.is_invincible = False
         self.invincility_cooldown_timer = Cooldown(
-            self.props.get("invinciblity_cooldown_time")
+            self.props.get("invincibility_cooldown_time")
         )
 
     def update(self, *args, **kwargs):

@@ -19,5 +19,5 @@ class Asteroid(Obstacle):
     def update(self, *arg, **kwargs):
         super().update()
         relative_rect = kwargs.get("relative_rect")
-        if self.rect.colliderect(relative_rect):
+        if self.hitbox.colliderect(relative_rect):
             self.active()

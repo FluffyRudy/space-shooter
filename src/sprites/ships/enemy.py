@@ -66,7 +66,7 @@ class ShooterEnemy(Ship):
 
         if self.bullet_cooldown_timer.has_cooldown():
             x_dist = relative_rect.centerx - self.rect.centerx
-            if abs(x_dist) <= G_SPRITE_SIZE:
+            if abs(x_dist) <= G_SPRITE_SIZE // 2:
                 if self.direction.x != 0:
                     self.prev_direction.x = self.direction.x
                 self.direction.x = 0
