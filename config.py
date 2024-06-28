@@ -6,9 +6,10 @@ GRAPHICS_DIR = ROOT_DIR / "graphics" / "graphics"
 ENEMY_SHIP_DIR = GRAPHICS_DIR / "enemy_ship"
 EXPLOSION_DIR = GRAPHICS_DIR / "explosion"
 PLAYER_SHIP_DIR = GRAPHICS_DIR / "player_ship"
+DEAD_EFFECT = PLAYER_SHIP_DIR / "dead_effect"
 BULLET_DIR = GRAPHICS_DIR / "bullet"
 SPACE_BG_DIR = GRAPHICS_DIR / "space_bg"
-HEALTH_UI_DIR = GRAPHICS_DIR / "health"
+UI_DIR = GRAPHICS_DIR / "UI"
 OBSTACLES_DIR = GRAPHICS_DIR / "obstacles"
 
 if __name__ == "__main__":
