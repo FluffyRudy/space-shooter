@@ -21,7 +21,7 @@
         },
         "self_killer": {
             "speed": 8,
-            "kill_damage_count": "null"
+            "kill_damage_count": null
         }
     },
     "levels": {
