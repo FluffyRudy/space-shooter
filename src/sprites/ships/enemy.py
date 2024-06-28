@@ -87,7 +87,7 @@ class SelfKillerEnemy(Ship):
             ShipTypes.SELF_KILL_ENEMY,
             Storage.get_enemy_data("self_killer"),
             visible_group,
-            [],
+            base_group,
             [],
         )
         self.animation_speed = 1
