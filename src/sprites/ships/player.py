@@ -1,10 +1,12 @@
+from typing import Union
 import pygame, math, random
 from .ship import Ship
+from .state import State
 from ..weapons.bullet import Bullet, create_bullet
 from src.utils.image_util import load_frame
 from src.timer.cooldown import Cooldown
 from src.storage.storage import Storage
-from src.settings import DEFAULT_BULLET_SPEED, ShipTypes
+from src.settings import DEFAULT_BULLET_SPEED, ShipTypes, G_SPRITE_SIZE
 from config import DEAD_EFFECT
 
 
@@ -23,14 +25,15 @@ class Player(Ship):
             [],
             bullet_group,
         )
-        self.animations_list["dead"] = load_frame(DEAD_EFFECT)
+        self.animations_list["dead"] = load_frame(
+            DEAD_EFFECT, None, (G_SPRITE_SIZE, G_SPRITE_SIZE)
+        )
 
-        self.auto_kill = False
-
-        self.is_invincible = False
         self.invincility_cooldown_timer = Cooldown(
             self.props.get("invincibility_cooldown_time")
         )
+        self.auto_kill = False
+        self.is_invincible = False
 
     def update(self, *args, **kwargs):
         self.handle_event()
@@ -66,7 +69,7 @@ class Player(Ship):
                 num_bullets=10,
                 speed=DEFAULT_BULLET_SPEED,
                 direction=(0, -1),
-                damage=self.props.get("damage"),
+                damage=self.props.get("bullet_damage"),
             )
             self.bullet_cooldown_timer.reset_time()
 
@@ -90,3 +93,15 @@ class Player(Ship):
 
     def get_damage_count(self):
         return max(0, self.props.get("kill_damage_count"))
+
+    def damage(self, damage: Union[int, None]):
+        if self.is_invincible:
+            return
+        if not self.auto_kill and not self.is_invincible:
+            self.is_invincible = True
+            self.invincility_cooldown_timer.reset_time()
+        self.props["kill_damage_count"] -= 1
+        if self.props["kill_damage_count"] <= 0:
+            self.animation_speed = 0.1
+            self.status.set_state(State.DEAD)
+            self.direction *= 0
