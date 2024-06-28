@@ -43,9 +43,13 @@ class Level:
 
     def spawn_enemy(self):
         if random.uniform(0, 1) < 0.01:
-            random_x = random.randint(-WIDTH, WIDTH * 2)
+            random_x = random.randint(0, WIDTH)
             random_y = random.randint(-HEIGHT, 0)
-            SelfKillerEnemy((random_x, random_y), self.visible_group, self.enemy_group)
+            SelfKillerEnemy(
+                (random_x, random_y),
+                visible_group=self.visible_group,
+                base_group=self.enemy_group,
+            )
 
         if len(self.enemy_group.sprites()) >= self.level_attributes.get(
             "spawn_count"
@@ -87,33 +91,32 @@ class Level:
             ):
                 collided_enemy.damage(bullet.get_damage())
                 bullet.kill()
-                break
+            for obstacle in self.obstacle_group.sprites():
+                if obstacle.hitbox.colliderect(bullet.rect):
+                    obstacle.active()
 
     def handle_enemy_attack(self):
         for bullet in self.enemy_bullet_group.sprites():
             player_bullet_collision = pygame.sprite.collide_rect(bullet, self.player)
-            if (
-                not self.player.is_invincible
-                and player_bullet_collision
-                and pygame.sprite.collide_mask(bullet, self.player)
+            if player_bullet_collision and pygame.sprite.collide_mask(
+                bullet, self.player
             ):
-                self.player.is_invincible = True
-                self.player.invincility_cooldown_timer.reset_time()
                 bullet.kill()
-                self.player.damage(bullet.get_damage())
-                self.health_bar.update_health_count(self.player.get_damage_count())
-                break
+                self.reduce_player_health(bullet.get_damage())
 
         for enemy in self.enemy_group.sprites():
-            if (
-                enemy.rect.colliderect(self.player.rect)
-                and not self.player.is_invincible
-            ):
-                self.player.damage(1)
-                self.health_bar.update_health_count(self.player.get_damage_count())
-                self.player.is_invincible = True
-                self.player.invincility_cooldown_timer.reset_time()
-                break
+            if enemy.rect.colliderect(self.player.rect):
+                self.reduce_player_health(1)
+
+    def handle_obstacle_collision(self):
+        for obstacle in self.obstacle_group.sprites():
+            if obstacle.hitbox.colliderect(self.player.rect):
+                obstacle.active()
+                self.reduce_player_health(1)
+
+    def reduce_player_health(self, damage: int):
+        self.player.damage(damage)
+        self.health_bar.update_health_count(self.player.get_damage_count())
 
     def run(self):
         self.background.update()
@@ -130,3 +133,4 @@ class Level:
         self.spawn_obstacle()
         self.handle_player_attack()
         self.handle_enemy_attack()
+        self.handle_obstacle_collision()
