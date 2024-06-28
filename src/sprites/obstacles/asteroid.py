@@ -15,9 +15,3 @@ class Asteroid(Obstacle):
         pos = (pos[0] if (pos[0] < WIDTH) else (pos[0] - WIDTH - 1), pos[1])
         super().__init__(pos, ObstacleTypes.ASTEROID, visible_group, base_group)
         self.direction.y = 1 if pos[1] < HEIGHT // 2 else -1
-
-    def update(self, *arg, **kwargs):
-        super().update()
-        relative_rect = kwargs.get("relative_rect")
-        if self.hitbox.colliderect(relative_rect):
-            self.active()
