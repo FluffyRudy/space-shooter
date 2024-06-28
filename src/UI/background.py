@@ -2,7 +2,7 @@ import pygame
 from pathlib import Path
 from random import choice
 from src.utils.image_util import load_frame
-from config import SPACE_BG_DIR
+from config import UI_DIR
 
 
 class Background:
@@ -14,7 +14,8 @@ class Background:
         self.frame_index = 0
 
     def get_random_spaceBG(self):
-        return load_frame(choice(list(SPACE_BG_DIR.iterdir())), (4, 3))
+        space_bg_dir = UI_DIR / "space_bg"
+        return load_frame(choice(list(space_bg_dir.iterdir())), (4, 3))
 
     def draw_background(self, display_surface: pygame.Surface):
         display_surface.blit(self.background_image, (0, 0))

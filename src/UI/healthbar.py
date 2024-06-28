@@ -1,12 +1,12 @@
 import pygame
 from src.utils.image_util import load_frame
-from config import HEALTH_UI_DIR
+from config import UI_DIR
 
 
 class Healthbar:
     def __init__(self, health_count: int):
-        self.empty_health_chunks = load_frame(HEALTH_UI_DIR / "empty")
-        self.filled_health_chunks = load_frame(HEALTH_UI_DIR / "filled")
+        self.empty_health_chunks = load_frame(UI_DIR / "health" / "empty")
+        self.filled_health_chunks = load_frame(UI_DIR / "health" / "filled")
         self.chunk_width = self.empty_health_chunks[0].get_width()
         self.health_count = health_count
         self.full_health = health_count
