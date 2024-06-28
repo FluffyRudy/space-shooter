@@ -1,5 +1,5 @@
 {
-    "current_level": 3,
+    "current_level": 1,
     "player": {
         "health_count": 5,
         "speed": 5,
@@ -21,7 +21,7 @@
         },
         "self_killer": {
             "speed": 8,
-            "kill_damage_count": "null"
+            "kill_damage_count": null
         }
     },
     "levels": {
