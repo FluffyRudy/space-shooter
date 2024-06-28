@@ -46,3 +46,6 @@ class Obstacle(pygame.sprite.Sprite):
 
     def active(self):
         self.has_collided = True
+
+    def is_active(self):
+        return self.has_collided
