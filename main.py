@@ -1,8 +1,10 @@
 import pygame, sys
 from src.storage.storage import Storage
 from src.level import Level
+from src.utils.math_util import calculate_center
 from src.settings import FPS, WIDTH, HEIGHT, BLACK
-from src.storage.storage import StorageHandler
+
+from src.UI.menu.gameover import GameoverUI
 
 
 class Game:
@@ -13,6 +15,7 @@ class Game:
         self.clock = pygame.time.Clock()
 
         self.level = Level(level=Storage.get_current_level())
+        self.gameoverUI = GameoverUI(calculate_center(self.screen.get_size()))
 
     def handle_event(self):
         for event in pygame.event.get():
@@ -24,10 +27,12 @@ class Game:
         self.screen.fill(BLACK)
         self.handle_event()
 
-        self.level.run()
-        if self.level.completed():
-            self.level = Level(self.level.current_level + 1)
-            print(self.level.current_level)
+        if False:
+            self.level.run()
+            if self.level.completed():
+                self.level = Level(self.level.current_level + 1)
+        else:
+            self.gameoverUI.display(self.screen)
 
         pygame.display.update()
         self.clock.tick(FPS)
