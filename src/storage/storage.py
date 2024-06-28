@@ -62,11 +62,11 @@ class StorageHandler:
     def get_ship_data(self) -> dict:
         return self.__ship_data
 
-    def get_level_data(self):
-        return self.__level_data
-
     def get_player_data(self):
         return Storage.get_ship_data().get("player")
+
+    def get_level_data(self, level: int):
+        return Storage.get_ship_data().get("levels").get(f"{level}")
 
     def get_enemy_data(self, type_: Literal["shooter", "self_killer"]):
         return Storage.get_ship_data().get("enemies").get(type_)
