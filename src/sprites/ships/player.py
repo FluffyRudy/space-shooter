@@ -34,6 +34,7 @@ class Player(Ship):
         )
         self.auto_kill = False
         self.is_invincible = False
+        self.is_immune = False
 
     def update(self, *args, **kwargs):
         self.handle_event()
@@ -92,16 +93,19 @@ class Player(Ship):
         self.rect.y += self.direction.y * self.props.get("speed")
 
     def get_damage_count(self):
-        return max(0, self.props.get("kill_damage_count"))
+        return max(0, self.props.get("health_count"))
 
     def damage(self, damage: Union[int, None]):
-        if self.is_invincible:
+        if self.is_invincible or self.is_immune:
             return
         if not self.auto_kill and not self.is_invincible:
             self.is_invincible = True
             self.invincility_cooldown_timer.reset_time()
-        self.props["kill_damage_count"] -= 1
-        if self.props["kill_damage_count"] <= 0:
+        self.props["health_count"] -= 1
+        if self.props["health_count"] <= 0:
             self.animation_speed = 0.1
             self.status.set_state(State.DEAD)
             self.direction *= 0
+
+    def is_dead(self):
+        return self.status.is_dead()

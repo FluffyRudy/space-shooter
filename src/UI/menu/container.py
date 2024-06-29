@@ -1,5 +1,6 @@
-from typing import Any
+from typing import Union
 import pygame
+from src.UI.menu.button import CustomButton, StateButton
 from src.animation.Text.colortransition import ColorTransition
 from src.utils.color_utils import random_rgba
 from src.utils.math_util import calculate_center
@@ -9,14 +10,24 @@ from config import UI_DIR, FONT_DIR
 
 
 class Container:
-    def __init__(self, pos: tuple[int, int], header: str = ""):
+    def __init__(
+        self,
+        pos: tuple[int, int],
+        header: str = "",
+        size: tuple[int, int] = (WIDTH, HEIGHT),
+    ):
         path = UI_DIR / "menu" / "common" / "Window.png"
-        self.image = load_image(path, None, (WIDTH, HEIGHT))
+        self.image = load_image(path, None, size)
         self.rect = self.image.get_rect(center=pos)
 
         self.header_box_height = self.calculate_header_boxsize()[1]
-        self.header_text = ColorTransition(header, int(self.header_box_height))
-        self.widgets = []
+        self.header_text = ColorTransition(header, int(self.header_box_height // 1.8))
+
+    def get_rect(self):
+        return self.rect
+
+    def get_surface(self):
+        return self.image
 
     def calculate_header_boxsize(self):
         """i just used this way using a threshold to capture nearset family of color
@@ -35,13 +46,10 @@ class Container:
 
         return (start_y, end_y)
 
-    def add_header(self, display_surface: pygame.Surface):
-        self.header_text.display((WIDTH, self.header_box_height), display_surface)
-
-    def add_widget(self, widget: Any):
-        pass
+    def add_header(self, position: tuple[int, int], display_surface: pygame.Surface):
+        self.header_text.display((position), display_surface)
 
     def display(self, display_surface: pygame.Surface):
         display_surface.fill((138, 170, 169))
         display_surface.blit(self.image, self.rect.topleft)
-        self.add_header(display_surface)
+        self.add_header((WIDTH, self.header_box_height), display_surface)

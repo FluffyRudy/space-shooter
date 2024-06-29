@@ -97,10 +97,10 @@ class Ship(pygame.sprite.Sprite):
         return new_state
 
     def damage(self, damage: Union[int, None]):
-        if damage is None or self.props["kill_damage_count"] is None:
-            return damage
-        self.props["kill_damage_count"] -= 1
-        if self.props["kill_damage_count"] <= 0:
+        if damage is None or self.props.get("health_count") is None:
+            return None
+        self.props["health_count"] -= 1
+        if self.props["health_count"] <= 0:
             self.animation_speed = 0.1
             self.status.set_state(State.DEAD)
             self.direction *= 0

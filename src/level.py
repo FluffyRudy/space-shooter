@@ -1,3 +1,4 @@
+from typing import Optional
 import pygame, random
 from src.storage.storage import Storage
 from src.UI.background import Background
@@ -12,8 +13,10 @@ class Level:
     def __init__(self, level: int):
         self.display_surface = pygame.display.get_surface()
 
+        self.is_gameover = False
+
         self.background = Background()
-        self.health_bar = Healthbar(5)
+        self.health_bar = Healthbar(Storage.get_player_data().get("health_count"))
 
         self.visible_group = pygame.sprite.Group()
         self.enemy_group = pygame.sprite.Group()
@@ -118,12 +121,13 @@ class Level:
         self.player.damage(damage)
         self.health_bar.update_health_count(self.player.get_damage_count())
 
-    def run(self):
+    def handle_gameover(self):
+        if self.player.is_dead() and self.player.can_kill():
+            self.is_gameover = True
+
+    def run(self, event: Optional[pygame.event.Event]):
         self.background.update()
-        if not self.player.status.is_dead():
-            self.visible_group.update(relative_rect=self.player.rect)
-        else:
-            self.player.update()
+        self.visible_group.update(relative_rect=self.player.rect)
 
         self.background.draw_background(self.display_surface)
         self.visible_group.draw(self.display_surface)
@@ -134,3 +138,4 @@ class Level:
         self.handle_player_attack()
         self.handle_enemy_attack()
         self.handle_obstacle_collision()
+        self.handle_gameover()
