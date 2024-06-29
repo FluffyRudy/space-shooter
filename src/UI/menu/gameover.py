@@ -10,7 +10,9 @@ from config import UI_DIR
 class GameoverUI:
     def __init__(self, pos: tuple[int, int], event_action: dict):
         self.event_action = event_action
-        self.container = Container(pos, "GAME_OVER", (WIDTH // 2, HEIGHT))
+        self.container = Container(
+            pos, "GAME_OVER", (WIDTH // 2, HEIGHT), text_alpha_factor=(10, 0)
+        )
 
         center_pos = (
             self.container.get_rect().width // 2,

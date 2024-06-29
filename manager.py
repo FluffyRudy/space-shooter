@@ -1,6 +1,7 @@
 import pygame, sys, time
 from src.storage.storage import Storage
 from src.level import Level
+from src.UI.menu.mainmenu import MainMenuUI
 from src.UI.menu.gameover import GameoverUI
 from src.settings import FPS, WIDTH, HEIGHT, BLACK
 
@@ -10,6 +11,7 @@ class Manager:
         pygame.init()
 
         self.quit_game = False
+        self.start_game = False
         self.event = None
 
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -23,6 +25,14 @@ class Manager:
                 "close": lambda: self.end_game(),
                 "replay": lambda: self.replay(),
                 "main_menu": lambda: print("main_menu"),
+            },
+        )
+        self.mainmenu = MainMenuUI(
+            (WIDTH // 2, HEIGHT // 2),
+            {
+                "play": lambda: print("start"),
+                "replay": lambda: print("levels"),
+                "close": lambda: print("main_menu"),
             },
         )
 
@@ -51,8 +61,11 @@ class Manager:
         if self.level.is_gameover:
             self.gameover.display(self.screen)
             self.gameover.update(self.event)
-        else:
+        elif self.start_game:
             self.level.run(self.event)
+        else:
+            self.mainmenu.display(self.screen)
+            self.mainmenu.update(self.event)
 
         pygame.display.update()
         self.clock.tick(FPS)

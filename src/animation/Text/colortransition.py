@@ -14,7 +14,7 @@ class ColorTransition:
         font: Optional[pygame.font.Font] = None,
         factor: int = 0,
     ):
-        self.font = pygame.font.Font(FONT_DIR / "BarcadeNoBarBold-gzXq.otf", size)
+        self.font = pygame.font.Font(FONT_DIR / "Barcade-R4LM.otf", size)
         self.text = text
         if isinstance(font, pygame.font.Font):
             self.font = font

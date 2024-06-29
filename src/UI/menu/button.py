@@ -1,5 +1,6 @@
 from typing import Literal, Callable
 import pygame
+from src.utils.math_util import calculate_center
 from src.utils.image_util import load_image
 from src.settings import G_SPRITE_SIZE
 from config import UI_DIR, FONT_DIR
@@ -52,12 +53,16 @@ class StateButton:
 
 
 class CustomButton:
-    def __init__(self, image_path: str, text: str, pos: tuple[int, int]):
-        self.image = load_image(image_path)
-        self.rect = self.image.get_rect(topleft=pos)
-        self.font = pygame.font.Font(
-            FONT_DIR / "BarcadeNoBarBold-gzXq.otf", min(self.rect.size)
-        )
+    def __init__(self, text: str, pos: tuple[int, int]):
+        table_path = UI_DIR / "menu" / "common" / "Table.png"
+        self.image = load_image(table_path)
+        self.rect = self.image.get_rect(center=pos)
+        self.font = pygame.font.Font(FONT_DIR / "BarcadeNoBarBold-gzXq.otf", 50)
+        self.text_surf = self.font.render(text, True, (255, 255, 255))
 
     def display(self, display_surface: pygame.Surface):
         display_surface.blit(self.image, self.rect.topleft)
+        self.image.blit(
+            self.text_surf,
+            calculate_center(self.image.get_size(), self.text_surf.get_size()),
+        )
