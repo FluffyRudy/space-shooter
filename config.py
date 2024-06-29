@@ -2,7 +2,8 @@ from pathlib import Path
 
 ROOT_DIR = Path(__file__).resolve().parent
 
-GRAPHICS_DIR = ROOT_DIR / "graphics" / "graphics"
+ASSETS_DIR = ROOT_DIR / "assets"
+GRAPHICS_DIR = ASSETS_DIR / "graphics"
 ENEMY_SHIP_DIR = GRAPHICS_DIR / "enemy_ship"
 EXPLOSION_DIR = GRAPHICS_DIR / "explosion"
 PLAYER_SHIP_DIR = GRAPHICS_DIR / "player_ship"
