@@ -3,6 +3,7 @@ from pathlib import Path
 ROOT_DIR = Path(__file__).resolve().parent
 
 ASSETS_DIR = ROOT_DIR / "assets"
+FONT_DIR = ASSETS_DIR / "fonts"
 GRAPHICS_DIR = ASSETS_DIR / "graphics"
 ENEMY_SHIP_DIR = GRAPHICS_DIR / "enemy_ship"
 EXPLOSION_DIR = GRAPHICS_DIR / "explosion"
