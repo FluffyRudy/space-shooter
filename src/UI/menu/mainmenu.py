@@ -48,6 +48,7 @@ class MainMenuUI:
             button.display(self.container.get_surface())
         self.level_box.display(self.container.get_surface())
         self.container.display(display_surface)
+        self.container.get_surface().fill((0, 0, 0))
 
     def update(self, event: Optional[pygame.event.Event]):
         is_event = event is not None
