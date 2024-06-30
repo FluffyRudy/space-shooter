@@ -52,6 +52,11 @@ class Container:
     def add_header(self, position: tuple[int, int], display_surface: pygame.Surface):
         self.header_text.display((position), display_surface)
 
+    def convert_position(self, pos: tuple[int, int]):
+        pos_x = pos[0] - self.rect.left
+        pos_y = pos[1] - self.rect.top
+        return pos_x, pos_y
+
     def display(self, display_surface: pygame.Surface):
         display_surface.blit(self.image, self.rect.topleft)
         self.add_header((WIDTH, self.header_box_height), display_surface)

@@ -30,9 +30,9 @@ class Manager:
         self.mainmenu = MainMenuUI(
             (WIDTH // 2, HEIGHT // 2),
             {
-                "play": lambda: print("start"),
-                "replay": lambda: print("levels"),
-                "close": lambda: print("main_menu"),
+                "play": lambda: self.play(),
+                "levels": lambda: print("levels"),
+                "exit": lambda: self.end_game(),
             },
         )
 
@@ -41,7 +41,11 @@ class Manager:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.quit_game = True
-            self.event = event
+            if (
+                event.type == pygame.MOUSEBUTTONDOWN
+                or event.type == pygame.MOUSEBUTTONUP
+            ):
+                self.event = event
 
         if self.quit_game:
             Storage.write_current_level(self.level.current_level)
@@ -54,13 +58,17 @@ class Manager:
     def end_game(self):
         self.quit_game = True
 
+    def play(self):
+        self.start_game = True
+
     def update(self):
-        self.screen.fill(BLACK)
         self.handle_event()
 
         if self.level.is_gameover:
             self.gameover.display(self.screen)
             self.gameover.update(self.event)
+        elif self.level.completed():
+            self.level = Level(self.level.current_level + 1)
         elif self.start_game:
             self.level.run(self.event)
         else:

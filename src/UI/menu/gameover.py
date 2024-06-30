@@ -30,22 +30,34 @@ class GameoverUI:
             "main_menu": main_menu,
         }
 
+        self.pressed_button = None
+
     def display(self, display_surface: pygame.Surface):
         self.container.display(display_surface)
         for button in self.buttons.values():
             button.display(self.container.get_surface())
 
     def update(self, event: pygame.event.Event):
-        if event is not None and event.type == pygame.MOUSEBUTTONDOWN:
-            for button in self.buttons.values():
-                pos_x = event.pos[0] - self.container.rect.left
-                pos_y = event.pos[1] - self.container.rect.top
-                if button.is_pressed((pos_x, pos_y)):
-                    button.toggle()
-        elif event is not None and event.type == pygame.MOUSEBUTTONUP:
-            for button in self.buttons.values():
-                pos_x = event.pos[0] - self.container.rect.left
-                pos_y = event.pos[1] - self.container.rect.top
-                if button.is_pressed((pos_x, pos_y)):
-                    button.trigger_action()
-                    button.inactive()
+        is_event = event is not None
+        if not is_event:
+            return
+
+        for button in self.buttons.values():
+            converted_pos = self.container.convert_position(event.pos)
+            if event.type == pygame.MOUSEBUTTONDOWN and button.is_pressed(
+                converted_pos
+            ):
+                self.pressed_button = button
+                button.toggle()
+            elif event.type == pygame.MOUSEBUTTONUP and button.is_pressed(
+                converted_pos
+            ):
+                button.trigger_action()
+                self.pressed_button = None
+
+        if self.pressed_button:
+            mouse_pos = pygame.mouse.get_pos()
+            converted_pos = self.container.convert_position(mouse_pos)
+            if not self.pressed_button.is_pressed(converted_pos):
+                self.pressed_button.trigger_action()
+                self.pressed_button = None

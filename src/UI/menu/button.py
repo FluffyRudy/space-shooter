@@ -53,12 +53,16 @@ class StateButton:
 
 
 class CustomButton:
-    def __init__(self, text: str, pos: tuple[int, int]):
+    def __init__(self, text: str, pos: tuple[int, int], action: Callable):
         table_path = UI_DIR / "menu" / "common" / "Table.png"
         self.image = load_image(table_path)
         self.rect = self.image.get_rect(center=pos)
         self.font = pygame.font.Font(FONT_DIR / "BarcadeNoBarBold-gzXq.otf", 50)
         self.text_surf = self.font.render(text, True, (255, 255, 255))
+        self.action = action
+
+    def trigger_action(self):
+        self.action()
 
     def display(self, display_surface: pygame.Surface):
         display_surface.blit(self.image, self.rect.topleft)
@@ -66,3 +70,6 @@ class CustomButton:
             self.text_surf,
             calculate_center(self.image.get_size(), self.text_surf.get_size()),
         )
+
+    def is_pressed(self, pos: tuple[int, int]):
+        return self.rect.collidepoint(pos)
