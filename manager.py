@@ -27,11 +27,11 @@ class Manager:
                 "main_menu": lambda: print("main_menu"),
             },
         )
+        # main menu has levels option that is binded with main menu itself
         self.mainmenu = MainMenuUI(
             (WIDTH // 2, HEIGHT // 2),
             {
                 "play": lambda: self.play(),
-                "levels": lambda: print("levels"),
                 "exit": lambda: self.end_game(),
             },
         )

@@ -3,6 +3,7 @@ import pygame
 from collections import OrderedDict
 from .container import Container
 from .button import CustomButton
+from .scrollbox import Scrollbox
 from src.utils.image_util import load_image
 from src.settings import WIDTH, HEIGHT, G_SPRITE_SIZE
 from config import UI_DIR
@@ -14,6 +15,7 @@ class MainMenuUI:
         self.container = Container(
             pos, "S P A C E  S H O O T E R", (WIDTH, HEIGHT), text_alpha_factor=(10, 0)
         )
+        self.container.get_surface().fill((0, 0, 0))
 
         center_pos = (
             self.container.get_rect().width // 2,
@@ -23,23 +25,36 @@ class MainMenuUI:
             (center_pos[0], center_pos[1] + i * G_SPRITE_SIZE * 2)
             for i in range(-1, 2, 1)
         ]
+        self.level_box = Scrollbox(
+            (WIDTH // 2, self.container.header_box_height // 4 + HEIGHT // 2),
+            lambda: self.level_box.toggle_visibility(),
+        )
         start_button = CustomButton("start", positions[0], event_action["play"])
-        levels_button = CustomButton("levels", positions[1], event_action["levels"])
+        levels_button = CustomButton(
+            "levels", positions[1], lambda: self.level_box.make_visible()
+        )
         exit_button = CustomButton("exit", positions[2], event_action["exit"])
         self.buttons = OrderedDict(
             start=start_button, levels=levels_button, _exit=exit_button
         )
 
+        self.display_level = False
+
         self.pressed_button = None
 
     def display(self, display_surface: pygame.Surface):
+        self.container.display(display_surface)
         for button in self.buttons.values():
             button.display(self.container.get_surface())
+        self.level_box.display(self.container.get_surface())
         self.container.display(display_surface)
 
     def update(self, event: Optional[pygame.event.Event]):
         is_event = event is not None
         if not is_event:
+            return
+        self.level_box.update(event)
+        if self.level_box.is_visible:
             return
 
         for button in self.buttons.values():

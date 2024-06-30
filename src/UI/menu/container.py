@@ -21,13 +21,20 @@ class Container:
         self.image = load_image(path, None, size)
         self.rect = self.image.get_rect(center=pos)
 
-        self.header_box_height = self.calculate_header_boxheight()[1]
+        if len(header) > 0:
+            self.header_box_height = self.calculate_header_boxheight()[1]
+        else:
+            self.header_box_height = 0
+
         self.header_text = ColorTransition(
             header, int(self.header_box_height // 1.5), factor=text_alpha_factor[0]
         )
 
     def get_rect(self):
         return self.rect
+
+    def update_surface(self, surface: pygame.Surface):
+        self.image = surface
 
     def get_surface(self):
         return self.image
