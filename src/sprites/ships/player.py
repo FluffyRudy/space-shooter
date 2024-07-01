@@ -67,7 +67,7 @@ class Player(Ship):
             create_bullet(
                 groups=[self.visible_group, self.bullet_group],
                 relative_rect=self.rect,
-                num_bullets=10,
+                num_bullets=20,
                 speed=DEFAULT_BULLET_SPEED,
                 direction=(0, -1),
                 damage=self.props.get("bullet_damage"),
