@@ -14,6 +14,7 @@ class Scrollbox:
         size = int(WIDTH * 0.4), int(HEIGHT * 0.7)
         overlay_size = size[0] * 0.9, size[1] * 0.7
         self.image = load_image(common_path / "box.png", None, size)
+        self.bg_image = self.image.copy()
         self.overlay = pygame.Surface(overlay_size, pygame.SRCALPHA)
         self.cancel_btn = load_image(
             common_path / "close.png", None, (G_SPRITE_SIZE, G_SPRITE_SIZE)
@@ -27,6 +28,8 @@ class Scrollbox:
         self.cell_coor_y = 0
         self.cells_list: list[CustomButton] = []
 
+        self.border_thickness = 5
+
     def set_cell_callback(self, callback: Callable[[str], None]):
         self.cell_callback = callback
 
@@ -37,10 +40,10 @@ class Scrollbox:
         self.cell_callback(cell)
         self.is_visible = False
 
-    def add_cell(self, label: str):
+    def add_cell(self, label: str, prefix: str = ""):
         self.cells_list.append(
             CustomButton(
-                label,
+                prefix + " " + label,
                 (
                     self.rect.width // 2,
                     self.cell_coor_y * G_SPRITE_SIZE // 2
@@ -61,51 +64,18 @@ class Scrollbox:
             # Fill the entire image with black
             self.image.fill((0, 0, 0))
 
-            # Draw the borders
-            border_color = (255, 255, 255)  # Example border color
-            border_thickness = 2  # Example border thickness
-
-            # Top border
-            self.image.fill(
-                border_color, rect=(0, 0, self.image.get_width(), border_thickness)
-            )
-            # Bottom border
-            self.image.fill(
-                border_color,
-                rect=(
-                    0,
-                    self.image.get_height() - border_thickness,
-                    self.image.get_width(),
-                    border_thickness,
-                ),
-            )
-            # Left border
-            self.image.fill(
-                border_color, rect=(0, 0, border_thickness, self.image.get_height())
-            )
-            # Right border
-            self.image.fill(
-                border_color,
-                rect=(
-                    self.image.get_width() - border_thickness,
-                    0,
-                    border_thickness,
-                    self.image.get_height(),
-                ),
-            )
-
             for cell_btn in self.cells_list:
                 # if cell_btn.rect.top > self.cancel_btn_rect.height:
                 cell_btn.display(self.overlay)
-
+            self.image.blit(self.bg_image, (0, 0))
             self.image.blit(self.cancel_btn, self.cancel_btn_rect.topleft)
             self.image.blit(
-                self.overlay, (border_thickness, self.cancel_btn_rect.bottom + 1)
+                self.overlay, (self.border_thickness, self.cancel_btn_rect.bottom + 1)
             )
 
             display_surface.blit(self.image, self.rect.topleft)
 
-            self.overlay.fill((0, 0, 0))
+            self.overlay.fill((0, 0, 0, 0))
         else:
             self.image.set_alpha(0)
 
@@ -147,9 +117,3 @@ class Scrollbox:
     def handle_cancel_button(self, event):
         if event.type == pygame.MOUSEBUTTONUP:
             self.is_visible = False
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            self.cancel_btn = load_image(
-                UI_DIR / "buttons" / "active" / "close.png",
-                None,
-                (G_SPRITE_SIZE, G_SPRITE_SIZE),
-            )
