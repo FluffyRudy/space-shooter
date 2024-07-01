@@ -61,11 +61,9 @@ class Scrollbox:
             if self.image.get_alpha() != 255:
                 self.image.set_alpha(255)
 
-            # Fill the entire image with black
             self.image.fill((0, 0, 0))
 
             for cell_btn in self.cells_list:
-                # if cell_btn.rect.top > self.cancel_btn_rect.height:
                 cell_btn.display(self.overlay)
             self.image.blit(self.bg_image, (0, 0))
             self.image.blit(self.cancel_btn, self.cancel_btn_rect.topleft)
