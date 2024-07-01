@@ -35,6 +35,7 @@ class StorageHandler:
             self.__game_data = game_data
         except FileNotFoundError:
             Path(game_data_path).touch()
+            f_game_data = open(game_data_path, "w")
             write_default_data = True
         except JSONDecodeError:
             write_default_data = True
