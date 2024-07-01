@@ -83,7 +83,7 @@ class Level:
     def spawn_obstacle(self):
         if random.uniform(0, 1) < 0.01:
             random_x = random.randint(0, WIDTH)
-            random_y = random.randrange(-HEIGHT * 2, HEIGHT * 2, HEIGHT)
+            random_y = random.randint(-HEIGHT * 2, 0 - G_SPRITE_SIZE)
             Asteroid((random_x, random_y), self.visible_group, self.obstacle_group)
 
     def handle_player_attack(self):
