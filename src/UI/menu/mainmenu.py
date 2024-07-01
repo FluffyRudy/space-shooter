@@ -4,6 +4,7 @@ from collections import OrderedDict
 from .container import Container
 from .button import CustomButton
 from .scrollbox import Scrollbox
+from src.storage.storage import Storage
 from src.utils.image_util import load_image
 from src.settings import WIDTH, HEIGHT, G_SPRITE_SIZE
 from config import UI_DIR
@@ -29,6 +30,11 @@ class MainMenuUI:
             (WIDTH // 2, self.container.header_box_height // 4 + HEIGHT // 2),
             lambda: self.level_box.toggle_visibility(),
         )
+        self.level_box.set_cell_callback(event_action["load_level"])
+
+        for num_level in range(Storage.get_current_level()):
+            self.level_box.add_cell(f"{num_level + 1}")
+
         start_button = CustomButton("start", positions[0], event_action["play"])
         levels_button = CustomButton(
             "levels", positions[1], lambda: self.level_box.make_visible()
@@ -54,8 +60,10 @@ class MainMenuUI:
         is_event = event is not None
         if not is_event:
             return
+
         self.level_box.update(event)
-        if self.level_box.is_visible:
+
+        if self.level_box.is_visible or event.type == pygame.MOUSEWHEEL:
             return
 
         for button in self.buttons.values():

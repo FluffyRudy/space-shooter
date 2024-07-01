@@ -1,4 +1,4 @@
-from typing import Literal, Callable
+from typing import Literal, Callable, Optional
 import pygame
 from src.utils.math_util import calculate_center
 from src.utils.image_util import load_image
@@ -53,11 +53,23 @@ class StateButton:
 
 
 class CustomButton:
-    def __init__(self, text: str, pos: tuple[int, int], action: Callable):
+    def __init__(
+        self,
+        text: str,
+        pos: tuple[int, int],
+        action: Callable,
+        size: Optional[tuple[int, int]] = None,
+    ):
         table_path = UI_DIR / "menu" / "common" / "Table.png"
-        self.image = load_image(table_path)
+        if size:
+            self.image = load_image(table_path, None, size)
+        else:
+            self.image = load_image(table_path)
         self.rect = self.image.get_rect(center=pos)
-        self.font = pygame.font.Font(FONT_DIR / "BarcadeNoBarBold-gzXq.otf", 50)
+        self.font = pygame.font.Font(
+            FONT_DIR / "BarcadeNoBarBold-gzXq.otf", sum(self.rect.size) // 10
+        )
+        self.text = text
         self.text_surf = self.font.render(text, True, (255, 255, 255))
         self.action = action
 

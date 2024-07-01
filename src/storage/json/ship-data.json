@@ -1,11 +1,11 @@
 {
-    "current_level": 2,
+    "current_level": 1,
     "player": {
         "health_count": 5,
         "speed": 5,
         "bullet_speed": 5,
         "bullet_damage": 1,
-        "kill_damage_count": 1,
+        "kill_damage_count": 5,
         "invincibility_cooldown_time": 1000,
         "bullet_cooldown_time": 200,
         "score": 0
