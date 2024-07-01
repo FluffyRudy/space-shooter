@@ -85,3 +85,6 @@ class CustomButton:
 
     def is_pressed(self, pos: tuple[int, int]):
         return self.rect.collidepoint(pos)
+
+    def update_text(self, text: str):
+        self.text_surf = self.font.render(text, True, (255, 255, 255))
