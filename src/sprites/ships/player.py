@@ -6,6 +6,7 @@ from ..weapons.bullet import Bullet, create_bullet
 from src.utils.image_util import load_frame
 from src.timer.cooldown import Cooldown
 from src.storage.storage import Storage
+from src.soundmanager.soundmanager import Soundmanager
 from src.settings import DEFAULT_BULLET_SPEED, ShipTypes, G_SPRITE_SIZE
 from config import DEAD_EFFECT
 
@@ -36,6 +37,8 @@ class Player(Ship):
         self.is_invincible = False
         self.is_immune = False
 
+        self.num_bullets = 1
+
     def update(self, *args, **kwargs):
         self.handle_event()
         self.movement()
@@ -64,10 +67,11 @@ class Player(Ship):
             self.direction.y = 0
 
         if keys[pygame.K_SPACE] and self.bullet_cooldown_timer.has_cooldown():
+            Soundmanager.play_sfx_sound("shoot")
             create_bullet(
                 groups=[self.visible_group, self.bullet_group],
                 relative_rect=self.rect,
-                num_bullets=20,
+                num_bullets=self.num_bullets,
                 speed=DEFAULT_BULLET_SPEED,
                 direction=(0, -1),
                 damage=self.props.get("bullet_damage"),

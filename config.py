@@ -3,6 +3,8 @@ from pathlib import Path
 ROOT_DIR = Path(__file__).resolve().parent
 
 ASSETS_DIR = ROOT_DIR / "assets"
+
+# graphics
 FONT_DIR = ASSETS_DIR / "fonts"
 GRAPHICS_DIR = ASSETS_DIR / "graphics"
 ENEMY_SHIP_DIR = GRAPHICS_DIR / "enemy_ship"
@@ -13,6 +15,9 @@ BULLET_DIR = GRAPHICS_DIR / "bullet"
 SPACE_BG_DIR = GRAPHICS_DIR / "space_bg"
 UI_DIR = GRAPHICS_DIR / "UI"
 OBSTACLES_DIR = GRAPHICS_DIR / "obstacles"
+
+# sound
+SOUND_PATH = ASSETS_DIR / "sounds"
 
 if __name__ == "__main__":
     all_dirs = [

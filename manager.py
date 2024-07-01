@@ -1,5 +1,6 @@
 import pygame, sys, time
 from src.storage.storage import Storage
+from src.soundmanager.soundmanager import Soundmanager
 from src.level import Level
 from src.UI.menu.mainmenu import MainMenuUI
 from src.UI.menu.gameover import GameoverUI
@@ -10,13 +11,13 @@ class Manager:
     def __init__(self):
         pygame.init()
 
+        self.clock = pygame.time.Clock()
+
         self.quit_game = False
         self.start_game = False
         self.event = None
 
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
-        self.clock = pygame.time.Clock()
-
         self.level = Level(level=Storage.get_current_level())
 
         self.gameover = GameoverUI(
@@ -100,5 +101,7 @@ class Manager:
         self.clock.tick(FPS)
 
     def run(self):
+        Soundmanager.play_main_channel()
+
         while True:
             self.update()
