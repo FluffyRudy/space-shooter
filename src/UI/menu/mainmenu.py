@@ -31,9 +31,9 @@ class MainMenuUI:
             lambda: self.level_box.toggle_visibility(),
         )
         self.level_box.set_cell_callback(event_action["load_level"])
-
-        for num_level in range(Storage.get_current_level()):
-            self.level_box.add_cell(f"{num_level + 1}")
+        self.init_loaded_level_range = Storage.get_current_level()
+        for num_level in range(self.init_loaded_level_range):
+            self.level_box.add_cell(f"{num_level + 1}", prefix="level")
 
         start_button = CustomButton("start", positions[0], event_action["play"])
         levels_button = CustomButton(
@@ -85,3 +85,7 @@ class MainMenuUI:
             if not self.pressed_button.is_pressed(mouse_pos):
                 self.pressed_button.rect.inflate_ip(10, 10)
                 self.pressed_button = None
+
+    def update_levels(self, new_level: int):
+        for level in range(self.init_loaded_level_range + 1, new_level + 1):
+            self.level_box.add_cell(str(level), prefix="level")
