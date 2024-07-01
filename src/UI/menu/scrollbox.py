@@ -25,7 +25,7 @@ class Scrollbox:
         self.is_visible = False
 
         self.cell_coor_y = 0
-        self.levels_list: list[CustomButton] = []
+        self.cells_list: list[CustomButton] = []
 
     def set_cell_callback(self, callback: Callable[[str], None]):
         self.cell_callback = callback
@@ -33,12 +33,12 @@ class Scrollbox:
     def make_visible(self):
         self.is_visible = True
 
-    def extended_cell_callback(self, level: int):
-        self.cell_callback(level)
+    def extended_cell_callback(self, cell: int):
+        self.cell_callback(cell)
         self.is_visible = False
 
     def add_cell(self, label: str):
-        self.levels_list.append(
+        self.cells_list.append(
             CustomButton(
                 label,
                 (
@@ -94,9 +94,9 @@ class Scrollbox:
                 ),
             )
 
-            for level_btn in self.levels_list:
-                # if level_btn.rect.top > self.cancel_btn_rect.height:
-                level_btn.display(self.overlay)
+            for cell_btn in self.cells_list:
+                # if cell_btn.rect.top > self.cancel_btn_rect.height:
+                cell_btn.display(self.overlay)
 
             self.image.blit(self.cancel_btn, self.cancel_btn_rect.topleft)
             self.image.blit(
@@ -123,26 +123,26 @@ class Scrollbox:
         if self.cancel_btn_rect.collidepoint((pos_x, pos_y)):
             self.handle_cancel_button(event)
 
-        if event.type == pygame.MOUSEBUTTONUP:
+        if event.type == pygame.MOUSEBUTTONDOWN:
             self.handle_cell_event((pos_x, pos_y))
 
     def handle_mousewheel(self, event):
         dir_y = event.dict.get("y")
-        if dir_y == -1 and self.levels_list[-1].rect.bottom > self.overlay.get_height():
-            self.scroll_levels(dir_y)
-        elif dir_y == 1 and self.levels_list[0].rect.top < 0:
-            self.scroll_levels(dir_y)
+        if dir_y == -1 and self.cells_list[-1].rect.bottom > self.overlay.get_height():
+            self.scroll_cells(dir_y)
+        elif dir_y == 1 and self.cells_list[0].rect.top < 0:
+            self.scroll_cells(dir_y)
 
-    def scroll_levels(self, dir_y):
+    def scroll_cells(self, dir_y):
         offset = (G_SPRITE_SIZE + 10) * dir_y
-        for level_btn in self.levels_list:
-            level_btn.rect.top += offset
+        for cell_btn in self.cells_list:
+            cell_btn.rect.top += offset
 
     def handle_cell_event(self, pos: tuple[int, int]):
         position = pos[0], pos[1] - self.cancel_btn_rect.bottom
-        for level_btn in self.levels_list:
-            if level_btn.rect.collidepoint(position):
-                level_btn.trigger_action()
+        for cell_btn in self.cells_list:
+            if cell_btn.rect.collidepoint(position):
+                cell_btn.trigger_action()
 
     def handle_cancel_button(self, event):
         if event.type == pygame.MOUSEBUTTONUP:
