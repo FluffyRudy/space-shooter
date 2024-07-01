@@ -37,6 +37,9 @@ class Manager:
             },
         )
 
+        # if player return to main menu by quitting current game
+        self.is_level_quited = False
+
     def handle_event(self):
         self.event = None
         for event in pygame.event.get():
@@ -85,9 +88,10 @@ class Manager:
             if self.level.is_gameover:
                 self.gameover.display(self.screen)
                 self.gameover.update(self.event)
+                self.mainmenu.update_levels(self.level.current_level)
             elif self.level.completed():
                 self.load_level(self.level.current_level + 1)
-                Storage.write_current_level(self.level.current_level + 1)
+                Storage.write_current_level(self.level.current_level)
         else:
             self.mainmenu.display(self.screen)
             self.mainmenu.update(self.event)
