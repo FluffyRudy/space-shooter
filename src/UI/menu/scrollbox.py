@@ -12,7 +12,7 @@ class Scrollbox:
 
         common_path = UI_DIR / "menu" / "common"
         size = int(WIDTH * 0.4), int(HEIGHT * 0.7)
-        overlay_size = size[0] * 0.9, size[1] * 0.7
+        overlay_size = size[0], size[1] * 0.7
         self.image = load_image(common_path / "box.png", None, size)
         self.bg_image = self.image.copy()
         self.overlay = pygame.Surface(overlay_size, pygame.SRCALPHA)
@@ -68,7 +68,11 @@ class Scrollbox:
             self.image.blit(self.bg_image, (0, 0))
             self.image.blit(self.cancel_btn, self.cancel_btn_rect.topleft)
             self.image.blit(
-                self.overlay, (self.border_thickness, self.cancel_btn_rect.bottom + 1)
+                self.overlay,
+                (
+                    self.image.get_width() // 2 - self.overlay.get_width() // 2,
+                    self.cancel_btn_rect.bottom + 1,
+                ),
             )
 
             display_surface.blit(self.image, self.rect.topleft)
