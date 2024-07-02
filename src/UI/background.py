@@ -20,6 +20,12 @@ class Background:
     def draw_background(self, display_surface: pygame.Surface):
         display_surface.blit(self.background_image, (0, 0))
 
+    def get_surfaces(self):
+        return self.bg_frames
+
+    def load_surfaces(self, bg_frames: list[pygame.Surface]):
+        self.bg_frames = bg_frames
+
     def update(self):
         self.frame_index += self.animation_speed
         if self.frame_index >= len(self.bg_frames):

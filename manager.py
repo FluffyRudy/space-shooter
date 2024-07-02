@@ -60,14 +60,18 @@ class Manager:
             sys.exit()
 
     def replay(self):
+        prev_background = self.level.background.get_surfaces()
         self.level.is_gameover = False
         self.level = Level(self.level.current_level)
+        self.level.background.load_surfaces(prev_background)
+        self.level.start_title_display_cooldown()
 
     def end_game(self):
         self.quit_game = True
 
     def play(self):
         self.start_game = True
+        self.level.start_title_display_cooldown()
 
     def return_menu(self):
         self.load_level(self.level.current_level, False)

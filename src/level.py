@@ -59,6 +59,9 @@ class Level:
         if not self.title_blit_cooldown.has_cooldown():
             self.level_title.display((WIDTH, HEIGHT), self.display_surface)
 
+    def start_title_display_cooldown(self):
+        self.title_blit_cooldown.reset_time()
+
     def completed(self):
         return (
             self.enemy_count >= self.level_attributes.get("max_spawn_count")
