@@ -45,7 +45,20 @@ class Level:
         )
 
     def spawn_enemy(self):
-        if random.uniform(0, 1) < 0.01:
+        if len(self.enemy_group.sprites()) >= self.level_attributes.get(
+            "spawn_count"
+        ) or self.enemy_count >= self.level_attributes.get("max_spawn_count"):
+            return
+
+        shooter_probability = self.level_attributes["enemies"]["shooter"]
+        self_killer_probability = self.level_attributes["enemies"]["self_killer"]
+        enemy_choice = random.choices(
+            ("shooter", "self_killer"),
+            (shooter_probability, self_killer_probability),
+            k=1,
+        )
+
+        if enemy_choice[0] == "self_killer":
             random_x = random.randint(0, WIDTH)
             random_y = random.randint(-HEIGHT, 0)
             SelfKillerEnemy(
@@ -53,32 +66,27 @@ class Level:
                 visible_group=self.visible_group,
                 base_group=self.enemy_group,
             )
+        else:
+            do_collide = False
+            random_x = random.randint(-WIDTH, WIDTH * 2)
+            random_y = random.randint(-HEIGHT, 0)
+            for sprite in self.enemy_group.sprites():
+                checker_rect = pygame.Rect(
+                    random_x, sprite.rect.y, G_SPRITE_SIZE, G_SPRITE_SIZE
+                )
+                if sprite.rect.colliderect(checker_rect):
+                    do_collide = True
+                    break
 
-        if len(self.enemy_group.sprites()) >= self.level_attributes.get(
-            "spawn_count"
-        ) or self.enemy_count >= self.level_attributes.get("max_spawn_count"):
-            return
-
-        do_collide = False
-        random_x = random.randint(-WIDTH, WIDTH * 2)
-        random_y = random.randint(-HEIGHT, 0)
-        for sprite in self.enemy_group.sprites():
-            checker_rect = pygame.Rect(
-                random_x, sprite.rect.y, G_SPRITE_SIZE, G_SPRITE_SIZE
-            )
-            if sprite.rect.colliderect(checker_rect):
-                do_collide = True
-                break
-
-        if not do_collide:
-            ShooterEnemy(
-                pos=(random_x, random_y),
-                visible_group=self.visible_group,
-                base_group=self.enemy_group,
-                bullet_group=self.enemy_bullet_group,
-                offset_y=random.randrange(0, G_SPRITE_SIZE * 4),
-            )
-            self.enemy_count += 1
+            if not do_collide:
+                ShooterEnemy(
+                    pos=(random_x, random_y),
+                    visible_group=self.visible_group,
+                    base_group=self.enemy_group,
+                    bullet_group=self.enemy_bullet_group,
+                    offset_y=random.randrange(0, G_SPRITE_SIZE * 4),
+                )
+                self.enemy_count += 1
 
     def spawn_obstacle(self):
         if random.uniform(0, 1) < 0.01:

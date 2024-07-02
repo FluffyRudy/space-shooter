@@ -44,6 +44,7 @@ class StorageHandler:
             write_default_data = True
         finally:
             if not write_default_data:
+                f_game_data.close()
                 return None
             with open(default_data_path, "r") as f_default_data:
                 default_data: dict = json.load(f_default_data)
