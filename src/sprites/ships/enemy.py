@@ -3,6 +3,7 @@ from .state import State
 from .ship import Ship
 from ..weapons.bullet import create_bullet
 from src.storage.storage import Storage
+from src.soundmanager.soundmanager import Soundmanager
 from src.settings import DEFAULT_BULLET_SPEED, ShipTypes, HEIGHT, WIDTH, G_SPRITE_SIZE
 
 
@@ -93,6 +94,8 @@ class SelfKillerEnemy(Ship):
         self.animation_speed = 1
         self.direction.y = 1
 
+        self.is_active = False
+
     def update(self, *args, **kwargs):
         relative_rect = kwargs.get("relative_rect")
         self.animate()
@@ -106,6 +109,9 @@ class SelfKillerEnemy(Ship):
             and self.frame_index >= len(self.get_current_animation()) - 1
         ):
             self.kill()
+        elif self.status.get_state() == State.DEAD and not self.is_active:
+            self.is_active = True
+            Soundmanager.play_sfx_sound("obstacle_destroy", channel=3)
 
     def calculate_vector(self, relative_rect: pygame.Rect):
         x_dist = self.rect.centerx - relative_rect.centerx

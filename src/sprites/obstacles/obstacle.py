@@ -1,5 +1,6 @@
 import pygame
 from pygame.math import Vector2
+from src.soundmanager.soundmanager import Soundmanager
 from src.utils.image_util import load_frame
 from src.settings import ObstacleTypes
 from config import OBSTACLES_DIR
@@ -45,7 +46,9 @@ class Obstacle(pygame.sprite.Sprite):
         self.rect.center = self.hitbox.center
 
     def active(self):
-        self.has_collided = True
+        if not self.has_collided:
+            self.has_collided = True
+            Soundmanager.play_sfx_sound("obstacle_destroy", channel=3)
 
     def is_active(self):
         return self.has_collided

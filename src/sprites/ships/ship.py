@@ -1,5 +1,6 @@
 from typing import Union
 import pygame, random, math
+from src.soundmanager.soundmanager import Soundmanager
 from src.utils.image_util import load_frames, load_frame
 from src.timer.cooldown import Cooldown
 from .state import Direction, State, Status
@@ -100,7 +101,8 @@ class Ship(pygame.sprite.Sprite):
         if damage is None or self.props.get("health_count") is None:
             return None
         self.props["health_count"] -= 1
-        if self.props["health_count"] <= 0:
+        if self.props["health_count"] <= 0 and self.status.get_state() != State.DEAD:
             self.animation_speed = 0.1
             self.status.set_state(State.DEAD)
             self.direction *= 0
+            Soundmanager.play_sfx_sound("enemy_destroy", channel=3)
