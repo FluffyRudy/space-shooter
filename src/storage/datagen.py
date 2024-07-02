@@ -34,13 +34,8 @@ def generate_levels_data(num_levels):
             "spawn_count": 5 + i,
             "max_spawn_count": 10 + 2 * i,
             "enemies": {
-                "shooter": round(1 - i * 0.01, 2),
-                "self_killer": round(i * 0.01, 2),
+                "shooter": max(0.5, round(1 - i * 0.05, 2)),
+                "self_killer": min(round(i * 0.05, 2), 0.5),
             },
         }
     return levels_data
-
-
-num_levels = 9
-levels = generate_levels_data(num_levels)
-print(levels)
