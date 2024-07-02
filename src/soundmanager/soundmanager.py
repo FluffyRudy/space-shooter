@@ -48,6 +48,7 @@ class SoundManager:
             "shoot", "enemydmg", "playerdmg", "pick", "gameover", "win"
         ],
     ):
+        self.sfx_channel.stop()
         self.sfx_channel.play(self.sfx_sounds[sound_type])
 
 
