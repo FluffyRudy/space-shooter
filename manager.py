@@ -74,12 +74,15 @@ class Manager:
         self.start_game = True
 
     def return_menu(self):
+        self.load_level(self.level.current_level, False)
+        self.level.is_gameover = False
         self.start_game = False
 
-    def load_level(self, level: int):
+    def load_level(self, level: int, auto_start: bool = True):
         print(level)
         self.level = Level(level)
-        self.play()
+        if auto_start:
+            self.play()
 
     def update(self):
         self.handle_event()
