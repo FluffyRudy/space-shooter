@@ -1,6 +1,5 @@
 import pygame, sys, time
 from src.storage.storage import Storage
-from src.soundmanager.soundmanager import Soundmanager
 from src.level import Level
 from src.UI.menu.mainmenu import MainMenuUI
 from src.UI.menu.gameover import GameoverUI
@@ -54,9 +53,6 @@ class Manager:
             ):
                 self.event = event
 
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                self.return_menu()
-
         if self.quit_game:
             Storage.write_current_level(
                 max(Storage.get_current_level(), self.level.current_level)
@@ -104,7 +100,5 @@ class Manager:
         self.clock.tick(FPS)
 
     def run(self):
-        Soundmanager.play_main_channel()
-
         while True:
             self.update()
