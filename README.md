@@ -1,8 +1,8 @@
 # space-shooter
 
 ## Overview
-    This is simple space shooter game made using pygame. This project is create with intention of learning how to save and load game from local device. This game is still incompleted but is playable and contains 20 levels currently.
-    **battle your way through galaxies filled with danger and excitement 😉.**
+This is simple space shooter game made using pygame. This project is create with intention of learning how to save and load game from local device. This game is still incompleted but is playable and contains 20 levels currently.
+**battle your way through galaxies filled with danger and excitement 😉.**
 
 ## Getting Started
 
