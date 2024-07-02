@@ -1,6 +1,7 @@
 from typing import Optional
 import pygame, random
 from src.storage.storage import Storage
+from src.soundmanager.soundmanager import Soundmanager
 from src.UI.background import Background
 from src.UI.healthbar import Healthbar
 from .sprites.ships.player import Player
@@ -11,6 +12,7 @@ from .settings import WIDTH, HEIGHT, G_SPRITE_SIZE, ShipTypes
 
 class Level:
     def __init__(self, level: int):
+
         self.display_surface = pygame.display.get_surface()
 
         self.is_gameover = False
@@ -37,6 +39,8 @@ class Level:
         """this is temporary solution, I have zero idea how
            a single bullet is always present in player bullet group"""
         self.player_bullet_group.empty()
+
+        Soundmanager.play_main_channel()
 
     def completed(self):
         return (
