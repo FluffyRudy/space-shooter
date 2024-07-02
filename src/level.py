@@ -126,6 +126,8 @@ class Level:
             for obstacle in self.obstacle_group.sprites():
                 if obstacle.hitbox.colliderect(bullet.rect):
                     obstacle.active()
+                    bullet.kill()
+                    break
 
     def handle_enemy_attack(self):
         for bullet in self.enemy_bullet_group.sprites():
