@@ -4,16 +4,28 @@ from src.storage.storage import Storage
 from src.soundmanager.soundmanager import Soundmanager
 from src.UI.background import Background
 from src.UI.healthbar import Healthbar
+from src.animation.Text.colortransition import ColorTransition
+from src.timer.cooldown import Cooldown
 from .sprites.ships.player import Player
 from .sprites.ships.enemy import ShooterEnemy, SelfKillerEnemy
 from .sprites.obstacles.asteroid import Asteroid
 from .settings import WIDTH, HEIGHT, G_SPRITE_SIZE, ShipTypes
+from config import FONT_DIR
 
 
 class Level:
     def __init__(self, level: int):
-
         self.display_surface = pygame.display.get_surface()
+
+        title_font = pygame.font.Font(FONT_DIR / "BarcadeNoBarBold-gzXq.otf", 100)
+        self.title_blit_cooldown = Cooldown(4000)
+        self.level_title = ColorTransition(
+            text=f"level {level}",
+            size=100,
+            font=title_font,
+            factor=10,
+            change_color=False,
+        )
 
         self.is_gameover = False
 
@@ -41,6 +53,11 @@ class Level:
         self.player_bullet_group.empty()
 
         Soundmanager.play_main_channel()
+
+    def display_title(self):
+        self.title_blit_cooldown.handle_cooldown()
+        if not self.title_blit_cooldown.has_cooldown():
+            self.level_title.display((WIDTH, HEIGHT), self.display_surface)
 
     def completed(self):
         return (
@@ -144,6 +161,8 @@ class Level:
         self.background.draw_background(self.display_surface)
         self.visible_group.draw(self.display_surface)
         self.health_bar.display(self.display_surface)
+
+        self.display_title()
 
         self.spawn_enemy()
         self.spawn_obstacle()
