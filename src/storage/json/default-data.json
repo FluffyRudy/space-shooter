@@ -93,8 +93,96 @@
             "spawn_count": 14,
             "max_spawn_count": 28,
             "enemies": {
+                "shooter": 0.91,
+                "self_killer": 0.09
+            }
+        },
+        "10": {
+            "spawn_count": 15,
+            "max_spawn_count": 30,
+            "enemies": {
                 "shooter": 0.9,
                 "self_killer": 0.1
+            }
+        },
+        "11": {
+            "spawn_count": 16,
+            "max_spawn_count": 32,
+            "enemies": {
+                "shooter": 0.89,
+                "self_killer": 0.11
+            }
+        },
+        "12": {
+            "spawn_count": 17,
+            "max_spawn_count": 34,
+            "enemies": {
+                "shooter": 0.88,
+                "self_killer": 0.12
+            }
+        },
+        "13": {
+            "spawn_count": 18,
+            "max_spawn_count": 36,
+            "enemies": {
+                "shooter": 0.87,
+                "self_killer": 0.13
+            }
+        },
+        "14": {
+            "spawn_count": 19,
+            "max_spawn_count": 38,
+            "enemies": {
+                "shooter": 0.86,
+                "self_killer": 0.14
+            }
+        },
+        "15": {
+            "spawn_count": 20,
+            "max_spawn_count": 40,
+            "enemies": {
+                "shooter": 0.85,
+                "self_killer": 0.15
+            }
+        },
+        "16": {
+            "spawn_count": 21,
+            "max_spawn_count": 42,
+            "enemies": {
+                "shooter": 0.84,
+                "self_killer": 0.16
+            }
+        },
+        "17": {
+            "spawn_count": 22,
+            "max_spawn_count": 44,
+            "enemies": {
+                "shooter": 0.83,
+                "self_killer": 0.17
+            }
+        },
+        "18": {
+            "spawn_count": 23,
+            "max_spawn_count": 46,
+            "enemies": {
+                "shooter": 0.82,
+                "self_killer": 0.18
+            }
+        },
+        "19": {
+            "spawn_count": 24,
+            "max_spawn_count": 48,
+            "enemies": {
+                "shooter": 0.81,
+                "self_killer": 0.19
+            }
+        },
+        "20": {
+            "spawn_count": 25,
+            "max_spawn_count": 50,
+            "enemies": {
+                "shooter": 0.8,
+                "self_killer": 0.2
             }
         }
     }

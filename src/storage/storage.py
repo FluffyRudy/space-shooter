@@ -2,6 +2,7 @@ from typing import Union, Literal
 import json
 from json.decoder import JSONDecodeError
 from pathlib import Path
+from .datagen import generate_levels_data
 from config import ROOT_DIR
 
 
@@ -15,6 +16,8 @@ class StorageHandler:
         if self.__instance is not None:
             return
         self.__storage_path: Path = ROOT_DIR / "src" / "storage" / "json"
+        self.__write_default_data(num_levels=20)
+
         self.__game_data: dict = {}
         self.__init_game_data()
 
@@ -47,6 +50,13 @@ class StorageHandler:
                 json.dump(obj=default_data, fp=f_game_data, indent=4)
                 self.__game_data = default_data
             f_game_data.close()
+
+    def __write_default_data(self, num_levels: int):
+        default_data_path: Path = self.__storage_path / "default-data.json"
+        default_data = generate_levels_data(num_levels)
+
+        with open(default_data_path, "w") as f_default_data:
+            json.dump(obj=default_data, fp=f_default_data, indent=4)
 
     def write_player_data(self, data: dict) -> None:
         """
