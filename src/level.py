@@ -9,6 +9,7 @@ from src.timer.cooldown import Cooldown
 from .sprites.ships.player import Player
 from .sprites.ships.enemy import ShooterEnemy, SelfKillerEnemy
 from .sprites.obstacles.asteroid import Asteroid
+from .sprites.weapons.laser import Laser
 from .settings import WIDTH, HEIGHT, G_SPRITE_SIZE, ShipTypes
 from config import FONT_DIR
 
@@ -36,6 +37,7 @@ class Level:
         self.enemy_group = pygame.sprite.Group()
         self.enemy_bullet_group = pygame.sprite.Group()
         self.player_bullet_group = pygame.sprite.Group()
+        self.powerops_group = pygame.sprite.Group()
         self.obstacle_group = pygame.sprite.Group()
 
         self.level_attributes = Storage.get_level_data(level)

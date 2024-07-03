@@ -14,6 +14,15 @@ def generate_levels_data(num_levels):
             "bullet_cooldown_time": 200,
             "score": 0,
         },
+        "weapons": {
+            "laser": {"speed": 0, "damage": 1, "kill_after": 500},
+            "missile": {"speed": 5, "damage": 5},
+        },
+        "defence": {
+            "shield": {"amount": 1, "kill_after": None},
+            "heal": {"amount": 0.2, "kill_after": 1000},
+            "invincibility": {"amount": "inf", "kill_after": 3000},
+        },
         "enemies": {
             "shooter": {
                 "health_count": 5,

@@ -21,7 +21,9 @@ class Laser(pygame.sprite.Sprite):
 
         self.image = self.frames[0]
 
-        self.rect = self.image.get_rect(center=pos)
+        self.rect = self.image.get_rect(
+            midtop=(pos[0], pos[1] - self.image.get_height() * 0.99)
+        )
 
     def get_damage(self):
         return self.damage
