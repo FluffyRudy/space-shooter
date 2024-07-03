@@ -2,7 +2,7 @@ from typing import Union
 import pygame
 from src.utils.image_util import load_frame
 from src.settings import HEIGHT
-from config import BULLET_DIR
+from config import WEAPONS_DIR
 
 
 class Bullet(pygame.sprite.Sprite):
@@ -16,6 +16,7 @@ class Bullet(pygame.sprite.Sprite):
         damage: int,
         sibling_offset_X: int = 0,
     ):
+        BULLET_DIR = WEAPONS_DIR / "bullet"
         super().__init__(groups)
         self.speed = speed
         self.damage = damage
