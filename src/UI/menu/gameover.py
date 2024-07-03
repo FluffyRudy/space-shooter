@@ -30,8 +30,6 @@ class GameoverUI:
             "main_menu": main_menu,
         }
 
-        self.pressed_button = None
-
     def display(self, display_surface: pygame.Surface):
         self.container.display(display_surface)
         for button in self.buttons.values():
@@ -42,22 +40,8 @@ class GameoverUI:
         if not is_event:
             return
 
-        for button in self.buttons.values():
-            converted_pos = self.container.convert_position(event.pos)
-            if event.type == pygame.MOUSEBUTTONDOWN and button.is_pressed(
-                converted_pos
-            ):
-                self.pressed_button = button
-                button.toggle()
-            elif event.type == pygame.MOUSEBUTTONUP and button.is_pressed(
-                converted_pos
-            ):
-                button.trigger_action()
-                self.pressed_button = None
-
-        if self.pressed_button:
-            mouse_pos = pygame.mouse.get_pos()
-            converted_pos = self.container.convert_position(mouse_pos)
-            if not self.pressed_button.is_pressed(converted_pos):
-                self.pressed_button.trigger_action()
-                self.pressed_button = None
+        if event.type == pygame.MOUSEBUTTONUP:
+            for button in self.buttons.values():
+                converted_pos = self.container.convert_position(event.pos)
+                if button.is_pressed(converted_pos):
+                    button.trigger_action()
