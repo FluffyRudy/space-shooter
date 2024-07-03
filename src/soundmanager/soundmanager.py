@@ -20,8 +20,8 @@ class SoundManager:
         WIN_SOUND (str): Placeholder for win sound effect path.
     """
 
-    LOOP = 1
-    NO_LOOP = -1
+    LOOP = -1
+    NO_LOOP = 1
     BG_SOUND = SOUND_PATH / "main-sound.mp3"
     SHOOT_SOUND = SOUND_PATH / "shoot.mp3"
     ENEMY_DESTROY_SOUND = SOUND_PATH / "ship-destroy.mp3"
