@@ -39,6 +39,8 @@ class Player(Ship):
 
         self.num_bullets = 1
 
+        self.limit_bound = pygame.display.get_surface().get_size()
+
     def update(self, *args, **kwargs):
         self.handle_event()
         self.movement()
@@ -95,6 +97,15 @@ class Player(Ship):
     def movement(self):
         self.rect.x += self.direction.x * self.props.get("speed")
         self.rect.y += self.direction.y * self.props.get("speed")
+
+        if self.rect.left < 0:
+            self.rect.left = 0
+        elif self.rect.right > self.limit_bound[0]:
+            self.rect.right = self.limit_bound[0]
+        if self.rect.top < 0:
+            self.rect.top = 0
+        elif self.rect.bottom > self.limit_bound[1]:
+            self.rect.bottom = self.limit_bound[1]
 
     def get_damage_count(self):
         return max(0, self.props.get("health_count"))
