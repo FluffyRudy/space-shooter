@@ -1,4 +1,4 @@
-from typing import Union, Literal
+from typing import Union, Literal, Optional, Any
 import json
 from json.decoder import JSONDecodeError
 from pathlib import Path
@@ -119,7 +119,7 @@ class StorageHandler:
         Returns:
             dict: Dictionary containing the player data.
         """
-        return Storage.get_game_data().get("player")
+        return self.get_game_data().get("player")
 
     def get_level_data(self, level: int) -> dict:
         """
@@ -131,7 +131,7 @@ class StorageHandler:
         Returns:
             dict: Dictionary containing the level data.
         """
-        return Storage.get_game_data().get("levels").get(f"{level}")
+        return self.get_game_data().get("levels").get(f"{level}")
 
     def get_current_level(self) -> int:
         """
@@ -140,7 +140,7 @@ class StorageHandler:
         Returns:
             int: The current level.
         """
-        return Storage.get_game_data().get("current_level")
+        return self.get_game_data().get("current_level")
 
     def get_enemy_data(self, type_: Literal["shooter", "self_killer"]) -> dict:
         """
@@ -152,7 +152,13 @@ class StorageHandler:
         Returns:
             dict: Dictionary containing the enemy data.
         """
-        return Storage.get_game_data().get("enemies").get(type_)
+        return self.get_game_data().get("enemies").get(type_)
+
+    def get_weapons(self, type_: Literal["laser", "missile"]) -> dict:
+        return self.get_game_data().get("weapons").get(type_)
+
+    def get_defence(self, type_: Literal["shield", "heal", "invincibility"]) -> dict:
+        return self.get_game_data().get("defence").get(type_)
 
 
 Storage = StorageHandler()

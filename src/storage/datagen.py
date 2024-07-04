@@ -15,7 +15,7 @@ def generate_levels_data(num_levels):
             "score": 0,
         },
         "weapons": {
-            "laser": {"speed": 0, "damage": 1, "kill_after": 500},
+            "laser": {"speed": 0, "damage": 1, "kill_after": 5000},
             "missile": {"speed": 5, "damage": 5},
         },
         "defence": {
@@ -39,12 +39,13 @@ def generate_levels_data(num_levels):
     levels_data["levels"] = {}
     for i in range(1, num_levels + 1):
         level = str(i)
+        powerops_count = (i // 5) + 1
         levels_data["levels"][level] = {
             "spawn_count": 5 + i,
             "max_spawn_count": 10 + 2 * i,
             "enemies": {
-                "shooter": max(0.5, round(1 - i * 0.05, 2)),
-                "self_killer": min(round(i * 0.05, 2), 0.5),
+                "shooter": max(0.5, round(1 - i * 0.02, 2)),
+                "self_killer": min(round(i * 0.02, 2), 0.5),
             },
         }
     return levels_data

@@ -53,6 +53,9 @@ class Bullet(pygame.sprite.Sprite):
         if self.rect.bottom < 0 or self.rect.top > HEIGHT:
             self.kill()
 
+    def handle_kill(self):
+        self.kill()
+
 
 def create_bullet(
     groups: list[pygame.sprite.Group],
