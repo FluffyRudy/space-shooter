@@ -12,6 +12,7 @@ class Cooldown:
         self.start_timer = 0
         self.cooldown_timer = cooldown_timer
         self.finish_cooldown = True
+        self.reset_time()
 
     def handle_cooldown(self) -> None:
         """
