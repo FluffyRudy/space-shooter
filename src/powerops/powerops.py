@@ -46,4 +46,9 @@ class Powerops(pygame.sprite.Sprite):
 
     def assign_power(self):
         if self.power_type == "laser":
-            Laser([self.visible_group, self.action_group], self.rect.midtop)
+            Laser(self.get_filtered_group(), self.rect.midtop)
+
+    def get_filtered_group(self) -> list:
+        if self.action_group is None:
+            return [self.visible_group]
+        return [self.visible_group, self.action_group]
