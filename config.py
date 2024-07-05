@@ -15,6 +15,7 @@ WEAPONS_DIR = GRAPHICS_DIR / "weapons"
 SPACE_BG_DIR = GRAPHICS_DIR / "space_bg"
 UI_DIR = GRAPHICS_DIR / "UI"
 OBSTACLES_DIR = GRAPHICS_DIR / "obstacles"
+POWEROPS_DIR = GRAPHICS_DIR / "powerops"
 
 # sound
 SOUND_PATH = ASSETS_DIR / "sounds"
