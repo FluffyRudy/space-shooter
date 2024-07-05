@@ -45,7 +45,9 @@ class Manager:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.quit_game = True
-                Storage.write_current_level(self.level.current_level)
+                Storage.write_current_level(
+                    max(Storage.get_current_level(), self.level.current_level)
+                )
             if (
                 event.type == pygame.MOUSEBUTTONDOWN
                 or event.type == pygame.MOUSEBUTTONUP
