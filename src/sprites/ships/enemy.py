@@ -29,7 +29,7 @@ class ShooterEnemy(Ship):
         self.prev_direction = self.direction.copy()
 
     def update(self, *args, **kwargs):
-        relative_rect = kwargs.get("relative_rect")
+        relative_rect = kwargs.get("player").rect
         self.behave(relative_rect)
         self.movement()
         self.bullet_cooldown_timer.handle_cooldown()
@@ -98,7 +98,7 @@ class SelfKillerEnemy(Ship):
         self.is_active = False
 
     def update(self, *args, **kwargs):
-        relative_rect = kwargs.get("relative_rect")
+        relative_rect = kwargs.get("player").rect
         self.animate()
         self.rect.y += self.direction.y * self.props.get("speed") * 2
         if self.rect.bottom >= HEIGHT or self.rect.colliderect(relative_rect):
