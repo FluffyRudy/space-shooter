@@ -53,7 +53,7 @@ class Bullet(pygame.sprite.Sprite):
         if self.rect.bottom < 0 or self.rect.top > HEIGHT:
             self.kill()
 
-    def handle_kill(self, callback: Optional[Callable] = None):
+    def handle_kill(self):
         self.kill()
 
 
