@@ -20,8 +20,8 @@ def generate_levels_data(num_levels):
         },
         "defence": {
             "shield": {"amount": 1, "kill_after": None},
-            "heal": {"amount": 0.2, "kill_after": 1000},
-            "invincibility": {"amount": "inf", "kill_after": 3000},
+            "regan": {"amount": 0.2, "kill_after": 1000},
+            "immunity": {"kill_after": 3000},
         },
         "enemies": {
             "shooter": {
@@ -39,7 +39,6 @@ def generate_levels_data(num_levels):
     levels_data["levels"] = {}
     for i in range(1, num_levels + 1):
         level = str(i)
-        powerops_count = (i // 5) + 1
         levels_data["levels"][level] = {
             "spawn_count": 5 + i,
             "max_spawn_count": 10 + 2 * i,

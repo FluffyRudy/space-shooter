@@ -26,12 +26,11 @@
             "amount": 1,
             "kill_after": null
         },
-        "heal": {
+        "regan": {
             "amount": 0.2,
             "kill_after": 1000
         },
-        "invincibility": {
-            "amount": "inf",
+        "immunity": {
             "kill_after": 3000
         }
     },
