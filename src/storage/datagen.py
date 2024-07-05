@@ -20,7 +20,7 @@ def generate_levels_data(num_levels):
         },
         "defence": {
             "shield": {"amount": 1, "kill_after": None},
-            "regan": {"amount": 0.2, "kill_after": 1000},
+            "regan": {"amount": 1, "kill_after": 0},
             "immunity": {"kill_after": 3000},
         },
         "enemies": {
