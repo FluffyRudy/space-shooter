@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Optional, Callable
 import pygame
 from src.utils.image_util import load_frame
 from src.settings import HEIGHT
@@ -53,7 +53,7 @@ class Bullet(pygame.sprite.Sprite):
         if self.rect.bottom < 0 or self.rect.top > HEIGHT:
             self.kill()
 
-    def handle_kill(self):
+    def handle_kill(self, callback: Optional[Callable] = None):
         self.kill()
 
 
