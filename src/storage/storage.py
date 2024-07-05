@@ -157,7 +157,7 @@ class StorageHandler:
     def get_weapons(self, type_: Literal["laser", "missile"]) -> dict:
         return self.get_game_data().get("weapons").get(type_)
 
-    def get_defence(self, type_: Literal["shield", "heal", "invincibility"]) -> dict:
+    def get_defence(self, type_: Literal["shield", "regan", "invincibility"]) -> dict:
         return self.get_game_data().get("defence").get(type_)
 
 
