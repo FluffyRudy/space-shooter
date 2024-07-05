@@ -47,9 +47,8 @@ class Level:
 
         range_ = self.level_attributes.get("max_spawn_count")
         self.powerops_index = [
-            random.randint(0, range_) for _ in range((level // 5) + 1)
+            random.randint(0, range_) for _ in range((level // 3) + 1)
         ]
-        print(self.powerops_index, "///")
         self.p_opsed_enemies = []
 
         self.player = Player(
@@ -151,12 +150,15 @@ class Level:
 
     def handle_player_attack(self):
         for bullet in self.player_bullet_group.sprites():
+            # Check collision with enemies
             collided_enemy = pygame.sprite.spritecollideany(bullet, self.enemy_group)
             if collided_enemy is not None and pygame.sprite.collide_mask(
                 bullet, collided_enemy
             ):
                 collided_enemy.damage(bullet.get_damage())
                 bullet.handle_kill()
+
+        for bullet in self.player_bullet_group.sprites():
             for obstacle in self.obstacle_group.sprites():
                 if obstacle.hitbox.colliderect(bullet.rect):
                     obstacle.active()
@@ -191,7 +193,7 @@ class Level:
 
     def run(self, event: Optional[pygame.event.Event]):
         self.background.update()
-        self.visible_group.update(relative_rect=self.player.rect)
+        self.visible_group.update(player=self.player)
 
         self.background.draw_background(self.display_surface)
         self.visible_group.draw(self.display_surface)
