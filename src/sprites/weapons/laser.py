@@ -27,6 +27,7 @@ class Laser(pygame.sprite.Sprite):
             midtop=(pos[0], pos[1] - self.image.get_height() * 0.97)
         )
         self.self_kill_cd = Cooldown(ATTRIBUTES.get("kill_after"))
+        self.self_kill_cd.reset_time()
 
     def get_damage(self):
         return self.damage

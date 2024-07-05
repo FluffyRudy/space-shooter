@@ -6,10 +6,10 @@ from src.UI.background import Background
 from src.UI.healthbar import Healthbar
 from src.animation.Text.colortransition import ColorTransition
 from src.timer.cooldown import Cooldown
+from src.powerops.powerops import Powerops
 from .sprites.ships.player import Player
 from .sprites.ships.enemy import ShooterEnemy, SelfKillerEnemy
 from .sprites.obstacles.asteroid import Asteroid
-from .sprites.weapons.laser import Laser
 from .settings import WIDTH, HEIGHT, G_SPRITE_SIZE, ShipTypes
 from config import FONT_DIR
 
@@ -41,8 +41,16 @@ class Level:
         self.obstacle_group = pygame.sprite.Group()
 
         self.level_attributes = Storage.get_level_data(level)
+
         self.current_level = level
         self.enemy_count = 0
+
+        range_ = self.level_attributes.get("max_spawn_count")
+        self.powerops_index = [
+            random.randint(0, range_) for _ in range((level // 5) + 1)
+        ]
+        print(self.powerops_index, "///")
+        self.p_opsed_enemies = []
 
         self.player = Player(
             (WIDTH // 2 - G_SPRITE_SIZE // 2, HEIGHT - G_SPRITE_SIZE),
@@ -120,6 +128,27 @@ class Level:
             random_y = random.randint(-HEIGHT * 2, 0 - G_SPRITE_SIZE)
             Asteroid((random_x, random_y), self.visible_group, self.obstacle_group)
 
+    def spawn_powerops(self):
+        if self.enemy_count in self.powerops_index:
+            self.powerops_index.remove(self.enemy_count)
+            current_enemy_group_len = len(self.enemy_group.sprites())
+            enemy_index = (
+                int(self.enemy_count / self.level_attributes.get("max_spawn_count"))
+                * current_enemy_group_len
+            ) % current_enemy_group_len
+            self.p_opsed_enemies.append(self.enemy_group.sprites()[enemy_index])
+            print(self.p_opsed_enemies, self.powerops_index)
+        "copy each time because me are removing from currently iterating array"
+        for sprite in self.p_opsed_enemies[:]:
+            if not sprite.alive():
+                Powerops(
+                    random.choice(["laser"]),
+                    base_group=self.powerops_group,
+                    visible_group=self.visible_group,
+                    action_group=self.player_bullet_group,
+                )
+                self.p_opsed_enemies.remove(sprite)
+
     def handle_player_attack(self):
         for bullet in self.player_bullet_group.sprites():
             collided_enemy = pygame.sprite.spritecollideany(bullet, self.enemy_group)
@@ -127,12 +156,11 @@ class Level:
                 bullet, collided_enemy
             ):
                 collided_enemy.damage(bullet.get_damage())
-                bullet.kill()
+                bullet.handle_kill()
             for obstacle in self.obstacle_group.sprites():
                 if obstacle.hitbox.colliderect(bullet.rect):
                     obstacle.active()
-                    bullet.kill()
-                    break
+                    bullet.handle_kill()
 
     def handle_enemy_attack(self):
         for bullet in self.enemy_bullet_group.sprites():
@@ -173,6 +201,7 @@ class Level:
 
         self.spawn_enemy()
         self.spawn_obstacle()
+        self.spawn_powerops()
         self.handle_player_attack()
         self.handle_enemy_attack()
         self.handle_obstacle_collision()
