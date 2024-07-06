@@ -34,8 +34,7 @@ class ShooterEnemy(Ship):
         self.behave(relative_rect)
         self.movement()
         self.bullet_cooldown_timer.handle_cooldown()
-        if self.bullet_cooldown_timer.has_cooldown():
-            self.bullet_cooldown_timer.reset_time()
+
         super().update()
 
     def movement(self):
@@ -54,6 +53,7 @@ class ShooterEnemy(Ship):
             damage=self.props.get("damage"),
             class_type=Bullet,
         )
+        self.bullet_cooldown_timer.reset_time()
 
     def behave(self, relative_rect: pygame.Rect):
         if self.rect.left < 0:

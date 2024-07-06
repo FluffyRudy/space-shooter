@@ -46,4 +46,4 @@ class Cooldown:
         Resets the start timer to the current time.
         """
         self.start_timer = pygame.time.get_ticks()
-        self.finish_cooldown = True
+        self.finish_cooldown = False

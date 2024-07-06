@@ -47,9 +47,10 @@ class Level:
 
         range_ = self.level_attributes.get("max_spawn_count")
         self.powerops_index = [
-            random.randint(0, range_) for _ in range((level // 3) + 1)
+            random.randint(0, range_) for _ in range((level // 3) + range_)
         ]
         self.p_opsed_enemies = []
+        self.used_enemy_indices = set()
 
         self.player = Player(
             (WIDTH // 2 - G_SPRITE_SIZE // 2, HEIGHT - G_SPRITE_SIZE),
@@ -131,17 +132,27 @@ class Level:
         if self.enemy_count in self.powerops_index:
             self.powerops_index.remove(self.enemy_count)
             current_enemy_group_len = len(self.enemy_group.sprites())
-            enemy_index = (
-                int(self.enemy_count / self.level_attributes.get("max_spawn_count"))
-                * current_enemy_group_len
-            ) % current_enemy_group_len
-            self.p_opsed_enemies.append(self.enemy_group.sprites()[enemy_index])
-            self.enemy_group.sprites()[enemy_index].image.fill("red")
-            print(self.p_opsed_enemies, self.powerops_index)
+
+            enemy_index = random.randint(0, current_enemy_group_len - 1)
+            traced_length = 0
+
+            while enemy_index in self.used_enemy_indices:
+                enemy_index = random.randint(0, current_enemy_group_len - 1)
+                traced_length += 1
+                if traced_length >= current_enemy_group_len:
+                    break
+
+            if enemy_index not in self.used_enemy_indices:
+                self.used_enemy_indices.add(enemy_index)
+                enemy = self.enemy_group.sprites()[enemy_index]
+                self.p_opsed_enemies.append(enemy)
+                self.enemy_group.sprites()[enemy_index].image.fill("red")
+                print(self.p_opsed_enemies, self.powerops_index)
+
         "copy each time because me are removing from currently iterating array"
         for sprite in self.p_opsed_enemies[:]:
             if not sprite.alive():
-                power_type = random.choice(["missile"])
+                power_type = random.choice(["laser"])
                 action_group = {
                     "laser": self.player_bullet_group,
                     "missile": self.player_bullet_group,
