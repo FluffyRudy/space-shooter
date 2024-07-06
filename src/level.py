@@ -14,6 +14,17 @@ from .settings import WIDTH, HEIGHT, G_SPRITE_SIZE, ShipTypes
 from config import FONT_DIR
 
 
+MAX_SPAWN_COUNT = "max_spawn_count"
+SPAWN_COUNT = "spawn_count"
+ENEMIES = "enemies"
+HEALTH_COUNT = "health_count"
+SHOOTER = "shooter"
+SELF_KILLER = "self_killer"
+LASER = "laser"
+REGAN = "regan"
+MISSILE = "missile"
+
+
 class Level:
     def __init__(self, level: int):
         self.display_surface = pygame.display.get_surface()
@@ -31,7 +42,7 @@ class Level:
         self.is_gameover = False
 
         self.background = Background()
-        self.health_bar = Healthbar(Storage.get_player_data().get("health_count"))
+        self.health_bar = Healthbar(Storage.get_player_data()[HEALTH_COUNT])
 
         self.visible_group = pygame.sprite.Group()
         self.enemy_group = pygame.sprite.Group()
@@ -45,7 +56,7 @@ class Level:
         self.current_level = level
         self.enemy_count = 0
 
-        range_ = self.level_attributes.get("max_spawn_count")
+        range_ = self.level_attributes[MAX_SPAWN_COUNT]
         self.powerops_index = [
             random.randint(0, range_) for _ in range((level // 2) + 1)
         ]
@@ -74,25 +85,26 @@ class Level:
 
     def completed(self):
         return (
-            self.enemy_count >= self.level_attributes.get("max_spawn_count")
+            self.enemy_count >= self.level_attributes[MAX_SPAWN_COUNT]
             and len(self.enemy_group.sprites()) == 0
         )
 
     def spawn_enemy(self):
-        if len(self.enemy_group.sprites()) >= self.level_attributes.get(
-            "spawn_count"
-        ) or self.enemy_count >= self.level_attributes.get("max_spawn_count"):
+        if (
+            len(self.enemy_group.sprites()) >= self.level_attributes[SPAWN_COUNT]
+            or self.enemy_count >= self.level_attributes[MAX_SPAWN_COUNT]
+        ):
             return
 
-        shooter_probability = self.level_attributes["enemies"]["shooter"]
-        self_killer_probability = self.level_attributes["enemies"]["self_killer"]
+        shooter_probability = self.level_attributes[ENEMIES][SELF_KILLER]
+        self_killer_probability = self.level_attributes[ENEMIES][SELF_KILLER]
         enemy_choice = random.choices(
             ("shooter", "self_killer"),
             (shooter_probability, self_killer_probability),
             k=1,
         )
 
-        if enemy_choice[0] == "self_killer":
+        if enemy_choice[0] == SELF_KILLER:
             random_x = random.randint(0, WIDTH)
             random_y = random.randint(-HEIGHT, 0)
             SelfKillerEnemy(
@@ -146,13 +158,11 @@ class Level:
                 self.used_enemy_indices.add(enemy_index)
                 enemy = self.enemy_group.sprites()[enemy_index]
                 self.p_opsed_enemies.append(enemy)
-                self.enemy_group.sprites()[enemy_index].image.fill("red")
-                print(self.p_opsed_enemies, self.powerops_index)
 
         "copy each time because me are removing from currently iterating array"
         for sprite in self.p_opsed_enemies[:]:
             if not sprite.alive():
-                power_type = random.choice(["laser", "regan", "missile"])
+                power_type = random.choice([LASER, REGAN, MISSILE])
                 action_group = {
                     "laser": self.player_bullet_group,
                     "missile": self.player_bullet_group,
@@ -168,7 +178,7 @@ class Level:
     def handle_player_attack(self):
         for bullet in self.player_bullet_group.sprites():
             collided_enemy = pygame.sprite.spritecollideany(bullet, self.enemy_group)
-            if get_instance_cls(bullet) in ["Laser", "Missile"]:
+            if get_instance_cls(bullet) in [LASER, MISSILE]:
                 if collided_enemy is not None and bullet.rect.colliderect(
                     collided_enemy
                 ):
