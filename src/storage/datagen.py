@@ -16,7 +16,7 @@ def generate_levels_data(num_levels):
         },
         "weapons": {
             "laser": {"speed": 0, "damage": 1, "kill_after": 5000},
-            "missile": {"speed": 5, "damage": 1, "damage_cd": 1000},
+            "missile": {"speed": 5, "damage": 2, "count": 3},
         },
         "defence": {
             "shield": {"amount": 1, "kill_after": None},

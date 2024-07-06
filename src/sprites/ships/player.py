@@ -2,7 +2,8 @@ from typing import Union
 import pygame, math, random
 from .ship import Ship
 from .state import State
-from ..weapons.bullet import Bullet, create_bullet
+from ..weapons.bullet import Bullet
+from ..weapons.projectile import create_projectile
 from src.utils.image_util import load_frame
 from src.timer.cooldown import Cooldown
 from src.storage.storage import Storage
@@ -70,13 +71,14 @@ class Player(Ship):
 
         if keys[pygame.K_SPACE] and self.bullet_cooldown_timer.has_cooldown():
             Soundmanager.play_sfx_sound("shoot")
-            create_bullet(
+            create_projectile(
                 groups=[self.visible_group, self.bullet_group],
                 relative_rect=self.rect,
                 num_bullets=self.num_bullets,
                 speed=DEFAULT_BULLET_SPEED,
                 direction=(0, -1),
                 damage=self.props.get("bullet_damage"),
+                class_type=Bullet,
             )
             self.bullet_cooldown_timer.reset_time()
 

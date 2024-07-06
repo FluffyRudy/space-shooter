@@ -1,14 +1,21 @@
 import pygame, random
 from .animation import Animation
+from src.storage.storage import Storage
 from src.utils.image_util import load_frame
+from src.sprites.weapons.projectile import create_projectile
 from src.sprites.weapons.laser import Laser
+from src.sprites.weapons.missile import Missile
 from src.sprites.defence.healthregan import HealthRegan
 from src.settings import WIDTH, HEIGHT, G_SPRITE_SIZE
 from config import POWEROPS_DIR
 
 
 def get_power_path(type_: str):
-    power_map = {"laser": POWEROPS_DIR / "laser", "regan": POWEROPS_DIR / "health"}
+    power_map = {
+        "laser": POWEROPS_DIR / "laser",
+        "regan": POWEROPS_DIR / "health",
+        "missile": POWEROPS_DIR / "missile",
+    }
     return power_map[type_]
 
 
@@ -26,7 +33,7 @@ class Powerops(pygame.sprite.Sprite):
 
         self.power_type = power_type
 
-        pos = random.randint(0, WIDTH - G_SPRITE_SIZE), random.randint(
+        pos = random.randint(int(WIDTH // 4), int(WIDTH * 0.7)), random.randint(
             -G_SPRITE_SIZE, -G_SPRITE_SIZE // 2
         )
         size = (G_SPRITE_SIZE, G_SPRITE_SIZE)
@@ -52,6 +59,16 @@ class Powerops(pygame.sprite.Sprite):
             Laser(self.get_filtered_group(), self.rect.midtop)
         elif self.power_type == "regan":
             HealthRegan(self.get_filtered_group(), self.rect.center)
+        elif self.power_type == "missile":
+            create_projectile(
+                self.get_filtered_group(),
+                self.rect,
+                Storage.get_weapons("missile").get("count"),
+                Storage.get_weapons("missile").get("speed"),
+                Storage.get_weapons("missile").get("damage"),
+                (0, -1),
+                Missile,
+            )
 
     def get_filtered_group(self) -> list:
         if self.action_group is None:

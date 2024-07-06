@@ -1,7 +1,8 @@
 import pygame, math, random
 from .state import State
 from .ship import Ship
-from ..weapons.bullet import create_bullet
+from ..weapons.projectile import create_projectile
+from ..weapons.bullet import Bullet
 from src.storage.storage import Storage
 from src.soundmanager.soundmanager import Soundmanager
 from src.settings import DEFAULT_BULLET_SPEED, ShipTypes, HEIGHT, WIDTH, G_SPRITE_SIZE
@@ -44,13 +45,14 @@ class ShooterEnemy(Ship):
         self.rect.y += velocity_y + random.choice([-1, 1])
 
     def shoot(self):
-        create_bullet(
+        create_projectile(
             groups=[self.visible_group, self.bullet_group],
             relative_rect=self.rect,
             num_bullets=1,
             speed=DEFAULT_BULLET_SPEED,
             direction=(0, 1),
             damage=self.props.get("damage"),
+            class_type=Bullet,
         )
 
     def behave(self, relative_rect: pygame.Rect):
