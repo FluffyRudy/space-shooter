@@ -22,7 +22,6 @@ class Obstacle(pygame.sprite.Sprite):
 
         self.image = self.frames[0]
         self.rect = self.image.get_rect(topleft=pos)
-        self.hitbox = self.rect.inflate(-20, -25)
 
         self.has_collided = False
         self.direction = Vector2(0, 0)
@@ -35,15 +34,13 @@ class Obstacle(pygame.sprite.Sprite):
             self.kill()
         frame_index = int(self.frame_index)
         self.image = self.frames[frame_index]
-        self.hitbox = self.image.get_rect(center=self.rect.center)
-        self.rect.center = self.hitbox.center
+        self.rect = self.image.get_rect(center=self.rect.center)
 
     def update(self, *arg, **kwargs):
         if self.has_collided:
             self.animate()
-        self.hitbox.x += self.speed * self.direction.x
-        self.hitbox.y += self.speed * self.direction.y
-        self.rect.center = self.hitbox.center
+        self.rect.x += self.speed * self.direction.x
+        self.rect.y += self.speed * self.direction.y
 
     def active(self):
         if not self.has_collided:
