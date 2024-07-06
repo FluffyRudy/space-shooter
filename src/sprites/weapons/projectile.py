@@ -23,7 +23,7 @@ class Projectile(pygame.sprite.Sprite):
         self.direction = pygame.math.Vector2(direction)
         self.frames = load_frame(WEAPONS_DIR / frames_dir)
         self.frame_index = 0
-        self.animation_speed = 0.2
+        self.animation_speed = 0.05
 
         self.image = self.frames[0]
         if self.direction.y > 0:
@@ -53,6 +53,8 @@ class Projectile(pygame.sprite.Sprite):
 
         if self.rect.bottom < 0 or self.rect.top > HEIGHT:
             self.kill()
+
+        self.animate()
 
     def handle_kill(self):
         self.kill()
