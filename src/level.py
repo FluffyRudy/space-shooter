@@ -98,43 +98,51 @@ class Level:
         ):
             return
 
-        shooter_probability = self.level_attributes[ENEMIES][SELF_KILLER]
+        shooter_probability = self.level_attributes[ENEMIES][SHOOTER]
         self_killer_probability = self.level_attributes[ENEMIES][SELF_KILLER]
-        enemy_choice = random.choices(
-            ("shooter", "self_killer"),
-            (shooter_probability, self_killer_probability),
-            k=1,
-        )
 
-        if enemy_choice[0] == SELF_KILLER:
-            random_x = random.randint(0, WIDTH)
-            random_y = random.randint(-HEIGHT, 0)
-            SelfKillerEnemy(
-                (random_x, random_y),
-                visible_group=self.visible_group,
-                base_group=self.enemy_group,
+        # Normalize the probabilities to ensure they add up to 1
+        total_probability = shooter_probability + self_killer_probability
+        shooter_probability /= total_probability
+        self_killer_probability /= total_probability
+
+        # Spawn enemies based on the probabilities
+        for _ in range(
+            self.level_attributes[SPAWN_COUNT] - len(self.enemy_group.sprites())
+        ):
+            enemy_type = (
+                "shooter" if random.random() < shooter_probability else "self_killer"
             )
-        else:
-            do_collide = False
-            random_x = random.randint(-WIDTH, WIDTH * 2)
-            random_y = random.randint(-HEIGHT, 0)
-            for sprite in self.enemy_group.sprites():
-                checker_rect = pygame.Rect(
-                    random_x, sprite.rect.y, G_SPRITE_SIZE, G_SPRITE_SIZE
-                )
-                if sprite.rect.colliderect(checker_rect):
-                    do_collide = True
-                    break
 
-            if not do_collide:
-                ShooterEnemy(
-                    pos=(random_x, random_y),
+            if enemy_type == "self_killer":
+                random_x = random.randint(0, WIDTH)
+                random_y = random.randint(-HEIGHT, 0)
+                SelfKillerEnemy(
+                    (random_x, random_y),
                     visible_group=self.visible_group,
                     base_group=self.enemy_group,
-                    bullet_group=self.enemy_bullet_group,
-                    offset_y=random.randrange(0, G_SPRITE_SIZE * 4),
                 )
-                self.enemy_count += 1
+            else:
+                do_collide = False
+                random_x = random.randint(-WIDTH, WIDTH * 2)
+                random_y = random.randint(-HEIGHT, 0)
+                for sprite in self.enemy_group.sprites():
+                    checker_rect = pygame.Rect(
+                        random_x, sprite.rect.y, G_SPRITE_SIZE, G_SPRITE_SIZE
+                    )
+                    if sprite.rect.colliderect(checker_rect):
+                        do_collide = True
+                        break
+
+                if not do_collide:
+                    ShooterEnemy(
+                        pos=(random_x, random_y),
+                        visible_group=self.visible_group,
+                        base_group=self.enemy_group,
+                        bullet_group=self.enemy_bullet_group,
+                        offset_y=random.randrange(0, G_SPRITE_SIZE * 4),
+                    )
+                    self.enemy_count += 1
 
     def spawn_obstacle(self):
         if random.uniform(0, 1) < 0.01:
@@ -148,18 +156,8 @@ class Level:
             current_enemy_group_len = len(self.enemy_group.sprites())
 
             enemy_index = random.randint(0, current_enemy_group_len - 1)
-            traced_length = 0
-
-            while enemy_index in self.used_enemy_indices:
-                enemy_index = random.randint(0, current_enemy_group_len - 1)
-                traced_length += 1
-                if traced_length >= current_enemy_group_len:
-                    break
-
-            if enemy_index not in self.used_enemy_indices:
-                self.used_enemy_indices.add(enemy_index)
-                enemy = self.enemy_group.sprites()[enemy_index]
-                self.p_opsed_enemies.append(enemy)
+            enemy = self.enemy_group.sprites()[enemy_index]
+            self.p_opsed_enemies.append(enemy)
 
         "copy each time because me are removing from currently iterating array"
         for sprite in self.p_opsed_enemies[:]:
@@ -180,7 +178,9 @@ class Level:
     def handle_player_attack(self):
         for bullet in self.player_bullet_group.sprites():
             collided_enemy = pygame.sprite.spritecollideany(bullet, self.enemy_group)
-            if get_instance_cls(bullet) in [LASER, MISSILE]:
+            if collided_enemy and collided_enemy.get_status() == "dead":
+                continue
+            if get_instance_cls(bullet) in [LASER.capitalize(), MISSILE.capitalize()]:
                 if collided_enemy is not None and bullet.rect.colliderect(
                     collided_enemy
                 ):
