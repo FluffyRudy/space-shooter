@@ -3,7 +3,8 @@ from src.storage.storage import Storage
 from src.level import Level
 from src.UI.menu.mainmenu import MainMenuUI
 from src.UI.menu.gameover import GameoverUI
-from src.settings import FPS, WIDTH, HEIGHT, BLACK
+from src.settings import FPS, WIDTH, HEIGHT
+from src.constants import BLACK
 
 
 class Manager:
@@ -81,7 +82,6 @@ class Manager:
         self.start_game = False
 
     def load_level(self, level: int, auto_start: bool = True):
-        print(level)
         self.level = Level(level)
         if auto_start:
             self.play()

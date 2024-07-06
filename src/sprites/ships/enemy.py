@@ -5,7 +5,8 @@ from ..weapons.projectile import create_projectile
 from ..weapons.bullet import Bullet
 from src.storage.storage import Storage
 from src.soundmanager.soundmanager import Soundmanager
-from src.settings import DEFAULT_BULLET_SPEED, ShipTypes, HEIGHT, WIDTH, G_SPRITE_SIZE
+from src.settings import HEIGHT, WIDTH, G_SPRITE_SIZE
+from src.constants import ENEMIES, SHOOTER, BULLET_SPEED, ShipTypes
 
 
 class ShooterEnemy(Ship):
@@ -20,7 +21,7 @@ class ShooterEnemy(Ship):
         super().__init__(
             pos,
             ShipTypes.SHOOTING_ENEMY,
-            Storage.get_enemy_data("shooter"),
+            Storage.get_enemy_data(SHOOTER),
             visible_group,
             base_group,
             bullet_group,
@@ -48,7 +49,7 @@ class ShooterEnemy(Ship):
             groups=[self.visible_group, self.bullet_group],
             relative_rect=self.rect,
             num_bullets=1,
-            speed=DEFAULT_BULLET_SPEED,
+            speed=Storage.get_enemy_data(SHOOTER)[BULLET_SPEED],
             direction=(0, 1),
             damage=self.props.get("damage"),
             class_type=Bullet,

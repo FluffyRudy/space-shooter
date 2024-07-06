@@ -1,7 +1,8 @@
 import pygame
 from .obstacle import Obstacle
 from src.utils.image_util import load_frame
-from src.settings import ObstacleTypes, HEIGHT, WIDTH
+from src.settings import HEIGHT, WIDTH
+from src.constants import ObstacleTypes
 from config import OBSTACLES_DIR
 
 

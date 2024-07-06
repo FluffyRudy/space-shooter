@@ -8,7 +8,8 @@ from src.utils.image_util import load_frame
 from src.timer.cooldown import Cooldown
 from src.storage.storage import Storage
 from src.soundmanager.soundmanager import Soundmanager
-from src.settings import DEFAULT_BULLET_SPEED, ShipTypes, G_SPRITE_SIZE
+from src.settings import G_SPRITE_SIZE
+from src.constants import BULLET_DAMAGE, BULLET_SPEED, ShipTypes
 from config import DEAD_EFFECT
 
 
@@ -75,9 +76,9 @@ class Player(Ship):
                 groups=[self.visible_group, self.bullet_group],
                 relative_rect=self.rect,
                 num_bullets=self.num_bullets,
-                speed=DEFAULT_BULLET_SPEED,
+                speed=Storage.get_player_data()[BULLET_SPEED],
                 direction=(0, -1),
-                damage=self.props.get("bullet_damage"),
+                damage=self.props[BULLET_DAMAGE],
                 class_type=Bullet,
             )
             self.bullet_cooldown_timer.reset_time()

@@ -2,7 +2,7 @@ import pygame
 from pygame.math import Vector2
 from src.soundmanager.soundmanager import Soundmanager
 from src.utils.image_util import load_frame
-from src.settings import ObstacleTypes
+from src.constants import ObstacleTypes
 from config import OBSTACLES_DIR
 
 

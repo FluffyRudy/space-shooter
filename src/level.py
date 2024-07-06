@@ -10,19 +10,21 @@ from src.powerops.powerops import Powerops
 from .sprites.ships.player import Player
 from .sprites.ships.enemy import ShooterEnemy, SelfKillerEnemy
 from .sprites.obstacles.asteroid import Asteroid
-from .settings import WIDTH, HEIGHT, G_SPRITE_SIZE, ShipTypes
+from .settings import WIDTH, HEIGHT, G_SPRITE_SIZE
+
+from .constants import (
+    ShipTypes,
+    MAX_SPAWN_COUNT,
+    SPAWN_COUNT,
+    ENEMIES,
+    HEALTH_COUNT,
+    SHOOTER,
+    SELF_KILLER,
+    REGAN,
+    MISSILE,
+    LASER,
+)
 from config import FONT_DIR
-
-
-MAX_SPAWN_COUNT = "max_spawn_count"
-SPAWN_COUNT = "spawn_count"
-ENEMIES = "enemies"
-HEALTH_COUNT = "health_count"
-SHOOTER = "shooter"
-SELF_KILLER = "self_killer"
-LASER = "laser"
-REGAN = "regan"
-MISSILE = "missile"
 
 
 class Level:
