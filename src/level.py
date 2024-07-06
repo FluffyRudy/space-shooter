@@ -141,14 +141,13 @@ class Level:
         "copy each time because me are removing from currently iterating array"
         for sprite in self.p_opsed_enemies[:]:
             if not sprite.alive():
-                power_type = random.choice(["regan", "laser"])
+                power_type = random.choice(["laser"])
+                action_group = {"laser": self.player_bullet_group}
                 Powerops(
                     power_type,
                     base_group=self.powerops_group,
                     visible_group=self.visible_group,
-                    action_group=(
-                        None if power_type in ["regan"] else self.player_bullet_group
-                    ),
+                    action_group=action_group.get(power_type, None),
                 )
                 self.p_opsed_enemies.remove(sprite)
 
@@ -163,7 +162,9 @@ class Level:
 
         for bullet in self.player_bullet_group.sprites():
             for obstacle in self.obstacle_group.sprites():
-                if obstacle.hitbox.colliderect(bullet.rect):
+                if not obstacle.is_active() and obstacle.hitbox.colliderect(
+                    bullet.rect
+                ):
                     obstacle.active()
                     bullet.handle_kill()
 
