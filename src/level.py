@@ -157,7 +157,7 @@ class Level:
     def handle_player_attack(self):
         for bullet in self.player_bullet_group.sprites():
             collided_enemy = pygame.sprite.spritecollideany(bullet, self.enemy_group)
-            if get_instance_cls(bullet) == "Laser":
+            if get_instance_cls(bullet) in ["Laser", "Missile"]:
                 if collided_enemy is not None and bullet.rect.colliderect(
                     collided_enemy
                 ):
