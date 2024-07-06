@@ -162,8 +162,10 @@ class Level:
 
         for bullet in self.player_bullet_group.sprites():
             for obstacle in self.obstacle_group.sprites():
-                if not obstacle.is_active() and obstacle.hitbox.colliderect(
-                    bullet.rect
+                if (
+                    not obstacle.is_active()
+                    and obstacle.rect.colliderect(bullet.rect)
+                    and pygame.sprite.collide_mask(bullet, obstacle)
                 ):
                     obstacle.active()
                     bullet.handle_kill()
@@ -183,7 +185,9 @@ class Level:
 
     def handle_obstacle_collision(self):
         for obstacle in self.obstacle_group.sprites():
-            if obstacle.hitbox.colliderect(self.player.rect):
+            if obstacle.rect.colliderect(
+                self.player.rect
+            ) and pygame.sprite.collide_mask(self.player, obstacle):
                 obstacle.active()
                 self.reduce_player_health(1)
 
