@@ -136,21 +136,24 @@ class Level:
                 * current_enemy_group_len
             ) % current_enemy_group_len
             self.p_opsed_enemies.append(self.enemy_group.sprites()[enemy_index])
+            self.enemy_group.sprites()[enemy_index].image.fill("red")
             print(self.p_opsed_enemies, self.powerops_index)
         "copy each time because me are removing from currently iterating array"
         for sprite in self.p_opsed_enemies[:]:
             if not sprite.alive():
+                power_type = random.choice(["regan", "laser"])
                 Powerops(
-                    random.choice(["laser"]),
+                    power_type,
                     base_group=self.powerops_group,
                     visible_group=self.visible_group,
-                    action_group=self.player_bullet_group,
+                    action_group=(
+                        None if power_type in ["regan"] else self.player_bullet_group
+                    ),
                 )
                 self.p_opsed_enemies.remove(sprite)
 
     def handle_player_attack(self):
         for bullet in self.player_bullet_group.sprites():
-            # Check collision with enemies
             collided_enemy = pygame.sprite.spritecollideany(bullet, self.enemy_group)
             if collided_enemy is not None and pygame.sprite.collide_mask(
                 bullet, collided_enemy
@@ -185,7 +188,6 @@ class Level:
 
     def reduce_player_health(self, damage: int):
         self.player.damage(damage)
-        self.health_bar.update_health_count(self.player.get_damage_count())
 
     def handle_gameover(self):
         if self.player.is_dead() and self.player.can_kill():
@@ -193,6 +195,7 @@ class Level:
 
     def run(self, event: Optional[pygame.event.Event]):
         self.background.update()
+        self.health_bar.update(self.player.get_damage_count())
         self.visible_group.update(player=self.player)
 
         self.background.draw_background(self.display_surface)

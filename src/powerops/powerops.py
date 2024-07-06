@@ -2,14 +2,14 @@ import pygame, random
 from .animation import Animation
 from src.utils.image_util import load_frame
 from src.sprites.weapons.laser import Laser
+from src.sprites.defence.healthregan import HealthRegan
 from src.settings import WIDTH, HEIGHT, G_SPRITE_SIZE
 from config import POWEROPS_DIR
 
 
 def get_power_path(type_: str):
-    power_map = {"laser": POWEROPS_DIR / "laser"}
-    power = random.choice(list(power_map.keys()))
-    return power_map[power]
+    power_map = {"laser": POWEROPS_DIR / "laser", "regan": POWEROPS_DIR / "health"}
+    return power_map[type_]
 
 
 class Powerops(pygame.sprite.Sprite):
@@ -30,7 +30,9 @@ class Powerops(pygame.sprite.Sprite):
             -G_SPRITE_SIZE, -G_SPRITE_SIZE // 2
         )
         size = (G_SPRITE_SIZE, G_SPRITE_SIZE)
-        frames = load_frame(get_power_path(power_type), (0.5, 0.4))
+        frames = load_frame(
+            get_power_path(power_type), None, (G_SPRITE_SIZE // 2, G_SPRITE_SIZE // 2)
+        )
         self.animation = Animation(frames)
         self.image = self.animation.initial_frame
         self.rect = self.image.get_rect(topleft=pos)
@@ -43,10 +45,13 @@ class Powerops(pygame.sprite.Sprite):
             self.assign_power()
             self.kill()
         self.animation.animate()
+        self.image = self.animation.get_current_frame()
 
     def assign_power(self):
         if self.power_type == "laser":
             Laser(self.get_filtered_group(), self.rect.midtop)
+        elif self.power_type == "regan":
+            HealthRegan(self.get_filtered_group(), self.rect.center)
 
     def get_filtered_group(self) -> list:
         if self.action_group is None:

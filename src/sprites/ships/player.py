@@ -110,6 +110,9 @@ class Player(Ship):
     def get_damage_count(self):
         return max(0, self.props.get("health_count"))
 
+    def increase_health_count(self, amount: int = 1):
+        self.props["health_count"] += 1
+
     def damage(self, damage: Union[int, None]):
         if self.is_invincible or self.is_immune:
             return

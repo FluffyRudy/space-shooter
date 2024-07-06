@@ -14,6 +14,9 @@ class Healthbar:
     def update_health_count(self, health_count: int):
         self.health_count = health_count
 
+    def update(self, health_count: int):
+        self.update_health_count(health_count)
+
     def display(self, display_surface: pygame.Surface):
         i = 0
         for i in range(self.full_health):

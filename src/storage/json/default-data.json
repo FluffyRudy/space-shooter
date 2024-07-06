@@ -27,8 +27,8 @@
             "kill_after": null
         },
         "regan": {
-            "amount": 0.2,
-            "kill_after": 1000
+            "amount": 1,
+            "kill_after": 0
         },
         "immunity": {
             "kill_after": 3000

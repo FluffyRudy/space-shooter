@@ -38,7 +38,7 @@ class Laser(pygame.sprite.Sprite):
         self.image = self.frames[frame_index]
 
     def update(self, *arg, **kwargs):
-        relative_rect = kwargs.get("relative_rect")
+        relative_rect = kwargs.get("player").rect
         self.rect.centerx = relative_rect.centerx
         self.rect.top = relative_rect.y - self.image.get_height() * 0.99
 
