@@ -47,7 +47,7 @@ class Level:
 
         range_ = self.level_attributes.get("max_spawn_count")
         self.powerops_index = [
-            random.randint(0, range_) for _ in range((level // 3) + range_)
+            random.randint(0, range_) for _ in range((level // 2) + 1)
         ]
         self.p_opsed_enemies = []
         self.used_enemy_indices = set()
@@ -152,7 +152,7 @@ class Level:
         "copy each time because me are removing from currently iterating array"
         for sprite in self.p_opsed_enemies[:]:
             if not sprite.alive():
-                power_type = random.choice(["laser"])
+                power_type = random.choice(["laser", "regan", "missile"])
                 action_group = {
                     "laser": self.player_bullet_group,
                     "missile": self.player_bullet_group,
