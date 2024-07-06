@@ -154,7 +154,13 @@ class Level:
     def handle_player_attack(self):
         for bullet in self.player_bullet_group.sprites():
             collided_enemy = pygame.sprite.spritecollideany(bullet, self.enemy_group)
-            if collided_enemy is not None and pygame.sprite.collide_mask(
+            if get_instance_cls(bullet) == "Laser":
+                if collided_enemy is not None and bullet.rect.colliderect(
+                    collided_enemy
+                ):
+                    collided_enemy.damage(bullet.get_damage())
+                    bullet.handle_kill()
+            elif collided_enemy is not None and pygame.sprite.collide_mask(
                 bullet, collided_enemy
             ):
                 collided_enemy.damage(bullet.get_damage())
@@ -216,3 +222,7 @@ class Level:
         self.handle_enemy_attack()
         self.handle_obstacle_collision()
         self.handle_gameover()
+
+
+def get_instance_cls(instance: object):
+    return instance.__class__.__name__
