@@ -20,4 +20,3 @@ class Animation:
         if self.frame_index >= len(self.frames):
             self.frame_index = 0
         self.image = self.frames[int(self.frame_index)]
-        print(self.frame_index)
