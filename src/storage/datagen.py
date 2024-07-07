@@ -16,7 +16,6 @@ def generate_levels_data(num_levels):
         },
         "weapons": {
             "laser": {
-                "speed": 0,
                 "damage": 1,
                 "kill_after": 3000,
                 "upgrades": {
