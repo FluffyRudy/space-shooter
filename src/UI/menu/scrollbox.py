@@ -85,7 +85,8 @@ class Scrollbox:
         if not self.is_visible:
             return
 
-        if event.type == pygame.MOUSEWHEEL:
+        """check length of cell_list to prevent the error if cell_list has zero length"""
+        if event.type == pygame.MOUSEWHEEL and len(self.cells_list) > 0:
             self.handle_mousewheel(event)
 
         mouse_pos = pygame.mouse.get_pos()

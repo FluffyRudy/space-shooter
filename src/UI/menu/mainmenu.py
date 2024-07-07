@@ -24,11 +24,15 @@ class MainMenuUI:
         )
         positions = [
             (center_pos[0], center_pos[1] + i * G_SPRITE_SIZE * 2)
-            for i in range(-1, 2, 1)
+            for i in range(-1, 3, 1)
         ]
         self.level_box = Scrollbox(
             (WIDTH // 2, self.container.header_box_height // 4 + HEIGHT // 2),
             lambda: self.level_box.toggle_visibility(),
+        )
+        self.shop_box = Scrollbox(
+            (WIDTH // 2, self.container.header_box_height // 4 + HEIGHT // 2),
+            lambda: self.shop_box.toggle_visibility(),
         )
         self.level_box.set_cell_callback(event_action["load_level"])
         self.init_loaded_level_range = Storage.get_current_level()
@@ -39,13 +43,18 @@ class MainMenuUI:
         levels_button = CustomButton(
             "levels", positions[1], lambda: self.level_box.make_visible()
         )
-        exit_button = CustomButton("exit", positions[2], event_action["exit"])
+        shop_button = CustomButton(
+            "shop", positions[2], lambda: self.shop_box.make_visible()
+        )
+        exit_button = CustomButton("exit", positions[3], event_action["exit"])
         self.buttons = OrderedDict(
-            start=start_button, levels=levels_button, _exit=exit_button
+            start=start_button,
+            levels=levels_button,
+            shop=shop_button,
+            _exit=exit_button,
         )
 
         self.display_level = False
-
         self.pressed_button = None
 
     def display(self, display_surface: pygame.Surface):
@@ -53,6 +62,7 @@ class MainMenuUI:
         for button in self.buttons.values():
             button.display(self.container.get_surface())
         self.level_box.display(self.container.get_surface())
+        self.shop_box.display(self.container.get_surface())
         self.container.display(display_surface)
         self.container.get_surface().fill((0, 0, 0))
 
@@ -62,6 +72,7 @@ class MainMenuUI:
             return
 
         self.level_box.update(event)
+        self.shop_box.update(event)
 
         if self.level_box.is_visible or event.type == pygame.MOUSEWHEEL:
             return
