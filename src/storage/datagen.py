@@ -12,15 +12,52 @@ def generate_levels_data(num_levels):
             "kill_damage_count": 5,
             "invincibility_cooldown_time": 1000,
             "bullet_cooldown_time": 200,
-            "score": 0,
+            "coins": 0,
         },
         "weapons": {
-            "laser": {"speed": 0, "damage": 1, "kill_after": 5000},
-            "missile": {"speed": 5, "damage": 5, "count": 3},
+            "laser": {
+                "speed": 0,
+                "damage": 1,
+                "kill_after": 3000,
+                "upgrades": {
+                    "upgrade_level": 1,
+                    "max_upgrade_level": 5,
+                    "initial_cost": 10,
+                    "cost_increase_rate": 0.2,
+                },
+            },
+            "missile": {
+                "speed": 5,
+                "damage": 5,
+                "count": 3,
+                "upgrades": {
+                    "upgrade_level": 1,
+                    "max_upgrade_level": 5,
+                    "initial_cost": 10,
+                    "cost_increase_rate": 0.2,
+                },
+            },
         },
         "defence": {
-            "shield": {"kill_after": 5000},
-            "regan": {"amount": 1, "kill_after": 0},
+            "shield": {
+                "kill_after": 5000,
+                "upgrades": {
+                    "upgrade_level": 1,
+                    "max_upgrade_level": 5,
+                    "initial_cost": 10,
+                    "cost_increase_rate": 0.2,
+                },
+            },
+            "regan": {
+                "amount": 1,
+                "kill_after": 0,
+                "upgrades": {
+                    "upgrade_level": 1,
+                    "max_upgrade_level": 5,
+                    "initial_cost": 10,
+                    "cost_increase_rate": 0.2,
+                },
+            },
         },
         "enemies": {
             "shooter": {
