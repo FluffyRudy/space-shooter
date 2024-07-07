@@ -55,10 +55,17 @@ class Shield(pygame.sprite.Sprite):
             self.bright_up_cd.handle_cooldown()
             if self.bright_up_cd.has_cooldown():
                 self.is_brighten = False
+            else:
+                self.image.set_alpha(255)
         else:
             elapsed_time = self.self_kill_cd.get_prev_time()
-            updated_alpha = max(80, 255 - self.alpha_rate * elapsed_time)
-            self.image.set_alpha(int(updated_alpha))
+            target_alpha = max(80, 255 - self.alpha_rate * elapsed_time)
+            current_alpha = self.image.get_alpha()
+            if current_alpha > target_alpha:
+                new_alpha = max(target_alpha, current_alpha - 5)
+            else:
+                new_alpha = target_alpha
+            self.image.set_alpha(int(new_alpha))
 
     def bright_up(self):
         self.is_brighten = True
