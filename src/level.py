@@ -52,6 +52,7 @@ class Level:
         self.enemy_bullet_group = pygame.sprite.Group()
         self.player_bullet_group = pygame.sprite.Group()
         self.powerops_group = pygame.sprite.Group()
+        self.defensive_power_group = pygame.sprite.Group()
         self.obstacle_group = pygame.sprite.Group()
 
         self.level_attributes = Storage.get_level_data(level)
@@ -61,7 +62,7 @@ class Level:
 
         range_ = self.level_attributes[MAX_SPAWN_COUNT]
         self.powerops_index = [
-            random.randint(0, range_) for _ in range((level // 2) + 1)
+            random.randint(0, range_) for _ in range(max((level // 2) + 1, 2))
         ]
         self.p_opsed_enemies = []
         self.used_enemy_indices = set()
@@ -163,11 +164,11 @@ class Level:
         "copy each time because me are removing from currently iterating array"
         for sprite in self.p_opsed_enemies[:]:
             if not sprite.alive():
-                power_type = random.choice([SHIELD, LASER, MISSILE, REGAN])
+                power_type = random.choice([SHIELD])
                 action_group = {
                     "laser": self.player_bullet_group,
                     "missile": self.player_bullet_group,
-                    "shield": None,
+                    "shield": self.defensive_power_group,
                 }
                 Powerops(
                     power_type,
@@ -225,6 +226,17 @@ class Level:
                 obstacle.active()
                 self.reduce_player_health(1)
 
+    """collision between players defensive powers and enemy bulllets"""
+
+    def defence_bullet_collision(self):
+        for p_ops in self.defensive_power_group.sprites():
+            collided_bullet = pygame.sprite.spritecollideany(
+                p_ops, self.enemy_bullet_group
+            )
+            if collided_bullet is not None:
+                p_ops.bright_up()
+                collided_bullet.kill()
+
     def reduce_player_health(self, damage: int):
         self.player.damage(damage)
 
@@ -246,6 +258,7 @@ class Level:
         self.spawn_enemy()
         self.spawn_obstacle()
         self.spawn_powerops()
+        self.defence_bullet_collision()
         self.handle_player_attack()
         self.handle_enemy_attack()
         self.handle_obstacle_collision()

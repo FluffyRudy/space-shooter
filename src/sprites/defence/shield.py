@@ -29,6 +29,9 @@ class Shield(pygame.sprite.Sprite):
         self.self_kill_cd = Cooldown(ATTRIBUTES.get(KILL_AFTER))
         self.self_kill_cd.reset_time()
 
+        self.bright_up_cd = Cooldown(200)
+        self.is_brighten = False
+
         self.alpha_rate = 255 / ATTRIBUTES.get(KILL_AFTER)
 
     def get_amount(self):
@@ -46,12 +49,24 @@ class Shield(pygame.sprite.Sprite):
 
         self.animate()
         self.self_kill_cd.handle_cooldown()
-        self.handle_kill()
-
-        elapsed_time = self.self_kill_cd.get_prev_time()
-        updated_alpha = max(100, 255 - self.alpha_rate * elapsed_time)
-        self.image.set_alpha(int(updated_alpha))
+        if self.is_brighten:
+            self.bright_up_cd.handle_cooldown()
+            if self.bright_up_cd.has_cooldown():
+                self.is_brighten = False
+        else:
+            elapsed_time = self.self_kill_cd.get_prev_time()
+            updated_alpha = max(80, 255 - self.alpha_rate * elapsed_time)
+            self.image.set_alpha(int(updated_alpha))
+        if self.self_kill_cd.has_cooldown():
+            kwargs.get("player").make_vulnerable()
+            self.handle_kill()
+        else:
+            kwargs.get("player").make_immune()
 
     def handle_kill(self):
-        if self.self_kill_cd.has_cooldown():
-            self.kill()
+        self.kill()
+
+    def bright_up(self):
+        self.is_brighten = True
+        self.bright_up_cd.reset_time()
+        self.image.set_alpha(255)

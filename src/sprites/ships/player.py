@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Literal
 import pygame, math, random
 from .ship import Ship
 from .state import State
@@ -9,7 +9,7 @@ from src.timer.cooldown import Cooldown
 from src.storage.storage import Storage
 from src.soundmanager.soundmanager import Soundmanager
 from src.settings import G_SPRITE_SIZE
-from src.constants import BULLET_DAMAGE, BULLET_SPEED, ShipTypes
+from src.constants import BULLET_DAMAGE, BULLET_SPEED, ShipTypes, SHIELD
 from config import DEAD_EFFECT
 
 
@@ -130,3 +130,9 @@ class Player(Ship):
 
     def is_dead(self):
         return self.status.is_dead()
+
+    def make_immune(self):
+        self.is_immune = True
+
+    def make_vulnerable(self):
+        self.is_immune = False
