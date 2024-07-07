@@ -34,9 +34,6 @@ class Shield(pygame.sprite.Sprite):
 
         self.alpha_rate = 255 / ATTRIBUTES.get(KILL_AFTER)
 
-    def get_amount(self):
-        return self.amount
-
     def animate(self):
         self.frame_index += self.animation_speed
         frame_index = int(self.frame_index) % len(self.frames)
