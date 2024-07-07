@@ -164,7 +164,7 @@ class Level:
         "copy each time because me are removing from currently iterating array"
         for sprite in self.p_opsed_enemies[:]:
             if not sprite.alive():
-                power_type = random.choice([SHIELD])
+                power_type = random.choice([SHIELD, LASER, REGAN, LASER])
                 action_group = {
                     "laser": self.player_bullet_group,
                     "missile": self.player_bullet_group,
