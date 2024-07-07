@@ -23,6 +23,7 @@ from .constants import (
     REGAN,
     MISSILE,
     LASER,
+    SHIELD,
 )
 from config import FONT_DIR
 
@@ -162,10 +163,11 @@ class Level:
         "copy each time because me are removing from currently iterating array"
         for sprite in self.p_opsed_enemies[:]:
             if not sprite.alive():
-                power_type = random.choice([LASER, REGAN, MISSILE])
+                power_type = random.choice([SHIELD, LASER, MISSILE, REGAN])
                 action_group = {
                     "laser": self.player_bullet_group,
                     "missile": self.player_bullet_group,
+                    "shield": None,
                 }
                 Powerops(
                     power_type,

@@ -19,7 +19,7 @@ def generate_levels_data(num_levels):
             "missile": {"speed": 5, "damage": 5, "count": 3},
         },
         "defence": {
-            "shield": {"amount": 1, "resist_count": 3},
+            "shield": {"amount": 1, "kill_after": 5000},
             "regan": {"amount": 1, "kill_after": 0},
         },
         "enemies": {

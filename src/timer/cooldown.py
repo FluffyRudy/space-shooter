@@ -47,3 +47,6 @@ class Cooldown:
         """
         self.start_timer = pygame.time.get_ticks()
         self.finish_cooldown = False
+
+    def get_prev_time(self):
+        return pygame.time.get_ticks() - self.start_timer

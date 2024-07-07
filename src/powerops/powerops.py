@@ -6,6 +6,7 @@ from src.sprites.weapons.projectile import create_projectile
 from src.sprites.weapons.laser import Laser
 from src.sprites.weapons.missile import Missile
 from src.sprites.defence.healthregan import HealthRegan
+from src.sprites.defence.shield import Shield
 from src.settings import WIDTH, HEIGHT, G_SPRITE_SIZE
 from config import POWEROPS_DIR
 
@@ -15,6 +16,7 @@ def get_power_path(type_: str):
         "laser": POWEROPS_DIR / "laser",
         "regan": POWEROPS_DIR / "health",
         "missile": POWEROPS_DIR / "missile",
+        "shield": POWEROPS_DIR / "shield",
     }
     return power_map[type_]
 
@@ -59,6 +61,8 @@ class Powerops(pygame.sprite.Sprite):
             Laser(self.get_filtered_group(), self.rect.midtop)
         elif self.power_type == "regan":
             HealthRegan(self.get_filtered_group(), self.rect.center)
+        elif self.power_type == "shield":
+            Shield(self.get_filtered_group(), self.rect.center)
         elif self.power_type == "missile":
             create_projectile(
                 self.get_filtered_group(),

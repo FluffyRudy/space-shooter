@@ -11,6 +11,10 @@ REGAN = "regan"
 MISSILE = "missile"
 BULLET_SPEED = "bullet_speed"
 BULLET_DAMAGE = "bullet_damage"
+HEALTH = "health"
+SHIELD = "shield"
+AMOUNT = "amount"
+KILL_AFTER = "kill_after"
 
 
 class ShipTypes(Enum):
