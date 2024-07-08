@@ -177,7 +177,7 @@ class StorageHandler:
     def get_defence(self, type_: Literal["shield", "regan", "invincibility"]) -> dict:
         return self.get_all_defence().get(type_)
 
-    def get_all_defence(self, type_) -> dict:
+    def get_all_defence(self) -> dict:
         return self.get_game_data().get("defence")
 
     def write_weapon_data(self, type_, prop: str, new_value: int):
