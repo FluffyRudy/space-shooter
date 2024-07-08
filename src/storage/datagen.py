@@ -81,5 +81,6 @@ def generate_levels_data(num_levels):
                 "shooter": (1 - i * 0.002),
                 "self_killer": (i * 0.002),
             },
+            "reward_point": 1,
         }
     return levels_data

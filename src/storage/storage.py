@@ -79,6 +79,16 @@ class StorageHandler:
         self.__game_data["current_level"] = level
         self.__write_to_file()
 
+    def write_reward_point(self, level: int) -> None:
+        """
+        Updates the reward point of current level and write it to the file"
+
+        Args:
+            level (int): reward point of level to be update
+        """
+        level = str(level)
+        self.__game_data["levels"][level]["reward_point"] = 0
+
     def __write_to_file(self) -> None:
         """
         Writes the current ship data to the JSON file.
