@@ -82,7 +82,7 @@ class Level:
     def display_title(self):
         self.title_blit_cooldown.handle_cooldown()
         if not self.title_blit_cooldown.has_cooldown():
-            self.level_title.display((WIDTH, HEIGHT), self.display_surface)
+            self.level_title.display((WIDTH // 2, HEIGHT // 2), self.display_surface)
 
     def start_title_display_cooldown(self):
         self.title_blit_cooldown.reset_time()
