@@ -20,14 +20,17 @@ class Container:
         path = UI_DIR / "menu" / "common" / "Window.png"
         self.image = load_image(path, None, size)
         self.rect = self.image.get_rect(center=pos)
-
+        self.original_image = self.image.copy()
+        self.original_size = pygame.math.Vector2(self.rect.size)
         if len(header) > 0:
             self.header_box_height = self.calculate_header_boxheight()[1]
         else:
             self.header_box_height = 0
 
         self.header_text = ColorTransition(
-            header, int(self.header_box_height // 1.5), factor=text_alpha_factor[0]
+            header,
+            int(self.header_box_height // 1.5),
+            factor=text_alpha_factor[0],
         )
 
     def get_rect(self):
@@ -56,8 +59,10 @@ class Container:
 
         return (start_y, end_y)
 
-    def add_header(self, position: tuple[int, int], display_surface: pygame.Surface):
-        self.header_text.display((position), display_surface)
+    def add_header(self):
+        self.header_text.display(
+            (self.rect.width // 2, self.header_box_height // 2), self.image
+        )
 
     def convert_position(self, pos: tuple[int, int]):
         pos_x = pos[0] - self.rect.left
@@ -65,5 +70,13 @@ class Container:
         return pos_x, pos_y
 
     def display(self, display_surface: pygame.Surface):
+        self.add_header()
         display_surface.blit(self.image, self.rect.topleft)
-        self.add_header((WIDTH, self.header_box_height), display_surface)
+        self.image.fill((0, 0, 0))
+        self.image = self.original_image.copy()
+
+    def update_font(self, font: pygame.font.Font):
+        self.header_text.font = font
+
+    def check_collision(self, pos: tuple[int, int]):
+        return self.rect.collidepoint(self.convert_position(pos))

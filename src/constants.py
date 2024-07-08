@@ -1,3 +1,4 @@
+import pygame
 from enum import Enum
 
 MAX_SPAWN_COUNT = "max_spawn_count"
@@ -25,6 +26,14 @@ class ShipTypes(Enum):
 
 class ObstacleTypes(Enum):
     ASTEROID = 0
+
+
+class GlobalPos:
+    parent_rect: pygame.Rect = None
+
+    @classmethod
+    def set_parent_rect(cls, rect: pygame.Rect):
+        cls.parent_rect = rect
 
 
 # colors

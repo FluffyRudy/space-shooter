@@ -89,6 +89,10 @@ class StorageHandler:
         level = str(level)
         self.__game_data["levels"][level]["reward_point"] = 0
 
+    def write_weapon_data(self, type_: str, new_data: dict):
+        self.__game_data[type_] = new_data
+        self.__write_to_file()
+
     def __write_to_file(self) -> None:
         """
         Writes the current ship data to the JSON file.
@@ -165,10 +169,19 @@ class StorageHandler:
         return self.get_game_data().get("enemies").get(type_)
 
     def get_weapons(self, type_: Literal["laser", "missile"]) -> dict:
-        return self.get_game_data().get("weapons").get(type_)
+        return self.get_all_weaponse().get(type_)
+
+    def get_all_weaponse(self) -> dict:
+        return self.get_game_data().get("weapons")
 
     def get_defence(self, type_: Literal["shield", "regan", "invincibility"]) -> dict:
-        return self.get_game_data().get("defence").get(type_)
+        return self.get_all_defence().get(type_)
+
+    def get_all_defence(self, type_) -> dict:
+        return self.get_game_data().get("defence")
+
+    def write_weapon_data(self, type_, prop: str, new_value: int):
+        self.__game_data["weapons"][type_][prop] = new_value
 
 
 Storage = StorageHandler()

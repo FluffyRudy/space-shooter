@@ -23,6 +23,7 @@ def generate_levels_data(num_levels):
                     "max_upgrade_level": 5,
                     "initial_cost": 10,
                     "cost_increase_rate": 0.2,
+                    "upgradable": ["damage", "kill_after"],
                 },
             },
             "missile": {
@@ -34,6 +35,7 @@ def generate_levels_data(num_levels):
                     "max_upgrade_level": 5,
                     "initial_cost": 10,
                     "cost_increase_rate": 0.2,
+                    "upgradable": ["speed", "damage", "count"],
                 },
             },
         },
@@ -45,6 +47,7 @@ def generate_levels_data(num_levels):
                     "max_upgrade_level": 5,
                     "initial_cost": 10,
                     "cost_increase_rate": 0.2,
+                    "upgradable": ["kill_after"],
                 },
             },
             "regan": {
@@ -55,6 +58,7 @@ def generate_levels_data(num_levels):
                     "max_upgrade_level": 5,
                     "initial_cost": 10,
                     "cost_increase_rate": 0.2,
+                    "upgradable": ["amount", "kill_after"],
                 },
             },
         },

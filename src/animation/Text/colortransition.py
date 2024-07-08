@@ -107,7 +107,9 @@ class ColorTransition:
             display_surface (pygame.Surface): The surface to render the text on.
         """
         text_surf = self.font.render(self.text, True, self.color)
-        position = calculate_center((position[0], position[1]), text_surf.get_size())
         text_surf.set_alpha(self.alpha)
         self.transit_alpha()
-        display_surface.blit(text_surf, position)
+
+        position_x = position[0] - text_surf.get_width() // 2
+        position_y = position[1] - text_surf.get_height() // 2
+        display_surface.blit(text_surf, (position_x, position_y))
