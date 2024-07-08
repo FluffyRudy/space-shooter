@@ -87,6 +87,7 @@ class Manager:
             self.play()
 
     def update(self):
+        time_delta = self.clock.tick(FPS) / 1000.0
         self.handle_event()
 
         if self.start_game:
@@ -105,7 +106,6 @@ class Manager:
             self.mainmenu.update(self.event)
 
         pygame.display.update()
-        self.clock.tick(FPS)
 
     def run(self):
         while True:
