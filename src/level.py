@@ -59,13 +59,12 @@ class Level:
 
         self.current_level = level
         self.enemy_count = 0
+        self.killed_enemy_count = 0
 
         range_ = self.level_attributes[MAX_SPAWN_COUNT]
         self.powerops_index = [
             random.randint(0, range_) for _ in range(max((level // 2) + 1, 2))
         ]
-        self.p_opsed_enemies = []
-        self.used_enemy_indices = set()
 
         self.player = Player(
             (WIDTH // 2 - G_SPRITE_SIZE // 2, HEIGHT - G_SPRITE_SIZE),
@@ -92,6 +91,11 @@ class Level:
             self.enemy_count >= self.level_attributes[MAX_SPAWN_COUNT]
             and len(self.enemy_group.sprites()) == 0
         )
+
+    "track and increase killed enemy count"
+
+    def increase_kill_count(self):
+        self.killed_enemy_count += 1
 
     def spawn_enemy(self):
         if (
@@ -153,30 +157,20 @@ class Level:
             Asteroid((random_x, random_y), self.visible_group, self.obstacle_group)
 
     def spawn_powerops(self):
-        if self.enemy_count in self.powerops_index:
-            self.powerops_index.remove(self.enemy_count)
-            current_enemy_group_len = len(self.enemy_group.sprites())
-
-            enemy_index = random.randint(0, current_enemy_group_len - 1)
-            enemy = self.enemy_group.sprites()[enemy_index]
-            self.p_opsed_enemies.append(enemy)
-
-        "copy each time because me are removing from currently iterating array"
-        for sprite in self.p_opsed_enemies[:]:
-            if not sprite.alive():
-                power_type = random.choice([SHIELD, LASER, REGAN, LASER])
-                action_group = {
-                    "laser": self.player_bullet_group,
-                    "missile": self.player_bullet_group,
-                    "shield": self.defensive_power_group,
-                }
-                Powerops(
-                    power_type,
-                    base_group=self.powerops_group,
-                    visible_group=self.visible_group,
-                    action_group=action_group.get(power_type, None),
-                )
-                self.p_opsed_enemies.remove(sprite)
+        if self.killed_enemy_count in self.powerops_index:
+            self.powerops_index.remove(self.killed_enemy_count)
+            power_type = random.choice([SHIELD, LASER, REGAN, LASER])
+            action_group = {
+                "laser": self.player_bullet_group,
+                "missile": self.player_bullet_group,
+                "shield": self.defensive_power_group,
+            }
+            Powerops(
+                power_type,
+                base_group=self.powerops_group,
+                visible_group=self.visible_group,
+                action_group=action_group.get(power_type, None),
+            )
 
     def handle_player_attack(self):
         for bullet in self.player_bullet_group.sprites():
@@ -187,12 +181,12 @@ class Level:
                 if collided_enemy is not None and bullet.rect.colliderect(
                     collided_enemy
                 ):
-                    collided_enemy.damage(bullet.get_damage())
+                    collided_enemy.damage(bullet.get_damage(), self.increase_kill_count)
                     bullet.handle_kill()
             elif collided_enemy is not None and pygame.sprite.collide_mask(
                 bullet, collided_enemy
             ):
-                collided_enemy.damage(bullet.get_damage())
+                collided_enemy.damage(bullet.get_damage(), self.increase_kill_count)
                 bullet.handle_kill()
 
         for bullet in self.player_bullet_group.sprites():

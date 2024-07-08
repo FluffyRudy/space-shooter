@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Optional, Callable
 import pygame, random, math
 from src.soundmanager.soundmanager import Soundmanager
 from src.utils.image_util import load_frames, load_frame
@@ -97,11 +97,13 @@ class Ship(pygame.sprite.Sprite):
                 new_state = "right"
         return new_state
 
-    def damage(self, damage: Union[int, None]):
+    def damage(self, damage: Union[int, None], callback: Optional[Callable] = None):
         if damage is None or self.props.get("health_count") is None:
             return None
         self.props["health_count"] -= damage
         if self.props["health_count"] <= 0 and self.status.get_state() != State.DEAD:
+            if callback is not None:
+                callback()
             self.animation_speed = 0.1
             self.status.set_state(State.DEAD)
             self.direction *= 0
