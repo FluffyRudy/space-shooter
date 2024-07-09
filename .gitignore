@@ -1,6 +1,5 @@
 .env/
 __pycache__/
 *.pyc
-/*/**/*.json
-*.json
+*data.json
 test.py

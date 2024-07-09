@@ -2,6 +2,7 @@ import pygame, sys, time
 from src.storage.storage import Storage
 from src.level import Level
 from src.UI.menu.mainmenu import MainMenuUI
+from src.UI.shop.shop import ShopManager
 from src.UI.menu.gameover import GameoverUI
 from src.settings import FPS, WIDTH, HEIGHT
 from src.constants import BLACK
@@ -38,6 +39,8 @@ class Manager:
             },
         )
 
+        self.shop_manager = ShopManager(self.screen.get_size())
+
         # if player return to main menu by quitting current game
         self.is_level_quited = False
 
@@ -55,6 +58,8 @@ class Manager:
                 or event.type == pygame.MOUSEWHEEL
             ):
                 self.event = event
+            self.shop_manager.process_events(event)
+            self.shop_manager.handle_events(event)
 
         if self.quit_game:
             Storage.write_current_level(
@@ -86,10 +91,7 @@ class Manager:
         if auto_start:
             self.play()
 
-    def update(self):
-        time_delta = self.clock.tick(FPS) / 1000.0
-        self.handle_event()
-
+    def handle_gamecore(self):
         if self.start_game:
             self.level.run(self.event)
             if self.level.is_gameover:
@@ -100,11 +102,16 @@ class Manager:
                 Storage.write_reward_point(self.level.current_level)
                 Storage.write_current_level(self.level.current_level + 1)
                 self.load_level(self.level.current_level + 1)
-
         else:
             self.mainmenu.display(self.screen)
             self.mainmenu.update(self.event)
 
+    def update(self):
+        time_delta = self.clock.tick(FPS) / 1000.0
+        self.handle_event()
+        self.shop_manager.update(time_delta)
+        self.handle_gamecore()
+        self.shop_manager.draw_ui(self.screen)
         pygame.display.update()
 
     def run(self):

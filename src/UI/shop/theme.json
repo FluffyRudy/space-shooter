@@ -1,0 +1,26 @@
+{
+    "#entry": {
+        "colours": {
+            "normal_bg": "#0a1549,#1c2e72,#2f48a0,45",
+            "hovered_bg": "#01579B,#0288D1,90",
+            "hovered_text_shadow": "skyblue"
+        },
+        "misc": {
+            "shape": "rounded_rectangle",
+            "shape_corner_radius": "10",
+            "tool_tip_delay": "0.2",
+            "border_width": "1",
+            "shadow_width": "1",
+            "text_shadow_size": "1",
+            "text_shadow_offset": "0,0",
+            "state_transitions": {
+                "normal_hovered": "0.5",
+                "hovered_normal": "0.5"
+            }
+        },
+        "font": {
+            "bold": "5",
+            "size": "24"
+        }
+    }
+}

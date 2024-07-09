@@ -19,12 +19,12 @@ def load_image(
     Returns:
         pygame.Surface: The loaded and scaled image as a pygame Surface object.
     """
-    image = pygame.image.load(path).convert_alpha()
+    image = pygame.image.load(path)
     if scale_ratio:
         return pygame.transform.scale_by(image, scale_ratio)
     elif scale_size:
         return pygame.transform.scale(image, scale_size)
-    return image
+    return image.convert_alpha()
 
 
 def load_frames(
