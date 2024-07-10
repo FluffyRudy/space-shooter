@@ -111,7 +111,8 @@ class Manager:
         self.handle_event()
         self.shop_manager.update(time_delta)
         self.handle_gamecore()
-        self.shop_manager.draw_ui(self.screen)
+        if not self.start_game:
+            self.shop_manager.draw_ui(self.screen)
         pygame.display.update()
 
     def run(self):
