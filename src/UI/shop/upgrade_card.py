@@ -1,18 +1,19 @@
 from typing import Optional
-import pygame, pygame_gui
-from pygame_gui.core import ObjectID
-from src.utils.image_util import load_image
+import pygame
+from pygame_gui import UIManager
+from pygame_gui.elements import UIButton, UIPanel, UIImage
+from pygame_gui.core import ObjectID, UIContainer
+from src.utils.image_util import load_frame
 from config import UI_DIR
 
 
-class UpgradeCard(pygame_gui.elements.UIPanel):
+class UpgradeCard(UIPanel):
     def __init__(
         self,
-        icon_path: str,
         key: str,
         type_: str,
         relative_rect: pygame.Rect,
-        manager: pygame_gui.UIManager,
+        manager: UIManager,
         container=None,
     ):
         super().__init__(
@@ -20,4 +21,12 @@ class UpgradeCard(pygame_gui.elements.UIPanel):
             object_id=ObjectID(object_id="#upgradecard"),
             anchors={"centerx": "centerx", "top": "top"},
             manager=manager,
+        )
+        surface = load_frame(UI_DIR / "powerops" / type_)[0]
+        icon = UIImage(
+            (0, 0),
+            surface,
+            manager,
+            container=self,
+            anchors={"left": "left", "top": "top"},
         )

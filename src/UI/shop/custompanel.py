@@ -2,6 +2,7 @@ import pygame, typing
 from pygame_gui import UIManager
 from pygame_gui.elements import UIButton, UIPanel
 from pygame_gui.core import ObjectID, UIContainer
+from pygame_gui import UI_BUTTON_PRESSED
 
 
 class ClosablePanel(UIPanel):
@@ -21,7 +22,7 @@ class ClosablePanel(UIPanel):
             anchors=anchors,
         )
 
-        self.cancel_button = UIButton(
+        self.close_button = UIButton(
             relative_rect=pygame.Rect((0, 0), (-1, -1)),
             text="🗴",
             manager=manager,
@@ -29,8 +30,3 @@ class ClosablePanel(UIPanel):
             anchors={"top": "top", "left": "right"},
             object_id=ObjectID(object_id="#close"),
         )
-
-    def update(self, *args, **kwargs):
-        mpos = pygame.mouse.get_pos()
-        if self.rect.collidepoint(mpos):
-            pass

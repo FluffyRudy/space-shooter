@@ -32,14 +32,18 @@ class ShopManager(pygame_gui.UIManager):
             manager=self,
             container=self.upgrade_panel,
         )
+
         self.upgrade_panel.hide()
+        self.close_button = self.upgrade_panel.close_button
 
     def handle_events(self, event: pygame.event.Event):
         if event.type == pygame_gui.UI_BUTTON_PRESSED:
             if event.ui_element == self.entry_provider:
-                self.display_shop()
+                self.open_shop()
+            elif event.ui_element == self.close_button:
+                self.close_shop()
 
-    def display_shop(self):
+    def open_shop(self):
         self.entry_provider.hide()
         self.upgrade_panel.show()
 
