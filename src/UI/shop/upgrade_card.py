@@ -10,6 +10,8 @@ from config import GRAPHICS_DIR
 
 
 class UpgradeCard(UIAutoResizingContainer):
+    event_buttons = []
+
     def __init__(
         self,
         key: str,
@@ -32,6 +34,10 @@ class UpgradeCard(UIAutoResizingContainer):
         self.type_ = type_
 
         self._setup_ui()
+
+    @classmethod
+    def get_upgrade_buttons(cls):
+        return cls.event_buttons
 
     def _setup_ui(self):
         OFFSET = 10
@@ -86,6 +92,7 @@ class UpgradeCard(UIAutoResizingContainer):
 
     def _create_upgrade_buttons(self, pos_x: int, pos_y: int, OFFSET: int):
         size = 25
+
         for btn_icount in range(self.upgrade_data["max_upgrade_level"]):
             UIButton(
                 relative_rect=pygame.Rect(pos_x, pos_y, size, size),
@@ -101,9 +108,11 @@ class UpgradeCard(UIAutoResizingContainer):
                 ),
             )
             pos_x += size + OFFSET
-        UIButton(
+
+        upgrade_button = UIButton(
             relative_rect=pygame.Rect(pos_x, pos_y, size * 2, size),
             manager=self.manager,
             container=self,
             text="+",
         )
+        UpgradeCard.event_buttons.append(upgrade_button)
