@@ -1,13 +1,7 @@
 from typing import Optional
 import pygame
-from pygame_gui import UIManager, TEXT_EFFECT_BOUNCE
-from pygame_gui.elements import (
-    UIButton,
-    UIPanel,
-    UIImage,
-    UILabel,
-    UIAutoResizingContainer,
-)
+from pygame_gui import UIManager
+from pygame_gui.elements import UIButton, UILabel, UIImage, UIAutoResizingContainer
 from pygame_gui.core import ObjectID, UIContainer
 from src.storage.storage import Storage
 from src.utils.image_util import load_frame
@@ -32,68 +26,84 @@ class UpgradeCard(UIAutoResizingContainer):
             container=container,
         )
 
-        upgrade_data: dict = Storage.get_game_data()[key][type_]["upgrades"]
-        upgradable_label: list = upgrade_data.get("upgradable")
+        self.upgrade_data = Storage.get_game_data()[key][type_]["upgrades"]
+        self.upgradable_labels = self.upgrade_data.get("upgradable")
+        self.manager = manager
+        self.type_ = type_
 
+        self._setup_ui()
+
+    def _setup_ui(self):
         OFFSET = 10
-        surface = load_frame(GRAPHICS_DIR / "powerops" / type_)[0]
+        surface = load_frame(GRAPHICS_DIR / "powerops" / self.type_)[0]
 
-        title = UILabel(
-            text=type_.capitalize(),
-            relative_rect=pygame.Rect(0, 0, -1, -1),
-            manager=manager,
+        title = self._create_title()
+        image = self._create_image(surface, title)
+        self._create_upgrade_labels(image, title, OFFSET)
+
+    def _create_title(self) -> UILabel:
+        offset_x = 10
+        return UILabel(
+            text=self.type_.capitalize(),
+            relative_rect=pygame.Rect(G_SPRITE_SIZE + offset_x, 0, -1, -1),
+            manager=self.manager,
             container=self,
-            anchors={"top": "top", "centerx": "centerx"},
+            anchors={"top": "top", "left": "left"},
             object_id=ObjectID(object_id="#cardtitle"),
         )
-        image = UIImage(
+
+    def _create_image(self, surface: pygame.Surface, title: UILabel) -> UIImage:
+        return UIImage(
             relative_rect=pygame.Rect(
                 (0, title.relative_rect.bottom),
                 (G_SPRITE_SIZE, G_SPRITE_SIZE),
             ),
             image_surface=surface,
-            manager=manager,
+            manager=self.manager,
             container=self,
         )
 
+    def _create_upgrade_labels(self, image: UIImage, title: UILabel, OFFSET: int):
         font_size = 20
-        y_offset = len(upgradable_label) * (font_size)
+        y_offset = len(self.upgradable_labels) * font_size
         pos_x = image.relative_rect.right + OFFSET
         pos_y = title.relative_rect.bottom
 
-        for label in upgradable_label:
+        for label_text in self.upgradable_labels:
             label = UILabel(
                 relative_rect=pygame.Rect(pos_x, pos_y, -1, -1),
-                text=label,
-                manager=manager,
+                text=label_text,
+                manager=self.manager,
                 container=self,
                 object_id=ObjectID(object_id="#upgfont"),
             )
-            x = 300
-            size = 25
-            for btn_icount in range(upgrade_data["max_upgrade_level"]):
-                UIButton(
-                    relative_rect=pygame.Rect(x, pos_y, size, size),
-                    manager=manager,
-                    container=self,
-                    text="",
-                    object_id=ObjectID(
-                        object_id=(
-                            "#active"
-                            if btn_icount < upgrade_data["upgrade_level"]
-                            else "#inactive"
-                        )
-                    ),
-                )
-                x += size + OFFSET
-            stats_btn = UIButton(
-                relative_rect=pygame.Rect(x, pos_y, size * 2, size),
-                manager=manager,
-                container=self,
-                text="+",
-            )
+            self._create_upgrade_buttons(pos_x + 300, pos_y, OFFSET)
             pos_y += y_offset
 
         image.set_relative_position(
-            (image.relative_rect.left, (pos_y - image.relative_rect.top) // 2)
+            (image.relative_rect.left + 5, (pos_y - image.relative_rect.height) // 2)
+        )
+
+    def _create_upgrade_buttons(self, pos_x: int, pos_y: int, OFFSET: int):
+        size = 25
+        for btn_icount in range(self.upgrade_data["max_upgrade_level"]):
+            UIButton(
+                relative_rect=pygame.Rect(pos_x, pos_y, size, size),
+                manager=self.manager,
+                container=self,
+                text="",
+                object_id=ObjectID(
+                    object_id=(
+                        "#active"
+                        if btn_icount < self.upgrade_data["upgrade_level"]
+                        else "#inactive"
+                    )
+                ),
+            )
+            pos_x += size + OFFSET
+        UIButton(
+            relative_rect=pygame.Rect(pos_x, pos_y, size * 2, size),
+            manager=self.manager,
+            container=self,
+            text="+",
         )
