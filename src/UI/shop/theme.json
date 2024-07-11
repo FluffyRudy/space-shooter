@@ -74,8 +74,12 @@
         }
     },
     "#upgfont": {
+        "colours": {
+            "normal_text": "#4db37c,#26d97a,#00ff77,0"
+        },
         "font": {
-            "size": "20"
+            "size": "20",
+            "bold": "20"
         }
     },
     "image": {
