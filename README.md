@@ -88,5 +88,8 @@ python3 main.py
     <li>
         <a href="https://free-game-assets.itch.io/free-space-shooter-game-user-interface">Menu UI</a>
     </li>
+    <li>
+        <a href="https://itch.io/queue/c/2841006/cliqqs-collection?game_id=492349">Shop UI</a>
+    </li>
     
 </ul>

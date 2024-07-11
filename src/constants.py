@@ -1,6 +1,9 @@
 import pygame
 from enum import Enum
 
+WIDTH = 1024
+HEIGHT = 768
+G_SPRITE_SIZE = 64
 MAX_SPAWN_COUNT = "max_spawn_count"
 SPAWN_COUNT = "spawn_count"
 ENEMIES = "enemies"

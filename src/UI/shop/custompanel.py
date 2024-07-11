@@ -23,7 +23,7 @@ class ClosablePanel(UIPanel):
         )
 
         self.close_button = UIButton(
-            relative_rect=pygame.Rect((0, 0), (-1, -1)),
+            relative_rect=pygame.Rect((-10, 0), (-1, -1)),
             text="🗴",
             manager=manager,
             container=self,
