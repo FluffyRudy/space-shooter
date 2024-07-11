@@ -14,6 +14,11 @@ class ShopManager(pygame_gui.UIManager):
     def __init__(self, size: Tuple[int, int]):
         theme_path = Path(__file__).resolve().parent / "theme.json"
         super().__init__(size, theme_path)
+
+        self.initialize_upgrade_field()
+        self.initialize_upgrade_items()
+
+    def initialize_upgrade_field(self):
         self.entry_provider = Entry(
             pygame.Rect(
                 WIDTH - G_SPRITE_SIZE * 3,
@@ -25,7 +30,7 @@ class ShopManager(pygame_gui.UIManager):
             self,
         )
         self.upgrade_panel = ClosablePanel(
-            relative_rect=pygame.Rect(0, 0, WIDTH * 0.7, HEIGHT * 0.9),
+            relative_rect=pygame.Rect(0, 0, WIDTH * 0.6, HEIGHT * 0.9),
             manager=self,
             object_id="#upgradepanel",
         )
@@ -42,29 +47,22 @@ class ShopManager(pygame_gui.UIManager):
         self.upgrade_panel.hide()
         self.close_button = self.upgrade_panel.close_button
 
+    def initialize_upgrade_items(self):
         x, y = 0, self.close_button.rect.height
         width = self.upgrade_container.rect.width * 0.9
         init_height = G_SPRITE_SIZE
 
-        for idx, key in enumerate(Storage.get_all_defence().keys()):
-            defence_card = UpgradeCard(
-                "defence",
-                key,
-                pygame.Rect((x, y), (width, init_height)),
-                self,
-                self.upgrade_container,
+        for key in Storage.get_all_defence().keys():
+            card_rect = self.load_card(
+                "defence", key, pygame.Rect((x, y), (width, init_height))
             )
-            y = defence_card.rect.bottom + defence_card.rect.height // 4
+            y = card_rect.bottom + card_rect.height // 4
 
-        for idx, key in enumerate(Storage.get_all_weaponse().keys()):
-            weapon_card = UpgradeCard(
-                "weapons",
-                key,
-                pygame.Rect((x, y), (width, init_height)),
-                self,
-                self.upgrade_container,
+        for key in Storage.get_all_weaponse().keys():
+            card_rect = self.load_card(
+                "weapons", key, pygame.Rect((x, y), (width, init_height))
             )
-            y = weapon_card.rect.bottom + weapon_card.rect.height // 4
+            y = card_rect.bottom + card_rect.height // 4
 
     def handle_events(self, event: pygame.event.Event):
         if event.type == pygame_gui.UI_BUTTON_PRESSED:
@@ -80,3 +78,7 @@ class ShopManager(pygame_gui.UIManager):
     def close_shop(self):
         self.entry_provider.show()
         self.upgrade_panel.hide()
+
+    def load_card(self, key: str, type_: str, rect: pygame.Rect):
+        card = UpgradeCard(key, type_, rect, self, self.upgrade_container)
+        return card.rect
