@@ -100,6 +100,7 @@ class StorageHandler:
         """
         level = str(level)
         self.__game_data["levels"][level]["reward_point"] = 0
+        self.__write_to_file()
 
     def write_weapon_data(self, type_: str, new_data: dict):
         self.__game_data[type_] = new_data

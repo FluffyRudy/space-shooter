@@ -102,6 +102,7 @@ class Manager:
             elif self.level.completed():
                 Storage.write_reward_point(self.level.current_level)
                 Storage.write_current_level(self.level.current_level + 1)
+                Storage.write_player_data(self.level.player.props)
                 self.load_level(self.level.current_level + 1)
         else:
             self.mainmenu.display(self.screen)

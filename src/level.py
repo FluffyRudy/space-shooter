@@ -94,8 +94,9 @@ class Level:
 
     "track and increase killed enemy count"
 
-    def increase_kill_count(self):
+    def enemy_kill_action(self):
         self.killed_enemy_count += 1
+        self.player.add_coins(self.level_attributes.get("reward_point"))
 
     def spawn_enemy(self):
         if (
@@ -181,12 +182,12 @@ class Level:
                 if collided_enemy is not None and bullet.rect.colliderect(
                     collided_enemy
                 ):
-                    collided_enemy.damage(bullet.get_damage(), self.increase_kill_count)
+                    collided_enemy.damage(bullet.get_damage(), self.enemy_kill_action)
                     bullet.handle_kill()
             elif collided_enemy is not None and pygame.sprite.collide_mask(
                 bullet, collided_enemy
             ):
-                collided_enemy.damage(bullet.get_damage(), self.increase_kill_count)
+                collided_enemy.damage(bullet.get_damage(), self.enemy_kill_action)
                 bullet.handle_kill()
 
         for bullet in self.player_bullet_group.sprites():

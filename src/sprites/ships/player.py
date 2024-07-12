@@ -40,6 +40,7 @@ class Player(Ship):
         self.is_immune = False
 
         self.num_bullets = 1
+        self.coins = self.props.get("coins")
 
         self.limit_bound = pygame.display.get_surface().get_size()
 
@@ -82,6 +83,10 @@ class Player(Ship):
                 class_type=Bullet,
             )
             self.bullet_cooldown_timer.reset_time()
+
+    def add_coins(self, coin_amount):
+        self.coins += coin_amount
+        self.props["coins"] = self.coins
 
     def handle_invincibility(self):
         if (
