@@ -110,10 +110,11 @@ class Manager:
     def update(self):
         time_delta = self.clock.tick(FPS) / 1000.0
         self.handle_event()
-        self.shop_manager.update(time_delta)
+
         if not self.shop_manager.isopen():
             self.handle_gamecore()
         if not self.start_game:
+            self.shop_manager.update(time_delta)
             self.shop_manager.draw_ui(self.screen)
         pygame.display.update()
 
