@@ -69,6 +69,18 @@ class StorageHandler:
         self.__game_data.get("player").update(data)
         self.__write_to_file()
 
+    def write_upgrade_data(self, key: str, type_: str, data: dict) -> None:
+        """
+        Updates the specified data in the ship data based on the provided key and type.
+
+        Args:
+            key (str): The key to access the data in the ship data.
+            type_ (str): The type of data to update.
+            data (dict): The new data to update in the ship data.
+        """
+        self.__game_data.get(key).get(type_)["upgrades"].update(data)
+        self.__write_to_file()
+
     def write_current_level(self, level: int) -> None:
         """
         Updates the current level in the ship data and writes it to the file.

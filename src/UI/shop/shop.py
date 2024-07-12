@@ -18,6 +18,8 @@ class ShopManager(pygame_gui.UIManager):
         self.initialize_upgrade_field()
         self.initialize_upgrade_items()
 
+        self.isactive = False
+
     def initialize_upgrade_field(self):
         self.entry_provider = Entry(
             pygame.Rect(
@@ -50,7 +52,7 @@ class ShopManager(pygame_gui.UIManager):
     def initialize_upgrade_items(self):
         x, y = 0, self.close_button.rect.height
         width = self.upgrade_container.rect.width * 0.9
-        init_height = G_SPRITE_SIZE
+        init_height = G_SPRITE_SIZE * 2.5
 
         for key in Storage.get_all_defence().keys():
             card_rect = self.load_card(
@@ -70,14 +72,22 @@ class ShopManager(pygame_gui.UIManager):
                 self.open_shop()
             elif event.ui_element == self.close_button:
                 self.close_shop()
+            for button, (upg_hint, action) in UpgradeCard.get_upgrade_buttons().items():
+                if event.ui_element == button:
+                    action(button)
 
     def open_shop(self):
         self.entry_provider.hide()
         self.upgrade_panel.show()
+        self.isactive = True
 
     def close_shop(self):
         self.entry_provider.show()
         self.upgrade_panel.hide()
+        self.isactive = False
+
+    def isopen(self):
+        return self.isactive
 
     def load_card(self, key: str, type_: str, rect: pygame.Rect):
         card = UpgradeCard(key, type_, rect, self, self.upgrade_container)

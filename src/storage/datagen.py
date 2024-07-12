@@ -19,10 +19,10 @@ def generate_levels_data(num_levels):
                 "damage": 1,
                 "kill_after": 3000,
                 "upgrades": {
-                    "upgrade_level": 1,
+                    "upgrade_level": [1, 1],
                     "max_upgrade_level": 5,
-                    "initial_cost": 10,
-                    "cost_increase_rate": 0.2,
+                    "cost": 50,
+                    "cost_increase_rate": 2.0,
                     "upgradable": ["damage", "kill_after"],
                 },
             },
@@ -31,10 +31,10 @@ def generate_levels_data(num_levels):
                 "damage": 5,
                 "count": 3,
                 "upgrades": {
-                    "upgrade_level": 1,
+                    "upgrade_level": [1, 1, 1],
                     "max_upgrade_level": 5,
-                    "initial_cost": 10,
-                    "cost_increase_rate": 0.2,
+                    "cost": 50,
+                    "cost_increase_rate": 2.0,
                     "upgradable": ["speed", "damage", "count"],
                 },
             },
@@ -43,10 +43,10 @@ def generate_levels_data(num_levels):
             "shield": {
                 "kill_after": 5000,
                 "upgrades": {
-                    "upgrade_level": 1,
+                    "upgrade_level": [1],
                     "max_upgrade_level": 5,
-                    "initial_cost": 10,
-                    "cost_increase_rate": 0.2,
+                    "cost": 50,
+                    "cost_increase_rate": 2.0,
                     "upgradable": ["kill_after"],
                 },
             },
@@ -54,10 +54,10 @@ def generate_levels_data(num_levels):
                 "amount": 1,
                 "kill_after": 0,
                 "upgrades": {
-                    "upgrade_level": 1,
+                    "upgrade_level": [1, 1],
                     "max_upgrade_level": 5,
-                    "initial_cost": 10,
-                    "cost_increase_rate": 0.2,
+                    "cost": 50,
+                    "cost_increase_rate": 2.0,
                     "upgradable": ["amount", "kill_after"],
                 },
             },
@@ -85,6 +85,6 @@ def generate_levels_data(num_levels):
                 "shooter": (1 - i * 0.002),
                 "self_killer": (i * 0.002),
             },
-            "reward_point": 1,
+            "reward_point": 3,
         }
     return levels_data

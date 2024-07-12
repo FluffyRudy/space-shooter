@@ -17,8 +17,5 @@ class Entry(UIButton):
             tool_tip_text="Purchase Or Upgrade",
         )
 
-    def handle_entry(self):
-        pass
-
     def update(self, time_delta: float):
         super().update(time_delta)

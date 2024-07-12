@@ -58,8 +58,9 @@ class Manager:
                 or event.type == pygame.MOUSEWHEEL
             ):
                 self.event = event
-            self.shop_manager.process_events(event)
-            self.shop_manager.handle_events(event)
+            if not self.start_game:
+                self.shop_manager.process_events(event)
+                self.shop_manager.handle_events(event)
 
         if self.quit_game:
             Storage.write_current_level(
@@ -110,7 +111,8 @@ class Manager:
         time_delta = self.clock.tick(FPS) / 1000.0
         self.handle_event()
         self.shop_manager.update(time_delta)
-        self.handle_gamecore()
+        if not self.shop_manager.isopen():
+            self.handle_gamecore()
         if not self.start_game:
             self.shop_manager.draw_ui(self.screen)
         pygame.display.update()
