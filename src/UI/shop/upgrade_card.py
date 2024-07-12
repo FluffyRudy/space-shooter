@@ -149,7 +149,7 @@ class UpgradeCard(UIAutoResizingContainer):
 
         upgrade_level = new_data["upgrade_level"][upgrade_index]
         new_data["upgrade_level"][upgrade_index] += 1
-        new_data["cost"] += int(new_data["cost"] * new_data["cost_increase_rate"])
+        new_data["cost"] = int(new_data["cost"] * new_data["cost_increase_rate"])
 
         Storage.write_upgrade_data(self.key, self.type_, new_data)
         self.active_upgrade_hint(self.button_map[target_btn][0][upgrade_level])
