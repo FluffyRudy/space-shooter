@@ -161,7 +161,7 @@ class Level:
     def spawn_powerops(self):
         if self.killed_enemy_count in self.powerops_index:
             self.powerops_index.remove(self.killed_enemy_count)
-            power_type = random.choice([MISSILE,SHIELD, LASER, REGAN])
+            power_type = random.choice([MISSILE, SHIELD, LASER, REGAN])
             action_group = {
                 "laser": self.player_bullet_group,
                 "missile": self.player_bullet_group,
@@ -177,29 +177,17 @@ class Level:
 
     def handle_player_attack(self):
         for bullet in self.player_bullet_group.sprites():
-            collided_enemies = pygame.sprite.spritecollide(
-                bullet,
-                self.enemy_group,
-                dokill=False,
-                collided=pygame.sprite.collide_mask,
-            )
-
-            for collided_enemy in collided_enemies:
-                if collided_enemy.get_status() == "dead":
-                    continue
-
-                if get_instance_cls(bullet) in [
-                    LASER.capitalize(),
-                    MISSILE.capitalize(),
-                ]:
-                    if bullet.rect.colliderect(collided_enemy):
-                        collided_enemy.damage(
-                            bullet.get_damage(), self.enemy_kill_action
-                        )
-                        bullet.handle_kill()
-                else:
-                    collided_enemy.damage(bullet.get_damage(), self.enemy_kill_action)
-                    bullet.handle_kill()
+            collided_enemy = pygame.sprite.spritecollideany(bullet, self.enemy_group)
+            if collided_enemy is None or collided_enemy.get_status() == "dead":
+                continue
+            if get_instance_cls(bullet) in [LASER.capitalize(), MISSILE.capitalize()]:
+                collided_enemy.damage(bullet.get_damage(), self.enemy_kill_action)
+                bullet.handle_kill()
+            elif collided_enemy is not None and pygame.sprite.collide_mask(
+                bullet, collided_enemy
+            ):
+                collided_enemy.damage(bullet.get_damage(), self.enemy_kill_action)
+                bullet.handle_kill()
 
         for bullet in self.player_bullet_group.sprites():
             for obstacle in self.obstacle_group.sprites():

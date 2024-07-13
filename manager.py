@@ -1,4 +1,6 @@
-import pygame, sys, time
+import pygame
+import sys
+import time
 from src.storage.storage import Storage
 from src.level import Level
 from src.UI.menu.mainmenu import MainMenuUI
@@ -11,16 +13,12 @@ from src.constants import BLACK
 class Manager:
     def __init__(self):
         pygame.init()
-
         self.clock = pygame.time.Clock()
-
         self.quit_game = False
         self.start_game = False
         self.event = None
-
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         self.level = Level(level=Storage.get_current_level())
-
         self.gameover = GameoverUI(
             (WIDTH // 2, HEIGHT // 2),
             {
@@ -29,7 +27,6 @@ class Manager:
                 "main_menu": lambda: self.return_menu(),
             },
         )
-        # main menu has levels option that is binded with main menu itself
         self.mainmenu = MainMenuUI(
             (WIDTH // 2, HEIGHT // 2),
             {
@@ -38,10 +35,7 @@ class Manager:
                 "exit": lambda: self.end_game(),
             },
         )
-
         self.shop_manager = ShopManager(self.screen.get_size())
-
-        # if player return to main menu by quitting current game
         self.is_level_quited = False
 
     def handle_event(self):
@@ -52,11 +46,11 @@ class Manager:
                 Storage.write_current_level(
                     max(Storage.get_current_level(), self.level.current_level)
                 )
-            if (
-                event.type == pygame.MOUSEBUTTONDOWN
-                or event.type == pygame.MOUSEBUTTONUP
-                or event.type == pygame.MOUSEWHEEL
-            ):
+            if event.type in [
+                pygame.MOUSEBUTTONDOWN,
+                pygame.MOUSEBUTTONUP,
+                pygame.MOUSEWHEEL,
+            ]:
                 self.event = event
             if not self.start_game:
                 self.shop_manager.process_events(event)
@@ -114,9 +108,11 @@ class Manager:
 
         if not self.shop_manager.isopen():
             self.handle_gamecore()
+
         if not self.start_game:
             self.shop_manager.update(time_delta)
             self.shop_manager.draw_ui(self.screen)
+
         pygame.display.update()
 
     def run(self):
