@@ -1,6 +1,7 @@
 import pygame, sys, time
 from src.storage.storage import Storage
 from src.level import Level
+from src.UI.shop.shop import ShopManager
 from src.UI.menu.mainmenu import MainMenuUI
 from src.UI.menu.gameover import GameoverUI
 from src.settings import FPS, WIDTH, HEIGHT
@@ -19,6 +20,8 @@ class Manager:
 
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         self.level = Level(level=Storage.get_current_level())
+
+        self.shop = ShopManager((WIDTH, HEIGHT))
 
         self.gameover = GameoverUI(
             (WIDTH // 2, HEIGHT // 2),
@@ -55,6 +58,9 @@ class Manager:
                 or event.type == pygame.MOUSEWHEEL
             ):
                 self.event = event
+            if not self.start_game:
+                self.shop.process_events(event)
+                self.shop.handle_events(event)
 
         if self.quit_game:
             Storage.write_current_level(
@@ -99,11 +105,14 @@ class Manager:
             elif self.level.completed():
                 Storage.write_reward_point(self.level.current_level)
                 Storage.write_current_level(self.level.current_level + 1)
+                Storage.write_player_data(self.level.get_player_coin())
                 self.load_level(self.level.current_level + 1)
-
         else:
             self.mainmenu.display(self.screen)
             self.mainmenu.update(self.event)
+        if not self.start_game:
+            self.shop.update(time_delta)
+            self.shop.draw_ui(self.screen)
 
         pygame.display.update()
 
