@@ -51,10 +51,6 @@ class SoundManager:
         self.sfx_channel_0 = pygame.mixer.Channel(2)
         self.sfx_channel_1 = pygame.mixer.Channel(3)
 
-        self.set_channel_intensity(1, 1.0)
-        self.set_channel_intensity(2, 0.3)
-        self.set_channel_intensity(3, 0.3)
-
     def set_channel_intensity(self, channel: Literal[1, 2, 3], intensity: float):
         """
         Sets the intensity (volume) of the sound effects channel.
