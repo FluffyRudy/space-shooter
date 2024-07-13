@@ -64,7 +64,7 @@ python3 main.py
 
 ## Future Enhancements
     - Add boss
-    - Add shop to purchase and upgrade
+    - Add shop to purchase
     - Add more obastacle
     - Add other different enemies
     - Improve the widgets UI
