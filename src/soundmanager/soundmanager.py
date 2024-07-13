@@ -36,7 +36,6 @@ class SoundManager:
         Initializes the SoundManager with Pygame mixer and loads initial sound files.
         """
         pygame.mixer.init()
-
         self.bg_sound = pygame.mixer.Sound(str(SoundManager.BG_SOUND))
         self.sfx_sounds = {
             "shoot": pygame.mixer.Sound(str(SoundManager.SHOOT_SOUND)),
@@ -50,6 +49,7 @@ class SoundManager:
         self.main_channel = pygame.mixer.Channel(1)
         self.sfx_channel_0 = pygame.mixer.Channel(2)
         self.sfx_channel_1 = pygame.mixer.Channel(3)
+        self.sfx_channel_2 = pygame.mixer.Channel(4)
 
     def set_channel_intensity(self, channel: Literal[1, 2, 3], intensity: float):
         """
@@ -117,7 +117,7 @@ class SoundManager:
     def play_sfx_sound(
         self,
         sound_type: Literal["shoot", "enemy_destroy", "obstacle_destroy"],
-        channel: Literal[2, 3] = 2,
+        channel: Literal[2, 3, 4] = 2,
     ):
         """
         Plays a specified sound effect on the selected channel.
@@ -129,9 +129,12 @@ class SoundManager:
         if channel == 2:
             self.sfx_channel_0.stop()
             self.sfx_channel_0.play(self.sfx_sounds[sound_type])
-        else:
+        elif channel == 3:
             self.sfx_channel_1.stop()
             self.sfx_channel_1.play(self.sfx_sounds[sound_type])
+        elif channel == 4:
+            self.sfx_channel_2.stop()
+            self.sfx_channel_2.play(self.sfx_sounds[sound_type])
 
 
 Soundmanager = SoundManager()
