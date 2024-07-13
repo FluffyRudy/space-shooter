@@ -14,7 +14,7 @@ from config import POWEROPS_DIR
 def get_power_path(type_: str):
     power_map = {
         "laser": POWEROPS_DIR / "laser",
-        "regan": POWEROPS_DIR / "health",
+        "regan": POWEROPS_DIR / "regan",
         "missile": POWEROPS_DIR / "missile",
         "shield": POWEROPS_DIR / "shield",
     }
