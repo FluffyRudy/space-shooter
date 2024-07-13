@@ -33,7 +33,7 @@ class Level:
         self.display_surface = pygame.display.get_surface()
 
         title_font = pygame.font.Font(FONT_DIR / "BarcadeNoBarBold-gzXq.otf", 100)
-        self.title_blit_cooldown = Cooldown(4000)
+        self.title_blit_cooldown = Cooldown(3000)
         self.level_title = ColorTransition(
             text=f"level {level}",
             size=100,
@@ -61,7 +61,7 @@ class Level:
         self.enemy_count = 0
         self.killed_enemy_count = 0
 
-        range_ = self.level_attributes[MAX_SPAWN_COUNT]
+        range_ = int(self.level_attributes[MAX_SPAWN_COUNT] // 1.5)
         self.powerops_index = [
             random.randint(0, range_) for _ in range(max((level // 2) + 1, 2))
         ]
@@ -79,9 +79,11 @@ class Level:
         Soundmanager.play_main_channel()
 
     def display_title(self):
-        self.title_blit_cooldown.handle_cooldown()
+        to_handle = True
         if not self.title_blit_cooldown.has_cooldown():
             self.level_title.display((WIDTH // 2, HEIGHT // 2), self.display_surface)
+
+            self.title_blit_cooldown.handle_cooldown()
 
     def start_title_display_cooldown(self):
         self.title_blit_cooldown.reset_time()
@@ -113,7 +115,6 @@ class Level:
         shooter_probability /= total_probability
         self_killer_probability /= total_probability
 
-        # Spawn enemies based on the probabilities
         for _ in range(
             self.level_attributes[SPAWN_COUNT] - len(self.enemy_group.sprites())
         ):
@@ -160,12 +161,13 @@ class Level:
     def spawn_powerops(self):
         if self.killed_enemy_count in self.powerops_index:
             self.powerops_index.remove(self.killed_enemy_count)
-            power_type = random.choice([SHIELD, LASER, REGAN, LASER])
+            power_type = random.choice([MISSILE,SHIELD, LASER, REGAN])
             action_group = {
                 "laser": self.player_bullet_group,
                 "missile": self.player_bullet_group,
                 "shield": self.defensive_power_group,
             }
+            print(power_type)
             Powerops(
                 power_type,
                 base_group=self.powerops_group,
@@ -175,20 +177,29 @@ class Level:
 
     def handle_player_attack(self):
         for bullet in self.player_bullet_group.sprites():
-            collided_enemy = pygame.sprite.spritecollideany(bullet, self.enemy_group)
-            if collided_enemy and collided_enemy.get_status() == "dead":
-                continue
-            if get_instance_cls(bullet) in [LASER.capitalize(), MISSILE.capitalize()]:
-                if collided_enemy is not None and bullet.rect.colliderect(
-                    collided_enemy
-                ):
+            collided_enemies = pygame.sprite.spritecollide(
+                bullet,
+                self.enemy_group,
+                dokill=False,
+                collided=pygame.sprite.collide_mask,
+            )
+
+            for collided_enemy in collided_enemies:
+                if collided_enemy.get_status() == "dead":
+                    continue
+
+                if get_instance_cls(bullet) in [
+                    LASER.capitalize(),
+                    MISSILE.capitalize(),
+                ]:
+                    if bullet.rect.colliderect(collided_enemy):
+                        collided_enemy.damage(
+                            bullet.get_damage(), self.enemy_kill_action
+                        )
+                        bullet.handle_kill()
+                else:
                     collided_enemy.damage(bullet.get_damage(), self.enemy_kill_action)
                     bullet.handle_kill()
-            elif collided_enemy is not None and pygame.sprite.collide_mask(
-                bullet, collided_enemy
-            ):
-                collided_enemy.damage(bullet.get_damage(), self.enemy_kill_action)
-                bullet.handle_kill()
 
         for bullet in self.player_bullet_group.sprites():
             for obstacle in self.obstacle_group.sprites():

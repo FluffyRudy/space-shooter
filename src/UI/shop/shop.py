@@ -46,10 +46,22 @@ class ShopManager(pygame_gui.UIManager):
             container=self.upgrade_panel,
         )
 
+        self.avilable_coins = Storage.get_player_data()["coins"]
+        self.coin_label = pygame_gui.elements.UILabel(
+            relative_rect=pygame.Rect(0, 0, -1, -1),
+            text="Coins: " + str(self.avilable_coins),
+            manager=self,
+            container=self.upgrade_panel,
+            object_id=pygame_gui.core.ObjectID(object_id="#cardtitle"),
+            anchors={"centerx": "centerx"},
+        )
+
         self.upgrade_panel.hide()
         self.close_button = self.upgrade_panel.close_button
 
     def initialize_upgrade_items(self):
+        UpgradeCard.set_coin_ui_callback(self.update_coinUI)
+
         x, y = 0, self.close_button.rect.height
         width = self.upgrade_container.rect.width * 0.9
         init_height = G_SPRITE_SIZE * 2.5
@@ -75,6 +87,9 @@ class ShopManager(pygame_gui.UIManager):
             for button, (upg_hint, action) in UpgradeCard.get_upgrade_buttons().items():
                 if event.ui_element == button:
                     action(button)
+
+    def update_coinUI(self, text: str):
+        self.coin_label.set_text(text)
 
     def open_shop(self):
         self.entry_provider.hide()

@@ -1,5 +1,5 @@
 from typing import Optional, Callable
-import pygame, copy
+import pygame, copy, math
 from pygame_gui import UIManager
 from pygame_gui.elements import UIButton, UILabel, UIImage, UIAutoResizingContainer
 from pygame_gui.core import ObjectID, UIContainer
@@ -10,12 +10,12 @@ from config import GRAPHICS_DIR
 
 
 class UpgradeCard(UIAutoResizingContainer):
-    button_map: dict[UIButton, tuple[list[UIButton], Callable]] = {}
+    button_to_upgrade_info: dict[UIButton, tuple[list[UIButton], Callable]] = {}
 
     def __init__(
         self,
         key: str,
-        type_: str,
+        upgrade_type: str,
         relative_rect: pygame.Rect,
         manager: UIManager,
         container: Optional[UIContainer] = None,
@@ -27,23 +27,28 @@ class UpgradeCard(UIAutoResizingContainer):
             manager=manager,
             container=container,
         )
-        self.upgrade_data = copy.deepcopy(
-            Storage.get_game_data()[key][type_]["upgrades"]
-        )
+
+        self.data = copy.deepcopy(Storage.get_game_data()[key][upgrade_type])
+        self.upgrade_data = self.data["upgrades"]
         self.upgradable_labels = self.upgrade_data.get("upgradable")
         self.manager = manager
         self.key = key
-        self.type_ = type_
+        self.upgrade_type = upgrade_type
+        self.cost_label = None
 
         self._setup_ui()
 
     @classmethod
+    def set_coin_ui_callback(cls, callback: Callable):
+        cls.update_coin_ui = callback
+
+    @classmethod
     def get_upgrade_buttons(cls) -> dict[str, tuple[list[UIButton], Callable]]:
-        return cls.button_map
+        return cls.button_to_upgrade_info
 
     def _setup_ui(self):
         OFFSET = 10
-        surface = load_frame(GRAPHICS_DIR / "powerops" / self.type_)[0]
+        surface = load_frame(GRAPHICS_DIR / "powerops" / self.upgrade_type)[0]
 
         title = self._create_title()
         image = self._create_image(surface, title)
@@ -52,7 +57,7 @@ class UpgradeCard(UIAutoResizingContainer):
     def _create_title(self) -> UILabel:
         offset_x = 10
         return UILabel(
-            text=self.type_.capitalize(),
+            text=self.upgrade_type.capitalize(),
             relative_rect=pygame.Rect(G_SPRITE_SIZE + offset_x, 0, -1, -1),
             manager=self.manager,
             container=self,
@@ -90,7 +95,7 @@ class UpgradeCard(UIAutoResizingContainer):
             )
             pos_y += y_offset + OFFSET
 
-        label = UILabel(
+        self.cost_label = UILabel(
             relative_rect=pygame.Rect(pos_x, pos_y, -1, -1),
             text=f"COST: {self.upgrade_data.get('cost')}",
             manager=self.manager,
@@ -108,22 +113,20 @@ class UpgradeCard(UIAutoResizingContainer):
         hint_buttons: list[UIButton] = []
         upgrade_index = self.upgradable_labels.index(upgrade_type)
 
-        for btn_icount in range(self.upgrade_data["max_upgrade_level"]):
-            upg_hint_btn = UIButton(
+        for btn_index in range(self.upgrade_data["max_upgrade_level"]):
+            button_id = (
+                "#active"
+                if btn_index < self.upgrade_data["upgrade_level"][upgrade_index]
+                else "#inactive"
+            )
+            upgrade_hint_button = UIButton(
                 relative_rect=pygame.Rect(pos_x, pos_y, size, size),
                 manager=self.manager,
                 container=self,
                 text="",
-                object_id=ObjectID(
-                    object_id=(
-                        "#active"
-                        if btn_icount
-                        < self.upgrade_data["upgrade_level"][upgrade_index]
-                        else "#inactive"
-                    )
-                ),
+                object_id=ObjectID(object_id=button_id),
             )
-            hint_buttons.append(upg_hint_btn)
+            hint_buttons.append(upgrade_hint_button)
             pos_x += size + OFFSET
 
         upgrade_button = UIButton(
@@ -140,19 +143,44 @@ class UpgradeCard(UIAutoResizingContainer):
                 pos_y - (upgrade_button.relative_rect.height) // 4,
             )
         )
-        UpgradeCard.button_map[upgrade_button] = (hint_buttons, self.make_upgrade)
+        UpgradeCard.button_to_upgrade_info[upgrade_button] = (
+            hint_buttons,
+            self.apply_upgrade,
+        )
 
-    def make_upgrade(self, target_btn: UIButton):
-        upgrade_type = getattr(target_btn, "upgrade_type")
+    def apply_upgrade(self, target_button: UIButton):
+        upgrade_type = getattr(target_button, "upgrade_type")
         upgrade_index = self.upgradable_labels.index(upgrade_type)
-        new_data = self.upgrade_data
+        upgrade_data = self.data["upgrades"]
+        current_level = upgrade_data["upgrade_level"][upgrade_index]
+        avilable_coins = Storage.get_player_data()["coins"]
 
-        upgrade_level = new_data["upgrade_level"][upgrade_index]
-        new_data["upgrade_level"][upgrade_index] += 1
-        new_data["cost"] = int(new_data["cost"] * new_data["cost_increase_rate"])
+        if (
+            current_level >= upgrade_data["max_upgrade_level"]
+            or avilable_coins < upgrade_data["cost"]
+        ):
+            print("max reached or few coins")
+            return
 
-        Storage.write_upgrade_data(self.key, self.type_, new_data)
-        self.active_upgrade_hint(self.button_map[target_btn][0][upgrade_level])
+        upgrade_data["upgrade_level"][upgrade_index] += 1
+        upgrade_data["cost"] += upgrade_data["cost_increase"]
+        self.data[upgrade_type] = math.ceil(
+            self.data[upgrade_type] * upgrade_data["power_increase_rate"]
+        )
 
-    def active_upgrade_hint(self, hint_btn: UIButton):
-        hint_btn.change_object_id(ObjectID(object_id="#active"))
+        new_coin_balance = avilable_coins - upgrade_data["cost"]
+
+        Storage.write_upgrade_data(self.key, self.upgrade_type, self.data)
+        Storage.write_player_data({"coins": new_coin_balance})
+        self.activate_upgrade_hint(
+            self.button_to_upgrade_info[target_button][0][current_level]
+        )
+        self.update_coin_ui(f"Coins: {new_coin_balance}")
+
+        self.update_cost_label()
+
+    def activate_upgrade_hint(self, hint_button: UIButton):
+        hint_button.change_object_id(ObjectID(object_id="#active"))
+
+    def update_cost_label(self):
+        self.cost_label.set_text(f"COST: {self.upgrade_data.get('cost')}")
