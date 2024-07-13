@@ -159,8 +159,7 @@ class UpgradeCard(UIAutoResizingContainer):
             current_level >= upgrade_data["max_upgrade_level"]
             or avilable_coins < upgrade_data["cost"]
         ):
-            print("max reached or few coins")
-            return
+            return False
 
         upgrade_data["upgrade_level"][upgrade_index] += 1
         upgrade_data["cost"] += upgrade_data["cost_increase"]
@@ -176,8 +175,9 @@ class UpgradeCard(UIAutoResizingContainer):
             self.button_to_upgrade_info[target_button][0][current_level]
         )
         self.update_coin_ui(f"Coins: {new_coin_balance}")
-
         self.update_cost_label()
+
+        return True
 
     def activate_upgrade_hint(self, hint_button: UIButton):
         hint_button.change_object_id(ObjectID(object_id="#active"))

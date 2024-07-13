@@ -1,9 +1,11 @@
 import pygame, sys, time
 from src.storage.storage import Storage
 from src.level import Level
+from src.notification.manager import NotificationManager
 from src.UI.shop.shop import ShopManager
 from src.UI.menu.mainmenu import MainMenuUI
 from src.UI.menu.gameover import GameoverUI
+from src.animation.Text.fadeout import Fadeout
 from src.settings import FPS, WIDTH, HEIGHT
 from src.constants import BLACK
 
@@ -21,6 +23,7 @@ class Manager:
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         self.level = Level(level=Storage.get_current_level())
 
+        self.notification_manager = NotificationManager()
         self.shop = ShopManager((WIDTH, HEIGHT))
 
         self.gameover = GameoverUI(
@@ -60,7 +63,7 @@ class Manager:
                 self.event = event
             if not self.start_game:
                 self.shop.process_events(event)
-                self.shop.handle_events(event)
+                self.shop.handle_events(event, self.notification_manager)
 
         if self.quit_game:
             Storage.write_current_level(
@@ -107,12 +110,15 @@ class Manager:
                 Storage.write_current_level(self.level.current_level + 1)
                 Storage.write_player_data(self.level.get_player_coin())
                 self.load_level(self.level.current_level + 1)
-        else:
+        elif not self.shop.isopen():
             self.mainmenu.display(self.screen)
             self.mainmenu.update(self.event)
         if not self.start_game:
             self.shop.update(time_delta)
             self.shop.draw_ui(self.screen)
+
+        self.notification_manager.manage()
+        self.notification_manager.draw(self.screen)
 
         pygame.display.update()
 

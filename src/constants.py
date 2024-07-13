@@ -38,3 +38,4 @@ class GlobalPos:
 
 # colors
 BLACK = (0, 0, 0, 255)
+LIME = (0, 255, 0)

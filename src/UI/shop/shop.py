@@ -6,7 +6,9 @@ from .upgrade_card import UpgradeCard
 from .upgrade_container import UpgradeContainer
 from .custompanel import ClosablePanel
 from src.storage.storage import Storage
-from src.constants import LASER, MISSILE, SHIELD, REGAN
+from src.notification.manager import NotificationManager
+from src.animation.Text.fadeout import Fadeout
+from src.constants import LASER, MISSILE, SHIELD, REGAN, LIME
 from src.settings import WIDTH, HEIGHT, G_SPRITE_SIZE
 
 
@@ -16,7 +18,7 @@ class ShopManager(pygame_gui.UIManager):
         super().__init__(size, theme_path)
         self.initialize_upgrade_field()
         self.initialize_upgrade_items()
-        self.isactive = False
+        self.__isactive = False
 
     def initialize_upgrade_field(self):
         self.entry_provider = Entry(
@@ -76,7 +78,9 @@ class ShopManager(pygame_gui.UIManager):
             )
             y = card_rect.bottom + card_rect.height // 4
 
-    def handle_events(self, event: pygame.event.Event):
+    def handle_events(
+        self, event: pygame.event.Event, notification_manager: NotificationManager
+    ):
         if event.type == pygame_gui.UI_BUTTON_PRESSED:
             if event.ui_element == self.entry_provider:
                 self.open_shop()
@@ -84,7 +88,13 @@ class ShopManager(pygame_gui.UIManager):
                 self.close_shop()
             for button, (upg_hint, action) in UpgradeCard.get_upgrade_buttons().items():
                 if event.ui_element == button:
-                    action(button)
+                    pass_upgrade = action(button)
+                    if pass_upgrade:
+                        notification_manager.add(Fadeout("upgraded", color=LIME))
+                    else:
+                        notification_manager.add(
+                            Fadeout("max upgrade or not enough coin")
+                        )
 
     def update_coinUI(self, text: str):
         self.coin_label.set_text(text)
@@ -92,15 +102,15 @@ class ShopManager(pygame_gui.UIManager):
     def open_shop(self):
         self.entry_provider.hide()
         self.upgrade_panel.show()
-        self.isactive = True
+        self.__isactive = True
 
     def close_shop(self):
         self.entry_provider.show()
         self.upgrade_panel.hide()
-        self.isactive = False
+        self.__isactive = False
 
     def isopen(self):
-        return self.isactive
+        return self.__isactive
 
     def load_card(self, key: str, type_: str, rect: pygame.Rect):
         card = UpgradeCard(key, type_, rect, self, self.upgrade_container)
