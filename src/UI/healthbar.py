@@ -17,6 +17,9 @@ class Healthbar:
     def update(self, health_count: int):
         self.update_health_count(health_count)
 
+    def get_size(self):
+        return pygame.math.Vector2(self.empty_health_chunks[0].size)
+
     def display(self, display_surface: pygame.Surface):
         i = 0
         for i in range(self.full_health):

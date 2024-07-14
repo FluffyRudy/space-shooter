@@ -5,6 +5,7 @@ from src.storage.storage import Storage
 from src.soundmanager.soundmanager import Soundmanager
 from src.UI.background import Background
 from src.UI.healthbar import Healthbar
+from src.UI.coin import CoinUI
 from src.animation.Text.colortransition import ColorTransition
 from src.timer.cooldown import Cooldown
 from src.powerops.powerops import Powerops
@@ -47,6 +48,9 @@ class Level:
 
         self.background = Background()
         self.health_bar = Healthbar(Storage.get_player_data()[HEALTH_COUNT])
+        self.coin_ui = CoinUI(
+            (self.health_bar.get_size().x, self.health_bar.get_size().y)
+        )
 
         self.visible_group = pygame.sprite.Group()
         self.enemy_group = pygame.sprite.Group()
@@ -61,6 +65,7 @@ class Level:
         self.current_level = level
         self.enemy_count = 0
         self.killed_enemy_count = 0
+        self.coin_count = 0
 
         range_ = self.level_attributes[MAX_SPAWN_COUNT]
         self.powerops_index = [
@@ -96,8 +101,11 @@ class Level:
     "track and increase killed enemy count"
 
     def enemy_kill_action(self):
+        reward_point = self.level_attributes.get("reward_point")
         self.killed_enemy_count += 1
-        self.player.add_coins(self.level_attributes.get("reward_point"))
+        self.player.add_coins(reward_point)
+        self.coin_count += reward_point
+        self.coin_ui.update_coin(self.coin_count)
 
     def spawn_enemy(self):
         if (
@@ -249,11 +257,13 @@ class Level:
             return
         self.background.update()
         self.health_bar.update(self.player.get_damage_count())
+        self.coin_ui.update()
         self.visible_group.update(player=self.player)
 
         self.background.draw_background(self.display_surface)
         self.visible_group.draw(self.display_surface)
         self.health_bar.display(self.display_surface)
+        self.coin_ui.display(self.display_surface)
 
         self.display_title()
 
