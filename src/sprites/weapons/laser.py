@@ -1,6 +1,7 @@
 from typing import Union
 import pygame
 from src.storage.storage import Storage
+from src.soundmanager.soundmanager import Soundmanager
 from src.utils.image_util import load_frame
 from src.timer.cooldown import Cooldown
 from src.settings import HEIGHT
@@ -28,6 +29,7 @@ class Laser(pygame.sprite.Sprite):
         )
         self.self_kill_cd = Cooldown(ATTRIBUTES.get("kill_after"))
         self.self_kill_cd.reset_time()
+        Soundmanager.play_sfx_sound("laser", channel=4)
 
     def get_damage(self):
         return self.damage
@@ -41,11 +43,11 @@ class Laser(pygame.sprite.Sprite):
         relative_rect = kwargs.get("player").rect
         self.rect.centerx = relative_rect.centerx
         self.rect.top = relative_rect.y - self.image.get_height() * 0.99
-
         self.animate()
         self.self_kill_cd.handle_cooldown()
         self.handle_kill()
 
     def handle_kill(self):
         if self.self_kill_cd.has_cooldown():
+            Soundmanager.stop_channel(channel=4)
             self.kill()

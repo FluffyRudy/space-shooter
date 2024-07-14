@@ -24,6 +24,7 @@ class SoundManager:
     NO_LOOP = 1
     BG_SOUND = SOUND_PATH / "main-sound.mp3"
     SHOOT_SOUND = SOUND_PATH / "shoot.mp3"
+    LASER_SOUND = SOUND_PATH / "laser.ogg"
     ENEMY_DESTROY_SOUND = SOUND_PATH / "ship-destroy.mp3"
     OBSTACLE_DESTROY_SOUND = SOUND_PATH / "ship-destroy.mp3"
     PLAYER_DAMAGE_SOUND = ""
@@ -39,6 +40,7 @@ class SoundManager:
         self.bg_sound = pygame.mixer.Sound(str(SoundManager.BG_SOUND))
         self.sfx_sounds = {
             "shoot": pygame.mixer.Sound(str(SoundManager.SHOOT_SOUND)),
+            "laser": pygame.mixer.Sound(str(SoundManager.LASER_SOUND)),
             "enemy_destroy": pygame.mixer.Sound(str(SoundManager.ENEMY_DESTROY_SOUND)),
             "obstacle_destroy": pygame.mixer.Sound(
                 str(SoundManager.OBSTACLE_DESTROY_SOUND)
@@ -103,6 +105,16 @@ class SoundManager:
         """
         self.main_channel.stop()
 
+    def stop_channel(self, channel: Literal[1, 2, 3, 4]):
+        if channel == 1:
+            self.main_channel.stop()
+        elif channel == 2:
+            self.sfx_channel_0.stop()
+        elif channel == 3:
+            self.sfx_channel_1.stop()
+        elif channel == 4:
+            self.sfx_channel_2.stop()
+
     def update_bg_sound(self, sound_path: str):
         """
         Updates the background music with a new sound file path and replays it.
@@ -116,7 +128,7 @@ class SoundManager:
 
     def play_sfx_sound(
         self,
-        sound_type: Literal["shoot", "enemy_destroy", "obstacle_destroy"],
+        sound_type: Literal["shoot", "laser", "enemy_destroy", "obstacle_destroy"],
         channel: Literal[2, 3, 4] = 2,
     ):
         """
@@ -134,7 +146,7 @@ class SoundManager:
             self.sfx_channel_1.play(self.sfx_sounds[sound_type])
         elif channel == 4:
             self.sfx_channel_2.stop()
-            self.sfx_channel_2.play(self.sfx_sounds[sound_type])
+            self.sfx_channel_2.play(self.sfx_sounds[sound_type], loops=self.LOOP)
 
 
 Soundmanager = SoundManager()
