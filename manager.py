@@ -8,7 +8,7 @@ from src.notification.manager import NotificationManager
 from src.UI.shop.shop import ShopManager
 from src.UI.menu.mainmenu import MainMenuUI
 from src.UI.menu.gameover import GameoverUI
-from src.UI.menu.pausemenu import PauseMenu  # Import the PauseMenu class
+from src.UI.menu.pausemenu import PauseMenu
 from src.settings import FPS, WIDTH, HEIGHT
 from src.constants import BLACK
 
