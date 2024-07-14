@@ -160,7 +160,7 @@ class Level:
     def spawn_powerops(self):
         if self.killed_enemy_count in self.powerops_index:
             self.powerops_index.remove(self.killed_enemy_count)
-            power_type = random.choice([MISSILE])
+            power_type = random.choice([SHIELD])
             action_group = {
                 "laser": self.player_bullet_group,
                 "missile": self.player_bullet_group,
@@ -230,6 +230,7 @@ class Level:
                 p_ops, self.enemy_bullet_group
             )
             if collided_bullet is not None:
+                Soundmanager.play_sfx_sound("shieldBlock", channel=3)
                 p_ops.bright_up()
                 collided_bullet.kill()
 

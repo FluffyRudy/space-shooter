@@ -99,8 +99,8 @@ def generate_levels_data(num_levels):
             "spawn_count": 5 + i,
             "max_spawn_count": 10 + 2 * i,
             "enemies": {
-                "shooter": (1 - i * 0.002),
-                "self_killer": (i * 0.002),
+                "shooter": (1 - i * 0.02),
+                "self_killer": (i * 0.02),
             },
             "reward_point": 3,
         }
