@@ -179,17 +179,18 @@ class Level:
             for enemy in self.enemy_group:
                 if enemy.get_status() == "dead":
                     continue
-                if get_instance_cls(bullet) in [
-                    LASER.capitalize(),
-                    MISSILE.capitalize(),
-                ]:
-                    enemy.damage(bullet.get_damage(), self.enemy_kill_action)
-                    bullet.handle_kill()
-                    break
-                elif pygame.sprite.collide_mask(bullet, enemy):
-                    enemy.damage(bullet.get_damage(), self.enemy_kill_action)
-                    bullet.handle_kill()
-                    break
+                if bullet.rect.colliderect(enemy.rect):
+                    if get_instance_cls(bullet) in [
+                        LASER.capitalize(),
+                        MISSILE.capitalize(),
+                    ]:
+                        enemy.damage(bullet.get_damage(), self.enemy_kill_action)
+                        bullet.handle_kill()
+                        break
+                    elif pygame.sprite.collide_mask(bullet, enemy):
+                        enemy.damage(bullet.get_damage(), self.enemy_kill_action)
+                        bullet.handle_kill()
+                        break
 
         for bullet in self.player_bullet_group.sprites():
             for obstacle in self.obstacle_group.sprites():
@@ -244,6 +245,8 @@ class Level:
             self.is_gameover = True
 
     def run(self, event: Optional[pygame.event.Event]):
+        if self.player.can_kill():
+            return
         self.background.update()
         self.health_bar.update(self.player.get_damage_count())
         self.visible_group.update(player=self.player)

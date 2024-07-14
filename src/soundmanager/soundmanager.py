@@ -115,6 +115,11 @@ class SoundManager:
         elif channel == 4:
             self.sfx_channel_2.stop()
 
+    def stop_sfx_channels(self):
+        channels = [self.sfx_channel_0, self.sfx_channel_1, self.sfx_channel_2]
+        for channel in channels:
+            channel.stop()
+
     def update_bg_sound(self, sound_path: str):
         """
         Updates the background music with a new sound file path and replays it.
