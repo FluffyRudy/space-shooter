@@ -52,7 +52,7 @@ class Projectile(pygame.sprite.Sprite):
         self.rect.y += self.speed * self.direction.y
 
         if self.rect.bottom < 0 or self.rect.top > HEIGHT:
-            self.kill()
+            self.handle_kill()
 
         self.animate()
 

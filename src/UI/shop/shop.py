@@ -103,6 +103,11 @@ class ShopManager(pygame_gui.UIManager):
         self.entry_provider.hide()
         self.upgrade_panel.show()
         self.__isactive = True
+        self.load_coins()
+        self.update_coinUI(f"Coins: {self.avilable_coins}")
+
+    def load_coins(self):
+        self.avilable_coins = str(Storage.get_player_data()["coins"])
 
     def close_shop(self):
         self.entry_provider.show()

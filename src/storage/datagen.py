@@ -93,7 +93,7 @@ def generate_levels_data(num_levels):
         "levels": {},
     }
 
-    probability_factor = 0.02
+    probability_factor = 0.05
 
     for i in range(1, num_levels + 1):
         level = str(i)
