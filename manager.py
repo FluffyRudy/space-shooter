@@ -107,6 +107,7 @@ class Manager:
         self.load_level(self.level.current_level, False)
         self.level.is_gameover = False
         self.start_game = False
+        self.game_paused = False
 
     def load_level(self, level: int, auto_start: bool = True):
         self.level = Level(level)
@@ -129,7 +130,7 @@ class Manager:
                 Storage.write_current_level(self.level.current_level + 1)
                 Storage.write_player_data(self.level.get_player_coin())
                 self.load_level(self.level.current_level + 1)
-        elif not self.shop.isopen():
+        elif not self.shop.isopen() and not self.game_paused:
             self.mainmenu.display(self.screen)
             self.mainmenu.update(self.event)
         if not self.start_game:
