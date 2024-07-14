@@ -123,8 +123,8 @@ class Manager:
             if self.level.is_gameover:
                 self.gameover.display(self.screen)
                 self.gameover.update(self.event)
-                self.mainmenu.update_levels(self.level.current_level)
             elif self.level.completed():
+                self.mainmenu.update_levels(self.level.current_level + 1)
                 Soundmanager.stop_sfx_channels()
                 Storage.write_reward_point(self.level.current_level)
                 Storage.write_current_level(self.level.current_level + 1)
