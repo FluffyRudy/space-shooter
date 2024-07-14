@@ -1,5 +1,6 @@
 from typing import Optional
 import pygame, random
+from pygame.sprite import groupcollide
 from src.storage.storage import Storage
 from src.soundmanager.soundmanager import Soundmanager
 from src.UI.background import Background
@@ -174,21 +175,21 @@ class Level:
             )
 
     def handle_player_attack(self):
-        for bullet in self.player_bullet_group.sprites():
-            collided_enemy = pygame.sprite.spritecollideany(bullet, self.enemy_group)
-            if collided_enemy and collided_enemy.get_status() == "dead":
-                continue
-            if get_instance_cls(bullet) in [LASER.capitalize(), MISSILE.capitalize()]:
-                if collided_enemy is not None and bullet.rect.colliderect(
-                    collided_enemy
-                ):
-                    collided_enemy.damage(bullet.get_damage(), self.enemy_kill_action)
+        for bullet in self.player_bullet_group:
+            for enemy in self.enemy_group:
+                if enemy.get_status() == "dead":
+                    continue
+                if get_instance_cls(bullet) in [
+                    LASER.capitalize(),
+                    MISSILE.capitalize(),
+                ]:
+                    enemy.damage(bullet.get_damage(), self.enemy_kill_action)
                     bullet.handle_kill()
-            elif collided_enemy is not None and pygame.sprite.collide_mask(
-                bullet, collided_enemy
-            ):
-                collided_enemy.damage(bullet.get_damage(), self.enemy_kill_action)
-                bullet.handle_kill()
+                    break
+                elif pygame.sprite.collide_mask(bullet, enemy):
+                    enemy.damage(bullet.get_damage(), self.enemy_kill_action)
+                    bullet.handle_kill()
+                    break
 
         for bullet in self.player_bullet_group.sprites():
             for obstacle in self.obstacle_group.sprites():
