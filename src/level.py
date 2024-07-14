@@ -160,7 +160,7 @@ class Level:
     def spawn_powerops(self):
         if self.killed_enemy_count in self.powerops_index:
             self.powerops_index.remove(self.killed_enemy_count)
-            power_type = random.choice([LASER, MISSILE, REGAN, SHIELD])
+            power_type = random.choice([MISSILE])
             action_group = {
                 "laser": self.player_bullet_group,
                 "missile": self.player_bullet_group,

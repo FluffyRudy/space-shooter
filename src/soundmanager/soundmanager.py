@@ -25,6 +25,7 @@ class SoundManager:
     BG_SOUND = SOUND_PATH / "main-sound.mp3"
     SHOOT_SOUND = SOUND_PATH / "shoot.mp3"
     LASER_SOUND = SOUND_PATH / "laser.ogg"
+    MISSILE_SOUND = SOUND_PATH / "missile.ogg"
     ENEMY_DESTROY_SOUND = SOUND_PATH / "ship-destroy.mp3"
     OBSTACLE_DESTROY_SOUND = SOUND_PATH / "ship-destroy.mp3"
     PLAYER_DAMAGE_SOUND = ""
@@ -41,6 +42,7 @@ class SoundManager:
         self.sfx_sounds = {
             "shoot": pygame.mixer.Sound(str(SoundManager.SHOOT_SOUND)),
             "laser": pygame.mixer.Sound(str(SoundManager.LASER_SOUND)),
+            "missile": pygame.mixer.Sound(str(SoundManager.MISSILE_SOUND)),
             "enemy_destroy": pygame.mixer.Sound(str(SoundManager.ENEMY_DESTROY_SOUND)),
             "obstacle_destroy": pygame.mixer.Sound(
                 str(SoundManager.OBSTACLE_DESTROY_SOUND)
@@ -133,7 +135,9 @@ class SoundManager:
 
     def play_sfx_sound(
         self,
-        sound_type: Literal["shoot", "laser", "enemy_destroy", "obstacle_destroy"],
+        sound_type: Literal[
+            "shoot", "laser", "missile", "enemy_destroy", "obstacle_destroy"
+        ],
         channel: Literal[2, 3, 4] = 2,
     ):
         """
