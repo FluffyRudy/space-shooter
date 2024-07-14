@@ -93,14 +93,16 @@ def generate_levels_data(num_levels):
         "levels": {},
     }
 
+    probability_factor = 0.02
+
     for i in range(1, num_levels + 1):
         level = str(i)
         levels_data["levels"][level] = {
             "spawn_count": 5 + i,
             "max_spawn_count": 10 + 2 * i,
             "enemies": {
-                "shooter": (1 - i * 0.02),
-                "self_killer": (i * 0.02),
+                "shooter": (1 - i * probability_factor),
+                "self_killer": (i * probability_factor),
             },
             "reward_point": 3,
         }
