@@ -17,6 +17,7 @@ class ShooterEnemy(Ship):
         base_group: pygame.sprite.Group,
         bullet_group: pygame.sprite.Group,
         offset_y: int = 0,
+        health_increment: int = 0,
     ):
         super().__init__(
             pos,
@@ -26,6 +27,7 @@ class ShooterEnemy(Ship):
             base_group,
             bullet_group,
         )
+        self.props["health_count"] += health_increment
         self.offset_y = offset_y
         self.direction.x = random.choice([1, -1])
         self.prev_direction = self.direction.copy()

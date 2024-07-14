@@ -109,12 +109,10 @@ class Level:
         shooter_probability = self.level_attributes[ENEMIES][SHOOTER]
         self_killer_probability = self.level_attributes[ENEMIES][SELF_KILLER]
 
-        # Normalize the probabilities to ensure they add up to 1
         total_probability = shooter_probability + self_killer_probability
         shooter_probability /= total_probability
         self_killer_probability /= total_probability
 
-        # Spawn enemies based on the probabilities
         for _ in range(
             self.level_attributes[SPAWN_COUNT] - len(self.enemy_group.sprites())
         ):
@@ -149,6 +147,7 @@ class Level:
                         base_group=self.enemy_group,
                         bullet_group=self.enemy_bullet_group,
                         offset_y=random.randrange(0, G_SPRITE_SIZE * 4),
+                        health_increment=int(self.current_level // 5),
                     )
                     self.enemy_count += 1
 
