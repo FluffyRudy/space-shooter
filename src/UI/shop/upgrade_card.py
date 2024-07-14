@@ -162,12 +162,11 @@ class UpgradeCard(UIAutoResizingContainer):
             return False
 
         upgrade_data["upgrade_level"][upgrade_index] += 1
+        new_coin_balance = avilable_coins - upgrade_data["cost"]
         upgrade_data["cost"] += upgrade_data["cost_increase"]
         self.data[upgrade_type] = math.ceil(
             self.data[upgrade_type] * upgrade_data["power_increase_rate"]
         )
-
-        new_coin_balance = avilable_coins - upgrade_data["cost"]
 
         Storage.write_upgrade_data(self.key, self.upgrade_type, self.data)
         Storage.write_player_data({"coins": new_coin_balance})
