@@ -1,0 +1,104 @@
+{
+    "button": {
+        "colours": {
+            "normal_bg": "#0a1549,#1c2e72,#2f48a0,45",
+            "hovered_bg": "#01579B,#0288D1,90",
+            "hovered_text_shadow": "skyblue"
+        },
+        "misc": {
+            "shape": "rounded_rectangle",
+            "shape_corner_radius": "10",
+            "tool_tip_delay": "0.2",
+            "border_width": "1",
+            "shadow_width": "1",
+            "text_shadow_size": "1",
+            "text_shadow_offset": "0,0",
+            "state_transitions": {
+                "normal_hovered": "0.5",
+                "hovered_normal": "0.5"
+            }
+        },
+        "font": {
+            "bold": "5",
+            "size": "24"
+        }
+    },
+    "panel": {
+        "colours": {
+            "dark_bg": "#0a1549,#1c2e72,#2f48a0,0",
+            "normal_border": "#2f48a0,#0a1549,#1c2e72,0"
+        },
+        "misc": {
+            "shape": "rounded_rectangle",
+            "shape_corner_radius": "10",
+            "border_width": "3",
+            "shadow_width": "3"
+        }
+    },
+    "#close": {
+        "colours": {
+            "normal_bg": "pink,orange,red,45"
+        },
+        "font": {
+            "name": "noto sans",
+            "size": "24",
+            "bold": "5",
+            "regular_path": "assets/fonts/NotoSansSymbols2-Regular.ttf"
+        }
+    },
+    "#upgradecard": {
+        "colours": {
+            "dark_bg": "#ffffff",
+            "normal_border": "white,gray,black,0"
+        },
+        "misc": {
+            "border_width": "1"
+        }
+    },
+    "#cardtitle": {
+        "colours": {
+            "dark_bg": "rgba(0, 0, 0, 0)",
+            "normal_text": "rgb(38,123,217),rgb(255, 255, 255),rgb(0,255,208),45"
+        },
+        "misc": {
+            "shape": "rectangle",
+            "shape_corner_radius": "10",
+            "border_width": "1",
+            "shadow_width": "3"
+        },
+        "font": {
+            "name": "Lobster Regular",
+            "size": "35",
+            "bold": "5",
+            "regular_path": "assets/fonts/Lobster-Regular.ttf"
+        }
+    },
+    "#upgfont": {
+        "colours": {
+            "normal_text": "#4db37c,#26d97a,#00ff77,0"
+        },
+        "font": {
+            "size": "20",
+            "bold": "20"
+        }
+    },
+    "image": {
+        "colours": {
+            "normal_border": "red"
+        },
+        "misc": {
+            "border_width": "3"
+        }
+    },
+    "#active": {
+        "colours": {
+            "normal_bg": "#01579B,#0288D1,90"
+        }
+    },
+    "#inactive": {
+        "colours": {
+            "normal_bg": "rgba(0, 0, 0, 0)",
+            "normal_border": "white,gray,black,0"
+        }
+    }
+}
