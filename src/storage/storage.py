@@ -16,6 +16,7 @@ class StorageHandler:
         if self.__instance is not None:
             return
         self.__storage_path: Path = ROOT_DIR / "src" / "storage" / "json"
+        self.__storage_path.touch(exist_ok=True)
         self.__write_default_data(num_levels=20)
 
         self.__game_data: dict = {}
